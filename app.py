@@ -1,4 +1,4 @@
-from typing import List
+from distutils.log import debug
 from flask import Flask, render_template, request
 from datetime import datetime
 import re
@@ -39,4 +39,5 @@ def home():
 def blog():
     return render_template("blog.html")
 
-
+if __name__ == "__main__":
+    app.run(debug = False)
