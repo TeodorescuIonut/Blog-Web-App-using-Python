@@ -26,9 +26,9 @@ def add_post():
        post_owner = request.form.get("owner") 
        # getting input content  in HTML form 
        content = request.form.get("content")
+       favMovies = ["Godafther", "Speed", "Goodfellas"]
        myList.append(post(1, post_title, content, post_owner, datetime.now().day, datetime.now()))
-       return "Post submitted"
-    return render_template("add_post.html")
+    return render_template("add_post.html", myList = myList)
 
 @app.route("/")
 def home():

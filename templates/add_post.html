@@ -3,12 +3,21 @@
 {% endblock %}
 
 {% block content %}
+<br/>
 <form action="{{ url_for('add_post') }}"" method="post">
-    <label for="title">Title</label>
-    <input type="text" id="title" name="title"><br>
-    <label for="owner">Owner</label>
-    <input type="text" id="owner" name="owner"><br>
-    <label for="content">Content</label>
-    <textarea name="content"></textarea><br>
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input class="form-control" type="text" id="title" name="title"><br>
+        <label for="owner">Owner</label>
+        <input class="form-control" type="text" id="owner" name="owner"><br>
+        <label for="content">Content</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="content"></textarea><br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    
+<p></p>
+{% for x in myList %}
+    {{x}}<br/>
+{% endfor %}
+
 {% endblock %}
