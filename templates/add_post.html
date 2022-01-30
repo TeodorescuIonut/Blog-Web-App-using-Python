@@ -4,20 +4,23 @@
 
 {% block content %}
 <br/>
-<form action="{{ url_for('add_post') }}"" method="post">
+{% if buttonText != "Update" %}
+    {%set buttonText = "Submit"%}
+    {%set urlPage = url_for('add_post')%}
+{% else %}
+{%set buttonText = "Update"%}
+{%set urlPage = url_for('updatePost',postId = post.postId)%}
+{%endif%}
+<form action="{{urlPage}}" method="post">
     <div class="form-group">
         <label for="title">Title</label>
-        <input class="form-control" type="text" id="title" name="title"><br>
+        <input class="form-control" type="text" id="title" name="title" value="{{post.postTitle}}"><br>
         <label for="owner">Owner</label>
-        <input class="form-control" type="text" id="owner" name="owner"><br>
+        <input class="form-control" type="text" id="owner" name="owner"value="{{post.postOwner}}"><br>
         <label for="content">Content</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="content"></textarea><br>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" name="content">{{post.postContents}}</textarea><br>
+        <button type="submit" class="btn btn-primary">{{buttonText}}</button>
     </div>
     
-<p></p>
-{% for x in myList %}
-    {{x}}<br/>
-{% endfor %}
 
 {% endblock %}
