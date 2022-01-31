@@ -6,13 +6,13 @@
 <br/>
 {% if buttonText != "Update" %}
     {%set buttonText = "Submit"%}
-    {%set urlPage = url_for('add_post')%}
+    {%set urlPage = url_for('post_bp.add_post')%}
 {% else %}
 {%set buttonText = "Update"%}
-{%set urlPage = url_for('updatePost',postId = post.postId)%}
+{%set urlPage = url_for('post_bp.updatePost',postId = post.postId)%}
 {%endif%}
 <form action="{{urlPage}}" method="post">
-    <div class="form-group">
+    <div class="form-group" >
         <label for="title">Title</label>
         <input class="form-control" type="text" id="title" name="title" value="{{post.postTitle}}"><br>
         <label for="owner">Owner</label>

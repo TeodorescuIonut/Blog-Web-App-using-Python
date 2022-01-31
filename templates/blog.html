@@ -23,7 +23,7 @@
               <h5 class="card-title">{{ post.postTitle }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ post.postOwner }}</h6>
               <p class="card-text text-truncate">{{ post.postContents }}</p>
-              <a href="{{url_for('viewPost',postId = post.postId )}}" class="streched-link">Read More</a>
+              <a href="{{url_for('post_bp.viewPost',postId = post.postId )}}" class="streched-link">Read More</a>
             </div>
           </div>
     </div>

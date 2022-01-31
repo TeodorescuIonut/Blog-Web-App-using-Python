@@ -14,7 +14,7 @@
     <p class="blog-post-meta">modified on  {{post.postDateModification}}</p>
     {%endif%}
     <!-- Button trigger modal -->
-    <a href="{{url_for('updatePost',postId = post.postId )}}" class="d-inline btn btn-secondary">Update</a>
+    <a href="{{url_for('post_bp.updatePost',postId = post.postId )}}" class="d-inline btn btn-secondary">Update</a>
     <button type="button" class="d-inline btn btn-danger" data-toggle="modal" data-target="#exampleModal">
         Delete
     </button>
@@ -33,7 +33,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-              <a href="{{url_for('deletePost',postId = post.postId )}}" class="btn btn-primary">Yes</a>
+              <a href="{{url_for('post_bp.deletePost',postId = post.postId )}}" class="btn btn-primary">Yes</a>
             </div>
           </div>
         </div>
