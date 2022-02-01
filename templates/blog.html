@@ -16,13 +16,16 @@
 {% endif %}
 <div class="row">
     {% for post in posts %}
-    <div class="col-md-4">
+    <div class="posts col-md-4">
         <div class="card mb-4 shadow-sm" >
             <img src="https://www.groovehq.com/blog/wp-content/uploads/2022/01/Feature-image-14.png" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{ post.postTitle }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ post.postOwner }}</h6>
-              <p class="card-text text-truncate">{{ post.postContents }}</p>
+              <p class="card-text">{{ post.postContents }}</p>
+              {% if post.postDateModification != '' %}
+              <p class="card-text"><small class="text-muted"> Modified on {{post.postDateModification}}</small></p>
+              {%endif%}
               <a href="{{url_for('post_bp.viewPost',postId = post.postId )}}" class="streched-link">Read More</a>
             </div>
           </div>

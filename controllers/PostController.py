@@ -1,3 +1,4 @@
+from turtle import pos
 from flask import Flask, flash, redirect, render_template, request, url_for
 from models.Post import Post
 from datetime import datetime
@@ -12,15 +13,17 @@ def add_post():
        post_owner = request.form.get("owner") 
        # getting input content  in HTML form 
        content = request.form.get("content")
+       post = Post(post_title, content, post_owner)
+       error = None
        if not post_title:
-           flash("Please add a title")
-           return redirect(url_for('post_bp.add_post'))
+           error = "Please add a title"   
        elif not post_owner:
-           flash("Please add a owner")
-           return redirect(url_for('post_bp.add_post'))
+           error = "Please add a owner"
        elif not content:
-           flash("Please add content")
-           return redirect(url_for('post_bp.add_post'))
+           error = "Please add content"
+       if error:
+           flash(error)
+           return render_template("add_post.html", post = post, urlPage = add_post)
        else:
                 myList.append(
                     Post(
@@ -52,27 +55,29 @@ def deletePost(postId):
 
 def updatePost(postId):
     post = getPostByID(postId)
+    postIndex = getPostByIndex(postId)
     if request.method == "POST":      
-       postIndex = getPostByIndex(postId)
             # getting input title in HTML form
        post_title = request.form.get("title")
        # getting input owner in HTML form 
        post_owner = request.form.get("owner") 
        # getting input content  in HTML form 
        content = request.form.get("content")
-       postDateCreation = post.postDateCreation
+       error = None
        if not post_title:
-           flash("Please add a title")
-           return redirect(url_for('post_bp.add_post'))
+           error = "Please add a title"   
        elif not post_owner:
-           flash("Please add a owner")
+           error = "Please add a owner"
        elif not content:
-           flash("Please add content")
+           error = "Please add content"
+       if error:
+           flash(error)
+           return render_template("add_post.html", post = post, buttonText = "Update", urlPage = updatePost)
        else:
              myList[postIndex].postTitle = post_title.title()
              myList[postIndex].postOwner = post_owner
              myList[postIndex].postContents = content
-             myList[postIndex].postDateCreation = postDateCreation
+             myList[postIndex].postDateCreation = post.postDateCreation
              myList[postIndex].postDateModification = datetime.now().strftime("%B %d %Y")
              flash("Post updated") 
              return redirect(url_for('post_bp.blog'))

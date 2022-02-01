@@ -5,38 +5,45 @@
 {% block content %}
 
 <br>
-<div class="blog-post">
-    <h2 class="blog-post-title">{{ post.postTitle }}</h2>
-    <i class="d-inline far fa-clock"></i>
-    <p class="d-inline blog-post-meta">{{ post.postDateCreation }} by {{post.postOwner}}</p>
-    <p>{{ post.postContents }}</p>
-    {% if post.postDateModification != ""%}
-    <p class="blog-post-meta">modified on  {{post.postDateModification}}</p>
-    {%endif%}
-    <!-- Button trigger modal -->
-    <a href="{{url_for('post_bp.updatePost',postId = post.postId )}}" class="d-inline btn btn-secondary">Update</a>
-    <button type="button" class="d-inline btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-        Delete
-    </button>
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Delete Post {{ post.postTitle }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Are you sure you want to delete this post?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-              <a href="{{url_for('post_bp.deletePost',postId = post.postId )}}" class="btn btn-primary">Yes</a>
+<div class="row">
+  <div class="col-md-8 blog-main">
+    <div class="blog-post">
+      <h2 class="blog-post-title">{{ post.postTitle }}</h2>
+      <br>
+      <i class="d-inline far fa-clock"></i>
+      <p class="d-inline blog-post-meta">{{ post.postDateCreation }} by <a href="#">{{post.postOwner}}</a></p>
+      <p>{{ post.postContents }}</p>
+      <br>
+      {% if post.postDateModification != ""%}
+      <p class="card-text"><small class="text-muted"> Modified on {{post.postDateModification}}</small></p>
+      {%endif%}
+      <!-- Button trigger modal -->
+      <a href="{{url_for('post_bp.updatePost',postId = post.postId )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
+      <a class="d-inline btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#exampleModal">
+          Delete
+      </a>
+      
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Post {{ post.postTitle }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete this post?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="{{url_for('post_bp.deletePost',postId = post.postId )}}" class="btn btn-primary">Yes</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+  </div>
+  </div>
 </div>
+
 {% endblock %}
