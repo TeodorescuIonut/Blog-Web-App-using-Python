@@ -2,9 +2,11 @@ from turtle import pos
 from flask import Flask, flash, redirect, render_template, request, url_for
 from models.Post import Post
 from datetime import datetime
+from PostsRepo.postRepo import postRepo
+from operator import attrgetter
 
 
-myList =[]
+myList =postRepo()
 def add_post():
     if request.method == "POST":
        # getting input title in HTML form
@@ -25,7 +27,7 @@ def add_post():
            flash(error)
            return render_template("add_post.html", post = post, urlPage = add_post)
        else:
-                myList.append(
+                myList.create(
                     Post(
                     post_title.title(),
                     content, 
@@ -38,8 +40,8 @@ def add_post():
 
 
 def blog():
-    return render_template("blog.html", posts = myList, length = len(myList))
-
+    sortedArray = sorted(myList.posts,key=lambda x: x.postDateCreation,reverse=True)
+    return render_template("blog.html", posts = sortedArray, length = len(myList.posts))
 
 def viewPost(postId):
     post = getPostByID(postId)
@@ -47,15 +49,14 @@ def viewPost(postId):
 
 
 def deletePost(postId):
-    post = getPostByID(postId)
-    myList.remove(post)
+    post = myList.getById(postId)
+    myList.delete(post)
     flash("Post deleted")
     return redirect(url_for('post_bp.blog'))
 
 
 def updatePost(postId):
-    post = getPostByID(postId)
-    postIndex = getPostByIndex(postId)
+    post = myList.getById(postId)
     if request.method == "POST":      
             # getting input title in HTML form
        post_title = request.form.get("title")
@@ -74,17 +75,18 @@ def updatePost(postId):
            flash(error)
            return render_template("add_post.html", post = post, buttonText = "Update", urlPage = updatePost)
        else:
-             myList[postIndex].postTitle = post_title.title()
-             myList[postIndex].postOwner = post_owner
-             myList[postIndex].postContents = content
-             myList[postIndex].postDateCreation = post.postDateCreation
-             myList[postIndex].postDateModification = datetime.now().strftime("%B %d %Y")
+             post.postId = postId
+             post.postTitle = post_title
+             post.postOwner = post_owner
+             post.postContents = content
+             post.postDateModification = datetime.now().strftime("%B %d %Y")
+             myList.update(post)
              flash("Post updated") 
-             return redirect(url_for('post_bp.blog'))
+             return redirect(url_for('post_bp.viewPost',postId = post.postId))
     return render_template("add_post.html", post = post, buttonText = "Update", urlPage = updatePost)
 
 def getPostByID(postId):
-    for post in myList:
+    for post in myList.posts:
         if(post.postId == postId):
             return post
 

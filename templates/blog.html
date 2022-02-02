@@ -22,7 +22,7 @@
             <div class="card-body">
               <h5 class="card-title">{{ post.postTitle }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ post.postOwner }}</h6>
-              <p class="card-text">{{ post.postContents }}</p>
+              <p class="card-text">{{ post.postContents[0:300] }}</p>
               {% if post.postDateModification != '' %}
               <p class="card-text"><small class="text-muted"> Modified on {{post.postDateModification}}</small></p>
               {%endif%}

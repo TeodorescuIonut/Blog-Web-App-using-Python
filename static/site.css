@@ -1,12 +1,18 @@
 .card-text{
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
-    max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
-    height:56px;
 }
 #deleteBtn{
     color: white;
+}
+.post-content{
+    white-space: pre-wrap;
+    text-align: justify;
+    padding: 2vw 0;
+}
+.blog-post{
+    padding: 3vw 0;
 }

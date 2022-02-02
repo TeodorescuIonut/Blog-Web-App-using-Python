@@ -7,5 +7,5 @@ class Post:
         self.postTitle = str(title)
         self.postContents = str(contents)
         self.postOwner = str(owner)
-        self.postDateCreation = datetime.now().strftime("%B %d %Y")
+        self.postDateCreation = datetime.now().strftime("%B %d %Y %H:%M:%S")
         self.postDateModification = ''

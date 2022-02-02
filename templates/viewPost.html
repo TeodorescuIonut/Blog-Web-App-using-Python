@@ -6,14 +6,13 @@
 
 <br>
 <div class="row">
-  <div class="col-md-8 blog-main">
+  <div class="col-md-12 blog-main">
     <div class="blog-post">
       <h2 class="blog-post-title">{{ post.postTitle }}</h2>
       <br>
       <i class="d-inline far fa-clock"></i>
-      <p class="d-inline blog-post-meta">{{ post.postDateCreation }} by <a href="#">{{post.postOwner}}</a></p>
-      <p>{{ post.postContents }}</p>
-      <br>
+      <p class="d-inline blog-post-meta">{{ post.postDateCreation }} by <a href="#">{{post.postOwner}}</a></p><br>
+      <p class="post-content">{{ post.postContents }}</p>
       {% if post.postDateModification != ""%}
       <p class="card-text"><small class="text-muted"> Modified on {{post.postDateModification}}</small></p>
       {%endif%}
