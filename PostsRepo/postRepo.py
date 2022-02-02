@@ -12,7 +12,7 @@ class postRepo:
 
     def getById(self, id):
         for post in self.posts:
-            if post.postId == id :
+            if post.postId == id:
                 return post
     
     def create(self, post):
