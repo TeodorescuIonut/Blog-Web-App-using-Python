@@ -27,13 +27,13 @@ def add_post():
            flash(error)
            return render_template("add_post.html", post = post, urlPage = add_post)
        else:
-                myList.create(
-                    Post(
+                newPost =  Post(
                     post_title.title(),
                     content, 
-                    post_owner))
+                    post_owner)
+                myList.create(newPost)
                 flash("Post added")
-                return redirect(url_for('post_bp.blog')) 
+                return redirect(url_for('post_bp.viewPost',postId = newPost.postId)) 
                 
     return render_template("add_post.html", post = Post, urlPage = add_post)
 
@@ -94,3 +94,5 @@ def getPostByIndex(postId):
     for post in myList:
         if(post.postId == postId):
             return myList.index(post)
+
+

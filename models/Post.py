@@ -9,3 +9,5 @@ class Post:
         self.postOwner = str(owner)
         self.postDateCreation = datetime.now().strftime("%B %d %Y %H:%M:%S")
         self.postDateModification = ''
+        self.preview = contents[0:200]
+    
