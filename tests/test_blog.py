@@ -3,6 +3,8 @@ from pdb import post_mortem
 from sys import prefix
 from turtle import pos
 
+import flask
+
 from flask import Flask
 from models.Post import Post
 from PostsRepo.postRepo import postRepo
@@ -41,13 +43,19 @@ def deletePost(client):
      return client.post('/POST/DELETE/0', follow_redirects=True)
 
 def viewPost(client):
-     return client.post('/POST/VIEW/0', follow_redirects=True)
+     return client.post('/POST/VIEW/0')
 
 def test_add_post(client):
      """Test if a new post can be added"""
      result =  addPost(client, "Hello world", "bla bla", "Jhon")
      assert result.status == '200 OK'
      assert b'Post added' in result.data
+def test_view_post(client):
+     """Test if a post can be viewed"""
+     addPost(client,"Hello world", "bla bla", "Jhon")
+     result = viewPost(client)
+     assert b'Hello World' in result.data
+
 
 def test_update_post(client):
      """Test if a post can be updated"""
@@ -62,8 +70,4 @@ def test_delete_post(client):
      result = deletePost(client)
      assert b'Post deleted' in result.data
 
-def test_view_post(client):
-     """Test if a post can be viewed"""
-     addPost(client,"Hello world", "bla bla", "Jhon")
-     result = viewPost(client)
-     assert b'Hello World' in result.data
+

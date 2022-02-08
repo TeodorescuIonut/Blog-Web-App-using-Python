@@ -1,8 +1,9 @@
+from operator import imod
 import re
 from turtle import pos
+from IPostRepository import IPostRepository
 
-
-class postRepo:
+class postRepo(IPostRepository):
     def __init__(self):
         self.posts = list()
         self.count = 0
@@ -26,3 +27,5 @@ class postRepo:
 
     def delete(self, post):
         self.posts.remove(post)
+
+print(postRepo.__mro__)
