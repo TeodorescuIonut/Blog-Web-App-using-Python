@@ -1,9 +1,8 @@
-
 class IPostRepository():
-    def getAll(self):
+    def get_all(self):
         pass
 
-    def getById(self, id):
+    def get_by_id(self, post_id):
         pass
 
     def create(self, post):

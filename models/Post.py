@@ -1,13 +1,8 @@
 from datetime import datetime
-import itertools
 class Post:
-    id = itertools.count()
-    def __init__(self, title, contents, owner): 
-        self.postId = next(self.id)
-        self.postTitle = str(title)
-        self.postContents = str(contents)
-        self.postOwner = str(owner)
-        self.postDateCreation = datetime.now().strftime("%B %d %Y %H:%M:%S")
-        self.postDateModification = ''
-        self.preview = contents[0:200]
-    
+    def __init__(self, title, contents, owner):
+        self.post_title = str(title)
+        self.post_contents = str(contents)
+        self.post_owner = str(owner)
+        self.post_date_creation = datetime.now().strftime("%B %d %Y %H:%M:%S")
+        self.post_date_modification = ''

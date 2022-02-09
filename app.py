@@ -1,9 +1,5 @@
-from distutils.log import debug
-from turtle import pos
-from flask import Flask, flash, redirect, render_template, request, url_for
-from models.Post import Post
+from flask import Flask, render_template
 from routes.post_bp import post_bp
-
 
 app = Flask(__name__)
 app.config.from_object('config')

@@ -20,13 +20,13 @@
         <div class="card mb-4 shadow-sm" >
             <img src="https://www.groovehq.com/blog/wp-content/uploads/2022/01/Feature-image-14.png" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">{{ post.postTitle }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ post.postOwner }}</h6>
+              <h5 class="card-title">{{ post.post_title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ post.post_owner }}</h6>
               <p class="card-text">{{ post.preview }}</p>
-              {% if post.postDateModification != '' %}
-              <p class="card-text"><small class="text-muted"> Modified on {{post.postDateModification}}</small></p>
+              {% if post.post_date_modification != '' %}
+              <p class="card-text"><small class="text-muted"> Modified on {{post.post_date_modification}}</small></p>
               {%endif%}
-              <a href="{{url_for('post_bp.viewPost',postId = post.postId )}}" class="streched-link">Read More</a>
+              <a href="{{url_for('post_bp.view_post',post_id = post.post_id )}}" class="streched-link">Read More</a>
             </div>
           </div>
     </div>
