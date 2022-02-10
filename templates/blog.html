@@ -22,7 +22,7 @@
             <div class="card-body">
               <h5 class="card-title">{{ post.post_title }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ post.post_owner }}</h6>
-              <p class="card-text">{{ post.preview }}</p>
+              <p class="card-text">{{ post.post_contents_preview}}</p>
               {% if post.post_date_modification != '' %}
               <p class="card-text"><small class="text-muted"> Modified on {{post.post_date_modification}}</small></p>
               {%endif%}

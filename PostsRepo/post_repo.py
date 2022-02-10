@@ -1,5 +1,14 @@
+import sys
+import os
+myDir = os.getcwd()
+sys.path.append(myDir)
+from pathlib import Path
+path = Path(myDir)
+a=str(path.parent.absolute())
+from PostsRepo.post_repository_interface import IPostRepository
+from models.post_preview import PostPreview
 
-class PostRepo():
+class PostRepo(IPostRepository):
     def __init__(self):
         self.posts = list()
         self.count = 0
@@ -20,3 +29,16 @@ class PostRepo():
 
     def delete(self, post):
         self.posts.remove(post)
+    
+    def get_previews(self):
+        posts_previews = []
+        for post in self.posts:
+            posts_previews.append(self.create_preview(post))
+        return posts_previews
+
+    def create_preview(self,post):
+        content_preview = post.post_contents[0:200]
+        creation_date = post.post_date_creation
+        modification_date = post.post_date_modification
+        preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
+        return preview

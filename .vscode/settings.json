@@ -8,7 +8,5 @@
     "python.linting.enabled": true,
     "python.linting.pylintArgs": [
         "--disable=C0111"
-    ],
-    "python.autoComplete.extraPaths":
-    ["C:/Users/Ionut/Blog-Web-App-using-Python"]
+    ]
 }

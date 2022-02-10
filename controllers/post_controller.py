@@ -1,7 +1,16 @@
+import sys
+import os
+myDir = os.getcwd()
+sys.path.append(myDir)
+from pathlib import Path
+path = Path(myDir)
+a=str(path.parent.absolute())
+sys.path.append(a)
 from datetime import datetime
 from flask import flash, redirect, render_template, request, url_for
 from models.post import Post
 from PostsRepo.post_repo import PostRepo
+from PostsRepo.post_repository_interface import IPostRepository
 myList =PostRepo()
 def add_post():
     if request.method == "POST":
@@ -35,7 +44,7 @@ def add_post():
 
 
 def blog():
-    sorted_array = sorted(myList.posts,key=lambda x: x.post_date_creation,reverse=True)
+    sorted_array = sorted(myList.get_previews(),key=lambda x: x.post_date_creation,reverse=True)
     return render_template("blog.html", posts = sorted_array, length = len(myList.posts))
 
 def view_post(post_id):
