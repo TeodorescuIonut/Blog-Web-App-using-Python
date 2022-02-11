@@ -1,3 +1,11 @@
+import sys
+import os
+from pathlib import Path
+myDir = os.getcwd()
+sys.path.append(myDir)
+path = Path(myDir)
+a=str(path.parent.absolute())
+sys.path.append(a)
 from flask import Flask, render_template
 from routes.post_bp import post_bp
 

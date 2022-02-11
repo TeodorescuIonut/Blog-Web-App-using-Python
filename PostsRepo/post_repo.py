@@ -1,12 +1,13 @@
 import sys
 import os
+from PostsRepo.post_repository_interface import IPostRepository
+from models.post_preview import PostPreview
 myDir = os.getcwd()
 sys.path.append(myDir)
 from pathlib import Path
 path = Path(myDir)
 a=str(path.parent.absolute())
-from PostsRepo.post_repository_interface import IPostRepository
-from models.post_preview import PostPreview
+
 
 class PostRepo(IPostRepository):
     def __init__(self):

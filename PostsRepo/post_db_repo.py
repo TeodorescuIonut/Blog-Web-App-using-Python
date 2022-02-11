@@ -1,13 +1,12 @@
 import sys
 import os
 from pathlib import Path
-from PostsRepo.post_repository_interface import IPostRepository
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
-
+from PostsRepo.post_repository_interface import IPostRepository
 
 class PostDbRepo(IPostRepository):
     def create(self, post):

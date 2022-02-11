@@ -1,12 +1,12 @@
 import sys
 import os
+from pathlib import Path
+import pytest
 myDir = os.getcwd()
 sys.path.append(myDir)
-from pathlib import Path
 path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
-import pytest
 #pylint: disable=redefined-outer-name
 from app import app
 
@@ -59,8 +59,12 @@ def test_add_two_posts(client):
     add_post(client, "Hello ", "bla bla bla", "PEter")
     resp = client.get('/POST/',follow_redirects=True)
     assert result.status == '200 OK'
-    assert b"Hello World"; b"bla bla";b"Jhon"  in resp.data
-    assert b"Hello"; b"bla bla bla";b"Peter"  in resp.data
+    assert b"Hello World"
+    assert b'bla bla' in resp.data
+    assert b"Jhon"  in resp.data
+    assert b"Hello" in resp.data
+    assert b"bla bla bla" in resp.data
+    assert b"Peter"  in resp.data
 
 def test_view_post(client):
     """Test if a post can be viewed"""
@@ -90,3 +94,4 @@ def test_delete_post(client):
     assert b'Hell world' not in response.data
     assert b'new content' not in response.data
     assert b'Grace' not in response.data
+    

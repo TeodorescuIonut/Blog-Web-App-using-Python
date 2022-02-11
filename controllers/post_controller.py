@@ -1,17 +1,17 @@
 import sys
 import os
+from pathlib import Path
 myDir = os.getcwd()
 sys.path.append(myDir)
-from pathlib import Path
 path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
+from models.factory import Repo
 from datetime import datetime
 from flask import flash, redirect, render_template, request, url_for
 from models.post import Post
-from PostsRepo.post_repo import PostRepo
-from PostsRepo.post_repository_interface import IPostRepository
-myList =PostRepo()
+
+myList =Repo.factory("PostRepo")
 def add_post():
     if request.method == "POST":
        # getting input title in HTML form
@@ -97,3 +97,4 @@ def get_post_by_id(post_id):
     for post in myList.posts:
         if post.post_id == post_id :
             return post
+            

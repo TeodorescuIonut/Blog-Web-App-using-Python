@@ -1,5 +1,13 @@
-
 import abc
+import sys
+import os
+myDir = os.getcwd()
+sys.path.append(myDir)
+from pathlib import Path
+path = Path(myDir)
+a=str(path.parent.absolute())
+
+
 
 class IPostRepository(metaclass=abc.ABCMeta):
     @classmethod
@@ -42,3 +50,4 @@ class IPostRepository(metaclass=abc.ABCMeta):
         raise NotImplementedError
     
     
+
