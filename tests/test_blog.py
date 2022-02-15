@@ -1,3 +1,4 @@
+from pickle import TRUE
 import sys
 import os
 from pathlib import Path
@@ -13,6 +14,7 @@ from app import app
 
 @pytest.fixture(name = "client")
 def client():
+    app.config['TESTING']= TRUE
     return app.test_client()
 
 def test_app(client):
@@ -56,7 +58,7 @@ def test_add_post(client):
 def test_add_two_posts(client):
     """Test if a new post can be added"""
     result =  add_post(client, "Hello world", "bla bla", "Jhon")
-    add_post(client, "Hello ", "bla bla bla", "PEter")
+    add_post(client, "Hello ", "bla bla bla", "Peter")
     resp = client.get('/POST/',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World"
@@ -94,4 +96,3 @@ def test_delete_post(client):
     assert b'Hell world' not in response.data
     assert b'new content' not in response.data
     assert b'Grace' not in response.data
-    

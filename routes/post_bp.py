@@ -1,9 +1,15 @@
 from flask import Blueprint
-from controllers.post_controller import add_post, blog, view_post, update_post, delete_post
+from services.post_db_repo import PostDbRepo
+from services.post_repo import PostRepo
+from controllers.post_controller import PostController
 post_bp = Blueprint('post_bp', __name__)
 
-post_bp.route('/')(blog)
-post_bp.route('/CREATE/posts', methods =["GET", "POST"])(add_post)
-post_bp.route('/VIEW/<int:post_id>', methods =["GET", "POST"])(view_post)
-post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(update_post)
-post_bp.route('/DELETE/<int:post_id>', methods =["GET", "POST"])(delete_post)
+repo_memory = PostRepo.create_repo()
+post_controller = PostController(repo_memory)
+
+
+post_bp.route('/')(post_controller.blog)
+post_bp.route('/CREATE/posts', methods =["GET", "POST"])(post_controller.add_post)
+post_bp.route('/VIEW/<int:post_id>', methods =["GET", "POST"])(post_controller.view_post)
+post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(post_controller.update_post)
+post_bp.route('/DELETE/<int:post_id>', methods =["GET", "POST"])(post_controller.delete_post)

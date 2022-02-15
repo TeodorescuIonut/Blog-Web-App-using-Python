@@ -1,6 +1,6 @@
 import sys
 import os
-from PostsRepo.post_repository_interface import IPostRepository
+from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -43,3 +43,8 @@ class PostRepo(IPostRepository):
         modification_date = post.post_date_modification
         preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
         return preview
+    
+    @classmethod
+    def create_repo(cls):
+        return cls()
+

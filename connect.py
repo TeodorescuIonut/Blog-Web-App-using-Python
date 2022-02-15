@@ -1,7 +1,7 @@
 import psycopg2
 from config import config
 
-def connect():
+def connect_db():
     """ Connect to the PostgreSQL database server """
     conn = None
     try:
@@ -24,13 +24,7 @@ def connect():
             'post_modified_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
             'post_title VARCHAR ( 255 ) NOT NULL,'
             'post_content VARCHAR NOT NULL,'
-            'post_owner VARCHAR ( 50 ) UNIQUE NOT NULL);')
-        cur.execute('INSERT INTO posts (post_title, post_content, post_owner)'
-            'VALUES (%s, %s, %s)',
-            ('A Tale of Two Cities',
-             'A great classic!',
-             'Charles Dickens')
-            )
+            'post_owner  );')
         conn.commit()
         # display the PostgreSQL database server version
         db_version = cur.fetchone()
@@ -47,4 +41,4 @@ def connect():
 
 
 if __name__ == '__main__':
-    connect()
+    connect_db()
