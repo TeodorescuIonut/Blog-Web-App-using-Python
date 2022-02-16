@@ -1,7 +1,7 @@
-from pickle import TRUE
 import sys
 import os
 from pathlib import Path
+from venv import create
 import pytest
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -9,13 +9,13 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 #pylint: disable=redefined-outer-name
-from app import app
+from main import create_app
 
 
+testing_app = create_app(test_config=True)
 @pytest.fixture(name = "client")
 def client():
-    app.config['TESTING']= TRUE
-    return app.test_client()
+    return testing_app.test_client()
 
 def test_app(client):
     """Check an empty blog"""

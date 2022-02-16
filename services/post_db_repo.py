@@ -1,12 +1,9 @@
 from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
-from config import config
 from models.post import Post
-import psycopg2
+from post_db import PostDB
 
-params = config()
-conn = psycopg2.connect(**params)
-cur = conn.cursor()
+db = PostDB()
 
 class PostDbRepo(IPostRepository):
 
@@ -15,17 +12,17 @@ class PostDbRepo(IPostRepository):
         self.count = 0
 
     def create(self, post):      
-        cur.execute(
+        db.cur.execute(
                 "INSERT INTO posts (post_title, post_content, post_owner) VALUES (%s, %s, %s) RETURNING post_id",
                 (post.post_title, post.post_contents, post.post_owner),
             )
-        post.post_id = cur.fetchone()[0]
-        conn.commit()
-        self.posts.append(post)
-        
+        post.post_id = db.cur.fetchone()[0]
+        db.conn.commit()
+
+
     def get_all(self):
-        cur.execute("SELECT * FROM posts")
-        rows = cur.fetchall()        
+        db.cur.execute("SELECT * FROM posts")
+        rows = db.cur.fetchall()        
         for row in rows:
             post =Post("", "", "")
             post.post_id = row[0]
@@ -38,8 +35,8 @@ class PostDbRepo(IPostRepository):
         return self.posts
 
     def get_by_id(self, post_id):
-        cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
-        data = cur.fetchall()[0]
+        db.cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
+        data = db.cur.fetchall()[0]
         print(data)
         post =Post("", "", "")
         post.post_id = data[0]
@@ -51,7 +48,7 @@ class PostDbRepo(IPostRepository):
         return post
     def update(self, post):
         self.posts.append(post)
-        cur.execute("""
+        db.cur.execute("""
         UPDATE posts
         SET post_title = %s,
             post_content = %s,
@@ -62,8 +59,8 @@ class PostDbRepo(IPostRepository):
         
     
     def delete(self, post):       
-        cur.execute('DELETE FROM posts WHERE post_id= {0}'.format(post.post_id))
-        conn.commit()
+        db.cur.execute('DELETE FROM posts WHERE post_id= {0}'.format(post.post_id))
+        db.conn.commit()
         
     def get_previews(self):
         posts_previews = []
@@ -79,6 +76,9 @@ class PostDbRepo(IPostRepository):
         preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
         return preview
     
-    @classmethod
-    def create_repo(cls):
-        return cls()
+    def check_post(self, post, posts):
+        for ex_post in posts:
+            if post.post_id == ex_post.post_id:
+                return True
+
+

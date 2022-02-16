@@ -26,11 +26,6 @@ class IPostRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod 
     def create_preview(self,post):
         raise NotImplementedError
-    
-    @classmethod
-    @abc.abstractmethod
-    def create_repo(cls):
-        raise NotImplementedError
 
 
     

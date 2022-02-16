@@ -1,15 +1,18 @@
-from flask import Blueprint
-from services.post_db_repo import PostDbRepo
-from services.post_repo import PostRepo
-from controllers.post_controller import PostController
+from flask import Blueprint, current_app
+import sys
+import os
+from pathlib import Path
+myDir = os.getcwd()
+sys.path.append(myDir)
+path = Path(myDir)
+a=str(path.parent.absolute())
+sys.path.append(a)
+from controllers.post_controller import blog,add_post, delete_post, view_post, update_post
 post_bp = Blueprint('post_bp', __name__)
 
-repo_memory = PostRepo.create_repo()
-post_controller = PostController(repo_memory)
 
-
-post_bp.route('/')(post_controller.blog)
-post_bp.route('/CREATE/posts', methods =["GET", "POST"])(post_controller.add_post)
-post_bp.route('/VIEW/<int:post_id>', methods =["GET", "POST"])(post_controller.view_post)
-post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(post_controller.update_post)
-post_bp.route('/DELETE/<int:post_id>', methods =["GET", "POST"])(post_controller.delete_post)
+post_bp.route('/')(blog)
+post_bp.route('/CREATE/posts', methods =["GET", "POST"])(add_post)
+post_bp.route('/VIEW/<int:post_id>', methods =["GET", "POST"])(view_post)
+post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(update_post)
+post_bp.route('/DELETE/<int:post_id>', methods =["GET", "POST"])(delete_post)
