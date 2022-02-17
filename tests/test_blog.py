@@ -13,6 +13,8 @@ from main import create_app
 
 
 testing_app = create_app(test_config=True)
+
+
 @pytest.fixture(name = "client")
 def client():
     return testing_app.test_client()
@@ -48,7 +50,7 @@ def view_post(client):
 
 def test_add_post(client):
     """Test if a new post can be added"""
-    result =  add_post(client, "Hello world", "bla bla", "Jhon")
+    result =  add_post(client, "Hello world", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl pretium fusce id velit ut tortor. A cras semper auctor neque vitae tempus. Faucibus interdum posuere lorem ipsum dolor sit. Amet est placerat in egestas erat imperdiet. Imperdiet nulla malesuada pellentesque elit. Sit amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar. Mattis vulputate enim nulla aliquet porttitor lacus luctus accumsan. Massa massa ultric", "Jhon")
     resp = client.get('/POST/',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data

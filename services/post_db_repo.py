@@ -1,10 +1,20 @@
+import os
+import sys
+myDir = os.getcwd()
+sys.path.append(myDir)
+from pathlib import Path
+path = Path(myDir)
+a=str(path.parent.absolute())
 from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
 from post_db import PostDB
 
+
 db = PostDB()
 
+db.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts")
+rows = db.cur.fetchall()   
 class PostDbRepo(IPostRepository):
 
     def __init__(self):
@@ -21,17 +31,18 @@ class PostDbRepo(IPostRepository):
 
 
     def get_all(self):
-        db.cur.execute("SELECT * FROM posts")
-        rows = db.cur.fetchall()        
-        for row in rows:
-            post =Post("", "", "")
-            post.post_id = row[0]
-            post.post_date_creation = row[1]
-            post.post_date_modification = row[2]
-            post.post_title= row[3]
-            post.post_contents= row[4]
-            post.post_owner= row[5]
-            self.posts.append(post)
+        db.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
+        rows = db.cur.fetchall()
+        if len(self.posts) != len(rows):       
+            for row in rows:
+                post =Post("", "", "")
+                post.post_id = row[0]
+                post.post_date_creation = row[1]
+                post.post_date_modification = row[2]
+                post.post_title= row[3]
+                post.post_contents= row[4]
+                post.post_owner= row[5]
+                self.posts.append(post)
         return self.posts
 
     def get_by_id(self, post_id):
@@ -55,12 +66,16 @@ class PostDbRepo(IPostRepository):
             post_owner = %s
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
+        db.conn.commit()
         self.posts.remove(post)
         
     
-    def delete(self, post):       
-        db.cur.execute('DELETE FROM posts WHERE post_id= {0}'.format(post.post_id))
-        db.conn.commit()
+    def delete(self, post):    
+       db.cur.execute('DELETE FROM posts WHERE post_id= %s', (post.post_id,))
+       db.conn.commit()
+       self.posts.remove(post)
+
+
         
     def get_previews(self):
         posts_previews = []
@@ -80,5 +95,3 @@ class PostDbRepo(IPostRepository):
         for ex_post in posts:
             if post.post_id == ex_post.post_id:
                 return True
-
-

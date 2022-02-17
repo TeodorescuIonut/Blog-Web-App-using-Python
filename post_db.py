@@ -18,7 +18,7 @@ class PostDB:
             'post_owner  );')
         self.conn.commit()
     def close(self):
-        self.cur.close()
+        self.conn.close()
         self.cur.close()
     def config(self, filename='database.ini', section='postgresql'):
         # create a parser

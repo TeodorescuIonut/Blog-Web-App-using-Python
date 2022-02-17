@@ -1,5 +1,7 @@
 import sys
 import os
+from flask.cli import with_appcontext
+import click
 from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 myDir = os.getcwd()
@@ -13,8 +15,10 @@ class PostRepo(IPostRepository):
     def __init__(self):
         self.posts = list()
         self.count = 0
+
     def get_all(self):
-        return self.posts
+        sorted_array = sorted(self.get_previews(),key=lambda x: x.post_date_creation,reverse=True)
+        return sorted_array
 
     def get_by_id(self, post_id):
         for post in self.posts:

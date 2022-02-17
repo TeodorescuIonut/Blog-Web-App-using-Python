@@ -1,9 +1,8 @@
 from datetime import datetime
-from services.post_factory import PostFactory
 from flask import current_app, flash, redirect, render_template, request, url_for
 from models.post import Post
 
-repo = PostFactory.create('PostDbRepo')
+
 def add_post():
     if request.method == "POST":
         # getting input title in HTML form
