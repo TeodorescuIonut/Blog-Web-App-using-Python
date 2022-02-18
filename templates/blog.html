@@ -23,9 +23,6 @@
               <h5 class="card-title">{{ post.post_title }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ post.post_owner }}</h6>
               <p class="card-text">{{ post.post_contents}}</p>
-              {% if post.post_date_modification != '' %}
-              <p class="card-text"><small class="text-muted"> Modified on {{post.post_date_modification}}</small></p>
-              {%endif%}
               <a href="{{url_for('post_bp.view_post',post_id = post.post_id )}}" class="streched-link">Read More</a>
             </div>
           </div>

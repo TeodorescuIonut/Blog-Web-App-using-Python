@@ -1,3 +1,4 @@
+from operator import index
 import os
 import sys
 myDir = os.getcwd()
@@ -12,14 +13,13 @@ from post_db import PostDB
 
 
 db = PostDB()
-
-db.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts")
-rows = db.cur.fetchall()   
+   
 class PostDbRepo(IPostRepository):
 
     def __init__(self):
         self.posts = list()
         self.count = 0
+        db.create_db()
 
     def create(self, post):      
         db.cur.execute(
@@ -27,28 +27,35 @@ class PostDbRepo(IPostRepository):
                 (post.post_title, post.post_contents, post.post_owner),
             )
         post.post_id = db.cur.fetchone()[0]
+        self.posts.append(post)
         db.conn.commit()
 
 
     def get_all(self):
         db.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
-        rows = db.cur.fetchall()
-        if len(self.posts) != len(rows):       
-            for row in rows:
-                post =Post("", "", "")
-                post.post_id = row[0]
-                post.post_date_creation = row[1]
-                post.post_date_modification = row[2]
-                post.post_title= row[3]
-                post.post_contents= row[4]
-                post.post_owner= row[5]
+        rows = db.cur.fetchall()      
+        for row in rows:
+            post =Post("", "", "")
+            post.post_id = row[0]
+            post.post_date_creation = row[1]
+            post.post_date_modification = row[2]
+            post.post_title= row[3]
+            post.post_contents= row[4]
+            post.post_owner= row[5]
+            if self.check_post(post) is False:
                 self.posts.append(post)
         return self.posts
+
+    def check_post(self,post_to_check):
+        for post in self.posts:
+            if post.post_id == post_to_check.post_id:
+                return True
+        
+
 
     def get_by_id(self, post_id):
         db.cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
         data = db.cur.fetchall()[0]
-        print(data)
         post =Post("", "", "")
         post.post_id = data[0]
         post.post_date_creation = data[1]
@@ -70,10 +77,26 @@ class PostDbRepo(IPostRepository):
         self.posts.remove(post)
         
     
-    def delete(self, post):    
-       db.cur.execute('DELETE FROM posts WHERE post_id= %s', (post.post_id,))
-       db.conn.commit()
-       self.posts.remove(post)
+    def delete(self, post): 
+        id = post.post_id 
+        db.cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
+        db.conn.commit()
+        index_post = self.get_post_index(id)
+        self.posts.remove(self.posts[index_post])
+
+    def get_post_index(self, id):
+        for post in self.posts:
+            if post.post_id == id:
+                return self.posts.index(post)
+
+
+    def update_list(self):
+        db.cur.execute('SELECT * FROM posts')
+        rows = db.cur.fetchall()
+        for row in rows:
+            for post in self.posts:
+                if post.post.id != row[0]:
+                    self.posts.remove(post)
 
 
         
@@ -91,7 +114,3 @@ class PostDbRepo(IPostRepository):
         preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
         return preview
     
-    def check_post(self, post, posts):
-        for ex_post in posts:
-            if post.post_id == ex_post.post_id:
-                return True

@@ -15,7 +15,7 @@ class PostDB:
             'post_modified_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
             'post_title VARCHAR ( 255 ) NOT NULL,'
             'post_content VARCHAR NOT NULL,'
-            'post_owner  );')
+            'post_owner VARCHAR (255));')
         self.conn.commit()
     def close(self):
         self.conn.close()

@@ -46,12 +46,12 @@ def update_post(client, title, content, owner):
     , follow_redirects=True)
 
 def view_post(client):
-    return client.get('/POST/')
+    return client.get('/POST/VIEW/3')
 
 def test_add_post(client):
     """Test if a new post can be added"""
-    result =  add_post(client, "Hello world", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl pretium fusce id velit ut tortor. A cras semper auctor neque vitae tempus. Faucibus interdum posuere lorem ipsum dolor sit. Amet est placerat in egestas erat imperdiet. Imperdiet nulla malesuada pellentesque elit. Sit amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar. Mattis vulputate enim nulla aliquet porttitor lacus luctus accumsan. Massa massa ultric", "Jhon")
-    resp = client.get('/POST/',follow_redirects=True)
+    result =  add_post(client, "Hello world", "bla bla", "Jhon")
+    resp = client.get('/POST/VIEW/0',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data
     assert b"bla bla" in resp.data
@@ -59,16 +59,17 @@ def test_add_post(client):
 
 def test_add_two_posts(client):
     """Test if a new post can be added"""
-    result =  add_post(client, "Hello world", "bla bla", "Jhon")
-    add_post(client, "Hello ", "bla bla bla", "Peter")
-    resp = client.get('/POST/',follow_redirects=True)
+    result =  add_post(client, "Hello World", "bla bla", "Jhon")
+    add_post(client, "Hello", "bla bla bla", "Peter")
+    resp1 = client.get('/POST/VIEW/1',follow_redirects=True)
+    resp2 = client.get('/POST/VIEW/2',follow_redirects=True)
     assert result.status == '200 OK'
-    assert b"Hello World"
-    assert b'bla bla' in resp.data
-    assert b"Jhon"  in resp.data
-    assert b"Hello" in resp.data
-    assert b"bla bla bla" in resp.data
-    assert b"Peter"  in resp.data
+    assert b"Hello World" in resp1.data
+    assert b'bla bla' in resp1.data
+    assert b"Jhon"  in resp1.data
+    assert b"Hello" in resp2.data
+    assert b"bla bla bla" in resp2.data
+    assert b"Peter"  in resp2.data
 
 def test_view_post(client):
     """Test if a post can be viewed"""
