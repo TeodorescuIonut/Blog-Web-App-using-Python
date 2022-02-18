@@ -65,7 +65,10 @@ class PostDbRepo(IPostRepository):
         post.post_owner= data[5]
         return post
     def update(self, post):
-        self.posts.append(post)
+        id = post.post_id
+        index_post = self.get_post_index(id)
+        self.posts.remove(self.posts[index_post])
+        self.posts.append(post)      
         db.cur.execute("""
         UPDATE posts
         SET post_title = %s,
@@ -74,7 +77,8 @@ class PostDbRepo(IPostRepository):
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
         db.conn.commit()
-        self.posts.remove(post)
+        
+        
         
     
     def delete(self, post): 
