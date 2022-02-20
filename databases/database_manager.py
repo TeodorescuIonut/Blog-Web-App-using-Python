@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 import psycopg2
 
-class PostDB:
+class Database:
     def __init__(self):
         params = self.config()
         self.conn = psycopg2.connect(**params)
@@ -20,7 +20,7 @@ class PostDB:
     def close(self):
         self.conn.close()
         self.cur.close()
-    def config(self, filename='database.ini', section='postgresql'):
+    def config(self, filename='databases/database.ini', section='postgresql'):
         # create a parser
         parser = ConfigParser()
         # read config file

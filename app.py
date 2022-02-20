@@ -1,6 +1,5 @@
-from threading import Thread
 from main import create_app
-from flask import render_template, request
+from flask import render_template
 
 app = create_app()
 

@@ -2,10 +2,10 @@ from services.post_repo import PostRepo
 from services.post_db_repo import PostDbRepo
 
 class PostFactory(object):
-    def create(repo):
-        if repo == "PostRepo":
+    def create(config):
+        if config is True:
             return PostRepo()
-        if repo == "PostDbRepo":
+        else:
             return PostDbRepo()
 
     create = staticmethod(create)

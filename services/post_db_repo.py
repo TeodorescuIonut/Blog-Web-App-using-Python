@@ -1,4 +1,3 @@
-from operator import index
 import os
 import sys
 myDir = os.getcwd()
@@ -9,17 +8,17 @@ a=str(path.parent.absolute())
 from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
-from post_db import PostDB
+from databases.database_manager import Database
 
 
-db = PostDB()
+
+db = Database()
    
 class PostDbRepo(IPostRepository):
 
     def __init__(self):
         self.posts = list()
         self.count = 0
-        db.create_db()
 
     def create(self, post):      
         db.cur.execute(
