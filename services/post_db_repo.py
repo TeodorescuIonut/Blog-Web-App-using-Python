@@ -12,27 +12,27 @@ from databases.database_manager import Database
 
 
 
-db = Database()
-   
+ 
 class PostDbRepo(IPostRepository):
-
+    db = Database()
+    conn = db.create_conn()
+    cur = db.create_cursor(conn)
     def __init__(self):
         self.posts = list()
         self.count = 0
 
     def create(self, post):      
-        db.cur.execute(
+        self.cur.execute(
                 "INSERT INTO posts (post_title, post_content, post_owner) VALUES (%s, %s, %s) RETURNING post_id",
                 (post.post_title, post.post_contents, post.post_owner),
             )
-        post.post_id = db.cur.fetchone()[0]
+        post.post_id = self.cur.fetchone()[0]
         self.posts.append(post)
-        db.conn.commit()
-
+        self.conn.commit()
 
     def get_all(self):
-        db.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
-        rows = db.cur.fetchall()      
+        self.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
+        rows = self.cur.fetchall()      
         for row in rows:
             post =Post("", "", "")
             post.post_id = row[0]
@@ -41,11 +41,11 @@ class PostDbRepo(IPostRepository):
             post.post_title= row[3]
             post.post_contents= row[4]
             post.post_owner= row[5]
-            if self.check_post(post) is False:
+            if self.check_post_exists(post) is False:
                 self.posts.append(post)
         return self.posts
 
-    def check_post(self,post_to_check):
+    def check_post_exists(self,post_to_check):
         for post in self.posts:
             if post.post_id == post_to_check.post_id:
                 return True
@@ -53,8 +53,8 @@ class PostDbRepo(IPostRepository):
 
 
     def get_by_id(self, post_id):
-        db.cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
-        data = db.cur.fetchall()[0]
+        self.cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
+        data = self.cur.fetchall()[0]
         post =Post("", "", "")
         post.post_id = data[0]
         post.post_date_creation = data[1]
@@ -68,22 +68,22 @@ class PostDbRepo(IPostRepository):
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
         self.posts.append(post)      
-        db.cur.execute("""
+        self.cur.execute("""
         UPDATE posts
         SET post_title = %s,
             post_content = %s,
             post_owner = %s
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
-        db.conn.commit()
+        self.conn.commit()
         
         
         
     
     def delete(self, post): 
         id = post.post_id 
-        db.cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
-        db.conn.commit()
+        self.cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
+        self.conn.commit()
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
 
@@ -93,16 +93,6 @@ class PostDbRepo(IPostRepository):
                 return self.posts.index(post)
 
 
-    def update_list(self):
-        db.cur.execute('SELECT * FROM posts')
-        rows = db.cur.fetchall()
-        for row in rows:
-            for post in self.posts:
-                if post.post.id != row[0]:
-                    self.posts.remove(post)
-
-
-        
     def get_previews(self):
         posts_previews = []
         posts = self.get_all()
