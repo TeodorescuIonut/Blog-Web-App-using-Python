@@ -4,4 +4,3 @@ SECRET_KEY = os.urandom(32)
 # Enable debug mode.
 DEBUG = False
 #!/usr/bin/python
-

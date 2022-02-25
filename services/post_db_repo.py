@@ -1,22 +1,27 @@
-import os
 import sys
+import os
+from pathlib import Path
 myDir = os.getcwd()
 sys.path.append(myDir)
-from pathlib import Path
 path = Path(myDir)
 a=str(path.parent.absolute())
+sys.path.append(a)
+
+from databases.database_config import DatabaseConfig
+
 from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
 from databases.database_manager import Database
+from databases.database_settings import DatabaseSettings
 
 
 
- 
+
 class PostDbRepo(IPostRepository):
     db = Database()
     conn = db.create_conn()
-    cur = db.create_cursor(conn)
+    cur = db.create_cursor()
     def __init__(self):
         self.posts = list()
         self.count = 0
@@ -29,6 +34,7 @@ class PostDbRepo(IPostRepository):
         post.post_id = self.cur.fetchone()[0]
         self.posts.append(post)
         self.conn.commit()
+
 
     def get_all(self):
         self.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
@@ -75,7 +81,6 @@ class PostDbRepo(IPostRepository):
             post_owner = %s
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
-        self.conn.commit()
         
         
         
@@ -86,6 +91,7 @@ class PostDbRepo(IPostRepository):
         self.conn.commit()
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
+
 
     def get_post_index(self, id):
         for post in self.posts:
