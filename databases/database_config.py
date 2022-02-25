@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 myDir = os.getcwd()
 sys.path.append(myDir)
-from pathlib import Path
 path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
@@ -28,6 +27,8 @@ class DatabaseConfig:
     def is_configured(self):
         if not os.path.exists("./database.ini"):
             return False
+        else:
+            return True
 
         
     def load(self):

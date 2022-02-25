@@ -1,3 +1,11 @@
+import sys
+import os
+from pathlib import Path
+myDir = os.getcwd()
+sys.path.append(myDir)
+path = Path(myDir)
+a=str(path.parent.absolute())
+sys.path.append(a)
 import psycopg2
 from databases.database_config import DatabaseConfig
 
@@ -9,7 +17,8 @@ class Database:
         conn = psycopg2.connect(host = self.data_settings.host, database=self.data_settings.database, user = self.data_settings.user,password = self.data_settings.password)
         return conn
     def create_cursor(self):      
-        cur = self.create_conn().cursor()
+        conn = self.create_conn()
+        cur = conn.cursor()
         return cur
     def create_table(self):
         cur = self.create_cursor()

@@ -6,7 +6,6 @@ from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models.post import Post
 
 
-
 class PostBlueprint:
 
     def __init__(self, repo):
@@ -14,10 +13,10 @@ class PostBlueprint:
         self.post_bp = Blueprint('post_bp',__name__)
 
 
-    def create(self):
+    def create(self):        
         self.post_bp.route('/')(self.blog)
         self.post_bp.route('/POST')(self.blog)
-        self.post_bp.route('/PUT/posts', methods =["GET", "POST"])(self.add_post)
+        self.post_bp.route('/CREATE/posts', methods =["GET", "POST"])(self.add_post)
         self.post_bp.route('/GET/<int:post_id>')(self.view_post)
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>')(self.delete_post)

@@ -1,6 +1,8 @@
 import sys
 import os
 from pathlib import Path
+
+from flask import redirect, url_for
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -19,26 +21,28 @@ from databases.database_settings import DatabaseSettings
 
 
 class PostDbRepo(IPostRepository):
-    db = Database()
-    conn = db.create_conn()
-    cur = db.create_cursor()
+   
     def __init__(self):
         self.posts = list()
-        self.count = 0
-
-    def create(self, post):      
-        self.cur.execute(
+        self.db = Database()
+    def create(self, post):
+        conn = self.db.create_conn()
+        cur = self.db.create_cursor()  
+        cur.execute(
                 "INSERT INTO posts (post_title, post_content, post_owner) VALUES (%s, %s, %s) RETURNING post_id",
                 (post.post_title, post.post_contents, post.post_owner),
             )
-        post.post_id = self.cur.fetchone()[0]
+        post.post_id = cur.fetchone()[0]
         self.posts.append(post)
-        self.conn.commit()
+        conn.commit()
+        conn.close()
 
 
     def get_all(self):
-        self.cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
-        rows = self.cur.fetchall()      
+        conn = self.db.create_conn()
+        cur = self.db.create_cursor()  
+        cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
+        rows = cur.fetchall()      
         for row in rows:
             post =Post("", "", "")
             post.post_id = row[0]
@@ -49,6 +53,8 @@ class PostDbRepo(IPostRepository):
             post.post_owner= row[5]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
+            conn.commit()
+            conn.close()
         return self.posts
 
     def check_post_exists(self,post_to_check):
@@ -59,8 +65,10 @@ class PostDbRepo(IPostRepository):
 
 
     def get_by_id(self, post_id):
-        self.cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
-        data = self.cur.fetchall()[0]
+        conn = self.db.create_conn()
+        cur = self.db.create_cursor()  
+        cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
+        data = cur.fetchall()[0]
         post =Post("", "", "")
         post.post_id = data[0]
         post.post_date_creation = data[1]
@@ -68,27 +76,36 @@ class PostDbRepo(IPostRepository):
         post.post_title= data[3]
         post.post_contents= data[4]
         post.post_owner= data[5]
+        conn.commit()
+        conn.close()
         return post
     def update(self, post):
+        conn = self.db.create_conn()
+        cur = self.db.create_cursor()  
         id = post.post_id
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
         self.posts.append(post)      
-        self.cur.execute("""
+        cur.execute("""
         UPDATE posts
         SET post_title = %s,
             post_content = %s,
             post_owner = %s
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
+        conn.commit()
+        conn.close()
         
         
         
     
-    def delete(self, post): 
+    def delete(self, post):
+        conn = self.db.create_conn()
+        cur = self.db.create_cursor()  
         id = post.post_id 
-        self.cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
-        self.conn.commit()
+        cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
+        conn.commit()
+        conn.close()
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
 
