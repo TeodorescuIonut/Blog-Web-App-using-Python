@@ -7,15 +7,15 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 from main import create_app
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, request, url_for
 from databases.database_config import DatabaseConfig
-
+from databases.database_bp import database_bp, setup
 
 app = create_app() 
 
-@app.before_first_request
+@app.before_request
 def before_func():
-    if DatabaseConfig().is_configured() is False:
+    if DatabaseConfig().is_configured() is False and request.endpoint != "database_bp.setup":
         return redirect(url_for('database_bp.setup'))
   
 @app.route('/')
@@ -23,4 +23,4 @@ def main():
     return render_template('blog.html')
 
 if __name__ == "__main__":
-    app.run(debug = False)
+    app.run(port = 5000, debug = False)

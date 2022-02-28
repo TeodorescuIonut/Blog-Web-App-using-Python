@@ -1,14 +1,11 @@
 from datetime import datetime
-import os
-from venv import create
-from databases.database_config import DatabaseConfig
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models.post import Post
-
+from services.post_repository_interface import IPostRepository
 
 class PostBlueprint:
 
-    def __init__(self, repo):
+    def __init__(self, repo:IPostRepository):
         self.repo = repo
         self.post_bp = Blueprint('post_bp',__name__)
 
@@ -17,7 +14,7 @@ class PostBlueprint:
         self.post_bp.route('/')(self.blog)
         self.post_bp.route('/POST')(self.blog)
         self.post_bp.route('/CREATE/posts', methods =["GET", "POST"])(self.add_post)
-        self.post_bp.route('/GET/<int:post_id>')(self.view_post)
+        self.post_bp.route('/VIEW/<int:post_id>')(self.view_post)
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>')(self.delete_post)
         return self.post_bp

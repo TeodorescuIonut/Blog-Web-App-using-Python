@@ -2,20 +2,16 @@ import sys
 import os
 from pathlib import Path
 
-from flask import redirect, url_for
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 
-from databases.database_config import DatabaseConfig
-
 from services.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
 from databases.database_manager import Database
-from databases.database_settings import DatabaseSettings
 
 
 
@@ -27,22 +23,22 @@ class PostDbRepo(IPostRepository):
         self.db = Database()
     def create(self, post):
         conn = self.db.create_conn()
-        cur = self.db.create_cursor()  
+        cur = conn.cursor()
         cur.execute(
                 "INSERT INTO posts (post_title, post_content, post_owner) VALUES (%s, %s, %s) RETURNING post_id",
                 (post.post_title, post.post_contents, post.post_owner),
             )
+        conn.commit()
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
-        conn.commit()
-        conn.close()
+        self.db.close_and_save(conn)
 
 
     def get_all(self):
         conn = self.db.create_conn()
-        cur = self.db.create_cursor()  
+        cur = conn.cursor() 
         cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
-        rows = cur.fetchall()      
+        rows = cur.fetchall()[0]      
         for row in rows:
             post =Post("", "", "")
             post.post_id = row[0]
@@ -66,7 +62,7 @@ class PostDbRepo(IPostRepository):
 
     def get_by_id(self, post_id):
         conn = self.db.create_conn()
-        cur = self.db.create_cursor()  
+        cur = conn.cursor() 
         cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
         data = cur.fetchall()[0]
         post =Post("", "", "")
@@ -81,7 +77,7 @@ class PostDbRepo(IPostRepository):
         return post
     def update(self, post):
         conn = self.db.create_conn()
-        cur = self.db.create_cursor()  
+        cur = conn.cursor() 
         id = post.post_id
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
@@ -101,7 +97,7 @@ class PostDbRepo(IPostRepository):
     
     def delete(self, post):
         conn = self.db.create_conn()
-        cur = self.db.create_cursor()  
+        cur = conn.cursor()
         id = post.post_id 
         cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
         conn.commit()
