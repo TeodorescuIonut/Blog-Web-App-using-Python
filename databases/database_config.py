@@ -25,7 +25,6 @@ class DatabaseConfig:
             f'user = {database_settings.user}\n'
             f'password = {database_settings.password}'
             )
-        print("saved")
         
     def is_configured(self:bool):
         return os.path.exists(f"./{self.file}")
@@ -34,7 +33,6 @@ class DatabaseConfig:
         
     def load(self):
         params = self.connection_settings()
-        print(params)
         host = params['host']
         database = params['database']
         user = params['user']

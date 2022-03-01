@@ -20,13 +20,13 @@ class Database:
         conn = None
         data_settings = DatabaseConfig().load()
         try:
-            conn = psycopg2.connect(host = data_settings.host, database= data_settings.database, user = data_settings.user,password = data_settings.password)
+            conn = psycopg2.connect(host = data_settings.host,database = data_settings.database, user = data_settings.user,password = data_settings.password)
         except(Exception, psycopg2.DatabaseError) as error:
-            if(error):
+            if(error):           
                 conn = psycopg2.connect(host = data_settings.host, user = data_settings.user,password = data_settings.password)
-                conn.set_session(autocommit=True)
+                conn.autocommit = True
                 conn.cursor().execute(f'CREATE DATABASE {data_settings.database}')
-                conn.commit()
+                self.create_table()
         finally:
             return conn
         
@@ -37,16 +37,13 @@ class Database:
     def create_table(self):
         con = self.create_conn() 
         cur = con.cursor()
-        cur.execute(" DROP TABLE IF EXISTS posts;")
-        cur.execute(' CREATE TABLE posts (post_id serial PRIMARY KEY,'
+        cur.execute(' CREATE TABLE IF NOT EXISTS posts (post_id serial PRIMARY KEY,'
             'post_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
             'post_modified_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
             'post_title VARCHAR ( 255 ) NOT NULL,'
             'post_content VARCHAR NOT NULL,'
-            'post_owner VARCHAR (255));')
+            'post_owner VARCHAR (255)) ;')
         cur.close()
-        print('table created')
-        con.commit()
         con.close()
 
     def close_and_save(self, conn):

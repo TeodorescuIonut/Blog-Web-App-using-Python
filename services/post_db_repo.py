@@ -21,7 +21,7 @@ class PostDbRepo(IPostRepository):
     def __init__(self):
         self.posts = list()
         self.db = Database()
-    def create(self, post):
+    def create(self, post:Post):
         conn = self.db.create_conn()
         cur = conn.cursor()
         cur.execute(
@@ -75,7 +75,7 @@ class PostDbRepo(IPostRepository):
         conn.commit()
         conn.close()
         return post
-    def update(self, post):
+    def update(self, post:Post):
         conn = self.db.create_conn()
         cur = conn.cursor() 
         id = post.post_id
@@ -95,7 +95,7 @@ class PostDbRepo(IPostRepository):
         
         
     
-    def delete(self, post):
+    def delete(self, post:Post):
         conn = self.db.create_conn()
         cur = conn.cursor()
         id = post.post_id 
@@ -119,7 +119,7 @@ class PostDbRepo(IPostRepository):
             posts_previews.append(self.create_preview(post))
         return posts_previews
 
-    def create_preview(self,post):
+    def create_preview(self,post:Post):
         content_preview = post.post_contents[0:200]
         creation_date = post.post_date_creation
         modification_date = post.post_date_modification
