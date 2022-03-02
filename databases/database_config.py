@@ -26,13 +26,13 @@ class DatabaseConfig:
             f'password = {database_settings.password}'
             )
         
-    def is_configured(self:bool):
+    def is_configured(self)->bool:
         return os.path.exists(f"./{self.file}")
 
 
         
     def load(self):
-        params = self.connection_settings()
+        params = self.__get_connection_settings()
         host = params['host']
         database = params['database']
         user = params['user']
@@ -40,14 +40,14 @@ class DatabaseConfig:
         database_settings = DatabaseSettings(host,database, user,password)
         return database_settings
     
-    def connection_settings(self):
-         parser = ConfigParser()
-         parser.read(self.file)
-         db = {}
-         if parser.has_section(self.section):
-             params = parser.items(self.section)
-             for param in params:
-                 db[param[0]] = param[1]
-         else:
+    def __get_connection_settings(self):
+        parser = ConfigParser()
+        parser.read(self.file)
+        db = {}
+        if parser.has_section(self.section):
+            params = parser.items(self.section)
+            for param in params:
+                db[param[0]] = param[1]
+        else:
             raise Exception(f'Section {self.section} not found in {self.file}')
-         return db
+        return db

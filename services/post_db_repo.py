@@ -38,7 +38,7 @@ class PostDbRepo(IPostRepository):
         conn = self.db.create_conn()
         cur = conn.cursor() 
         cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
-        rows = cur.fetchall()[0]      
+        rows = cur.fetchall()
         for row in rows:
             post =Post("", "", "")
             post.post_id = row[0]
@@ -49,14 +49,16 @@ class PostDbRepo(IPostRepository):
             post.post_owner= row[5]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
-            conn.commit()
             conn.close()
+            cur.close()
         return self.posts
 
     def check_post_exists(self,post_to_check):
-        for post in self.posts:
-            if post.post_id == post_to_check.post_id:
-                return True
+        if len(self.posts) > 0:
+            for post in self.posts:
+                if post_to_check.post_id == post.post_id:
+                    return True
+        return False
         
 
 
