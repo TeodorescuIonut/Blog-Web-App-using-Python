@@ -2,6 +2,7 @@ from flask import Flask
 import sys
 import os
 from pathlib import Path
+
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -22,5 +23,6 @@ def create_app(test_config = False):
     post_bp = PostBlueprint(repo).create()
     app.register_blueprint(database_bp)
     app.register_blueprint(post_bp, url_prefix='/POST')
+    #Services(test_config)
     
     return app

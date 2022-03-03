@@ -1,6 +1,8 @@
 import sys
 import os
 from pathlib import Path
+
+from decorators.decorators import check_setup
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -11,16 +13,14 @@ from flask import redirect, render_template, request, url_for
 from databases.database_config import DatabaseConfig
 from databases.database_bp import database_bp, setup
 
+
 app = create_app() 
 
-@app.before_request
-def before_func():
-    if DatabaseConfig().is_configured() is False and request.endpoint != "database_bp.setup":
-        return redirect(url_for('database_bp.setup'))
-  
+@check_setup 
 @app.route('/')
 def main():
     return render_template('blog.html')
+
 
 if __name__ == "__main__":
     app.run(port = 5000, debug = False)
