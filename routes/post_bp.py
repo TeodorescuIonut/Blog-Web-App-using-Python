@@ -6,7 +6,6 @@ from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models.post import Post
 from services.post_repository_interface import IPostRepository
 
-
 class PostBlueprint:
 
     def __init__(self, repo:IPostRepository):
@@ -14,7 +13,7 @@ class PostBlueprint:
         self.post_bp = Blueprint('post_bp',__name__)
 
 
-
+    
     def create(self):       
         self.post_bp.route('/')(self.blog)
         self.post_bp.route('/POST')(self.blog)
@@ -23,10 +22,10 @@ class PostBlueprint:
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>')(self.delete_post)
         return self.post_bp
-    @check_setup 
+    @check_setup
     def blog(self):
         return render_template("blog.html", posts = self.repo.get_all(), length = len(self.repo.posts))
-    @check_setup 
+    @check_setup
     def add_post(self):
         if request.method == "POST":
             # getting input title in HTML form
@@ -56,12 +55,12 @@ class PostBlueprint:
             return redirect(url_for('post_bp.view_post',post_id = new_post.post_id))
         return render_template("add_post.html", post = Post, urlPage = self.add_post)
 
-    @check_setup 
+    @check_setup
     def view_post(self,post_id):
             post = self.repo.get_by_id(post_id)
             return render_template("viewPost.html", post = post)
 
-    @check_setup 
+    @check_setup
     def update_post(self,post_id):
         post = self.repo.get_by_id(post_id)
         if request.method == "POST":
@@ -95,7 +94,7 @@ class PostBlueprint:
         return render_template("add_post.html",
                 post = post, buttonText = "Update",
                 urlPage = self.update_post)
-    @check_setup 
+    @check_setup
     def delete_post(self,post_id):
         post = self.repo.get_by_id(post_id)
         self.repo.delete(post)

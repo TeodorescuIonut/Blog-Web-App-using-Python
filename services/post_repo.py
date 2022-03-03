@@ -19,7 +19,7 @@ class PostRepo(IPostRepository):
         sorted_array = sorted(self.get_previews(),key=lambda x: x.post_date_creation,reverse=True)
         return sorted_array
 
-    def get_by_id(self, post_id):
+    def get_by_id(self, post_id:int):
         for post in self.posts:
             if post.post_id == post_id:
                 return post

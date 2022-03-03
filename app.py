@@ -16,8 +16,8 @@ from databases.database_bp import database_bp, setup
 
 app = create_app() 
 
-@check_setup 
 @app.route('/')
+@check_setup
 def main():
     return render_template('blog.html')
 
