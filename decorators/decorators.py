@@ -10,4 +10,3 @@ def check_setup(setup):
             return redirect(url_for('database_bp.setup'))
         return setup(*args, **kwargs)
     return wrapper
-    
