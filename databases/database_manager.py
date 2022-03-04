@@ -20,7 +20,7 @@ class Database:
         conn = None
         data_settings = DatabaseConfig().load()
         try:
-            conn = psycopg2.connect(host = data_settings.host, user = data_settings.user,password = data_settings.password)
+            conn = psycopg2.connect(host = data_settings.host,database = data_settings.database, user = data_settings.user,password = data_settings.password)
         except(Exception, psycopg2.DatabaseError) as error:
             if(error):           
                 print(error)
