@@ -25,5 +25,5 @@ def create_app(test_config = False):
     post_bp = PostBlueprint(repo).create()
     app.register_blueprint(database_bp)
     app.register_blueprint(post_bp, url_prefix='/POST')
-    
+
     return app

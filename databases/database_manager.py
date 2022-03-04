@@ -40,6 +40,7 @@ class Database:
             'post_title VARCHAR ( 255 ) NOT NULL,'
             'post_content VARCHAR NOT NULL,'
             'post_owner VARCHAR (255)) ;')
+        con.commit()
         cur.close()
         con.close()
 

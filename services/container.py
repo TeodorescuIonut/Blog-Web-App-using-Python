@@ -5,8 +5,8 @@ from services.post_repository_interface import IPostRepository
 
 class Container:
     services_memory = {
-    IPostRepository: PostRepo(),   
+    IPostRepository: PostRepo()  
     }
     services_production = {
-    IPostRepository: PostDbRepo(),    
+    IPostRepository: PostDbRepo()  
     }

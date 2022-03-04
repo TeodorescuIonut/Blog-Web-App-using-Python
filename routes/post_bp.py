@@ -22,6 +22,7 @@ class PostBlueprint:
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>')(self.delete_post)
         return self.post_bp
+  
     @check_setup
     def blog(self):
         return render_template("blog.html", posts = self.repo.get_all(), length = len(self.repo.posts))
