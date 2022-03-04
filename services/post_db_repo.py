@@ -21,7 +21,7 @@ class PostDbRepo(IPostRepository):
     def __init__(self):
         self.posts = list()
         self.db = Database()
-    def create(self, post:Post):
+    def create(self, post:Post) -> None:
         conn = self.db.create_conn()
         cur = conn.cursor()
         cur.execute(
@@ -34,7 +34,7 @@ class PostDbRepo(IPostRepository):
         self.db.close_and_save(conn)
 
 
-    def get_all(self):
+    def get_all(self) -> list():
         conn = self.db.create_conn()
         cur = conn.cursor() 
         cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
@@ -53,7 +53,7 @@ class PostDbRepo(IPostRepository):
             cur.close()
         return self.posts
 
-    def check_post_exists(self,post_to_check):
+    def check_post_exists(self,post_to_check:Post)-> bool:
         if len(self.posts) > 0:
             for post in self.posts:
                 if post_to_check.post_id == post.post_id:
@@ -62,7 +62,7 @@ class PostDbRepo(IPostRepository):
         
 
 
-    def get_by_id(self, post_id):
+    def get_by_id(self, post_id:int) -> Post:
         conn = self.db.create_conn()
         cur = conn.cursor() 
         cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
@@ -77,7 +77,7 @@ class PostDbRepo(IPostRepository):
         conn.commit()
         conn.close()
         return post
-    def update(self, post:Post):
+    def update(self, post:Post) -> None:
         conn = self.db.create_conn()
         cur = conn.cursor() 
         id = post.post_id
@@ -97,7 +97,7 @@ class PostDbRepo(IPostRepository):
         
         
     
-    def delete(self, post:Post):
+    def delete(self, post:Post) -> None:
         conn = self.db.create_conn()
         cur = conn.cursor()
         id = post.post_id 
@@ -108,23 +108,8 @@ class PostDbRepo(IPostRepository):
         self.posts.remove(self.posts[index_post])
 
 
-    def get_post_index(self, id):
+    def get_post_index(self, id: int)-> int:
         for post in self.posts:
             if post.post_id == id:
                 return self.posts.index(post)
-
-
-    def get_previews(self):
-        posts_previews = []
-        posts = self.get_all()
-        for post in posts:
-            posts_previews.append(self.create_preview(post))
-        return posts_previews
-
-    def create_preview(self,post:Post):
-        content_preview = post.post_contents[0:200]
-        creation_date = post.post_date_creation
-        modification_date = post.post_date_modification
-        preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
-        return preview
     

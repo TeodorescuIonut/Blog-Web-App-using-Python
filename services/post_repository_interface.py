@@ -19,13 +19,6 @@ class IPostRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod 
     def delete(self, post):
         raise NotImplementedError
-    @abc.abstractmethod 
-    def get_previews(self):
-        raise NotImplementedError
-
-    @abc.abstractmethod 
-    def create_preview(self,post):
-        raise NotImplementedError
 
 
     
