@@ -40,10 +40,9 @@ class Database:
             'post_title VARCHAR ( 255 ) NOT NULL,'
             'post_content VARCHAR NOT NULL,'
             'post_owner VARCHAR (255)) ;')
-        con.commit()
-        cur.close()
-        con.close()
+        self.close_and_save(con, cur)
 
-    def close_and_save(self, conn):
+    def close_and_save(self, conn,cur):
         conn.commit()
+        cur.close()
         conn.close()
