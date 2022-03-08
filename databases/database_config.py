@@ -1,6 +1,8 @@
 import sys
 import os
 from pathlib import Path
+
+from interfaces.db_config_interface import IDatabaseConfig
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -9,7 +11,7 @@ sys.path.append(a)
 from configparser import ConfigParser
 from databases.database_settings import DatabaseSettings
 
-class DatabaseConfig:
+class DatabaseConfig(IDatabaseConfig):
    
     def __init__(self):
         self.config = ConfigParser()

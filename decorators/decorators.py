@@ -2,6 +2,7 @@ from functools import wraps
 from databases.database_config import DatabaseConfig
 from flask import redirect, render_template, request, url_for
 from services.services import Services
+from interfaces.post_repository_interface import IPostRepository
 
 
 def check_setup(setup):
@@ -12,11 +13,10 @@ def check_setup(setup):
         return setup(*args, **kwargs)
     return wrapper
 
-# def injector(func):
-#     @wraps(func)
-#     def wrapper2(*args, **kwargs):
-#         if Services().get_service():
-#             return Services().get_service()
-#         return func(*args, **kwargs)
-        
-#     return wrapper2
+def injector(func):
+    @wraps(func)
+    def wrapper_services(*args, **kwargs):
+        service = Services.get_service()
+        value = func(service, *args, **kwargs)
+        return value
+    return wrapper_services

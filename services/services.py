@@ -1,14 +1,23 @@
+from unittest.mock import Mock
+from databases.database_config import DatabaseConfig
+from interfaces.db_config_interface import IDatabaseConfig
+from services.post_db_repo import PostDbRepo
+from services.post_repo import PostRepo
+from interfaces.post_repository_interface import IPostRepository
 
-from services.container import Container
-from services.post_repository_interface import IPostRepository
 
-
-class Services(object):
-    def __init__(self, config):
-        self.config = config
-    
-
-    def get_service(self):
-        if self.config is True:
-            return Container.services_memory[IPostRepository]
-        return Container.services_production[IPostRepository]
+class Services:
+    testing_config :bool
+    services_memory = {
+    IPostRepository: PostRepo(),
+    IDatabaseConfig: Mock()  
+    }
+    services_production = {
+    IPostRepository: PostDbRepo(),
+    IDatabaseConfig: DatabaseConfig()
+    }
+    @classmethod
+    def get_service(cls):
+        if cls.testing_config:
+            return cls.services_memory[IPostRepository]
+        return cls.services_production[IPostRepository]

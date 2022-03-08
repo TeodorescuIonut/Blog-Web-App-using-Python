@@ -8,7 +8,7 @@ sys.path.append(myDir)
 from pathlib import Path
 path = Path(myDir)
 a=str(path.parent.absolute())
-from services.post_repository_interface import IPostRepository
+from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 
 

@@ -8,7 +8,7 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 
-from services.post_repository_interface import IPostRepository
+from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
 from databases.database_manager import Database
@@ -28,10 +28,9 @@ class PostDbRepo(IPostRepository):
                 "INSERT INTO posts (post_title, post_content, post_owner) VALUES (%s, %s, %s) RETURNING post_id",
                 (post.post_title, post.post_contents, post.post_owner),
             )
-        conn.commit()
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
-        self.db.close_and_save(conn)
+        self.db.close_and_save(conn,cur)
 
 
     def get_all(self) -> list():
@@ -49,8 +48,7 @@ class PostDbRepo(IPostRepository):
             post.post_owner= row[5]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
-            conn.close()
-            cur.close()
+            self.db.close_and_save(conn, cur)
         return self.posts
 
     def check_post_exists(self,post_to_check:Post)-> bool:
@@ -74,8 +72,7 @@ class PostDbRepo(IPostRepository):
         post.post_title= data[3]
         post.post_contents= data[4]
         post.post_owner= data[5]
-        conn.commit()
-        conn.close()
+        self.db.close_and_save(conn, cur)
         return post
     def update(self, post:Post) -> None:
         conn = self.db.create_conn()
@@ -91,8 +88,7 @@ class PostDbRepo(IPostRepository):
             post_owner = %s
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
-        conn.commit()
-        conn.close()
+        self.db.close_and_save(conn, cur)
         
         
         
@@ -102,8 +98,7 @@ class PostDbRepo(IPostRepository):
         cur = conn.cursor()
         id = post.post_id 
         cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
-        conn.commit()
-        conn.close()
+        self.db.close_and_save(conn, cur)
         index_post = self.get_post_index(id)
         self.posts.remove(self.posts[index_post])
 

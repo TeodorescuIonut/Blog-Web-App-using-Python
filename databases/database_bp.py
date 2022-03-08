@@ -18,7 +18,7 @@ database_bp = Blueprint('database_bp', __name__)
 
 @database_bp.route('/setup/', methods = ['GET', 'POST'])
 def setup():
-    if DatabaseConfig().is_configured() is True:
+    if DatabaseConfig().is_configured():
         flash("Database already configured")
         return redirect(url_for("main"))
     if request.method == "POST":
