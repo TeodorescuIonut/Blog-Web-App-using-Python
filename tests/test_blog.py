@@ -1,7 +1,15 @@
 import sys
 import os
 from pathlib import Path
+from unittest import mock
 from venv import create
+
+from injector import inject
+from databases.database_config import DatabaseConfig
+from decorators.decorators import injector
+from interfaces.db_config_interface import IDatabaseConfig
+
+
 import pytest
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -10,11 +18,12 @@ a=str(path.parent.absolute())
 sys.path.append(a)
 #pylint: disable=redefined-outer-name
 from main import create_app
+from unittest.mock import Mock, patch
 
 
 testing_app = create_app(test_config=True)
 
-
+@injector
 @pytest.fixture(name = "client")
 def client():
     return testing_app.test_client()
@@ -99,3 +108,17 @@ def test_delete_post(client):
     assert b'Hell world' not in response.data
     assert b'new content' not in response.data
     assert b'Grace' not in response.data
+
+
+def test_redirect_setup(client):
+    with patch('databases.database_config.DatabaseConfig') as MockClass:
+        instance = MockClass.return_value
+        instance.is_configured = True
+        assert DatabaseConfig() is instance
+        assert DatabaseConfig().is_configured() is True
+            
+
+
+def test_redirect_configred_db(client):
+    result = client.get('/setup/' , follow_redirects=True)
+    assert result.status == '200 OK'

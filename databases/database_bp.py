@@ -1,8 +1,6 @@
 import sys
 import os
 from pathlib import Path
-
-
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
