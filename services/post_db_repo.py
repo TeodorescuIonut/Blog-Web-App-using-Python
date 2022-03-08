@@ -48,7 +48,7 @@ class PostDbRepo(IPostRepository):
             post.post_owner= row[5]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
-            self.db.close_and_save(conn, cur)
+        self.db.close_and_save(conn, cur)
         return self.posts
 
     def check_post_exists(self,post_to_check:Post)-> bool:
