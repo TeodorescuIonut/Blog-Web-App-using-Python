@@ -21,7 +21,6 @@ def input_test():
 
 
 def test_redirect_not_setup_false(input_test):
-    
     ContainerService.memory_config.set_configuration = False
     response = input_test.get("/setup/",follow_redirects=True)
     assert response.status == '200 OK'
@@ -31,10 +30,17 @@ def test_redirect_not_setup_false(input_test):
     assert b"Password" in response.data
     assert b"Read about true experiences," not in response.data
     assert b"There are no blog posts." not in response.data
+    response = input_test.get("/POST/",follow_redirects=True)
+    assert b"Host" in response.data
+    response = input_test.get("/POST/VIEW/1",follow_redirects=True)
+    assert b"Host" in response.data
+    response = input_test.get("/POST/UPDATE/1",follow_redirects=True)
+    assert b"Host" in response.data
+    response = input_test.get("/POST/DELETE/1",follow_redirects=True)
+    assert b"Host" in response.data
 
 def test_redirect_setup_true(input_test):
     ContainerService.memory_config.set_configuration = True
     response = input_test.get('/POST/', follow_redirects=True)
     assert response.status == '200 OK'
     assert b"Read about true experiences," in response.data
-    assert b"There are no blog posts." in response.data
