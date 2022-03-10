@@ -2,7 +2,7 @@ import sys
 import os
 
 from flask import Response
-from models.post import Post
+
 myDir = os.getcwd()
 sys.path.append(myDir)
 from pathlib import Path
@@ -10,13 +10,13 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
+from models.post import Post
 
 
 
 class PostRepo(IPostRepository):
-    def __init__(self):
-        self.posts = list()
-        self.count = 0
+    posts = list()
+    count = 0
 
     def get_all(self)-> list():
         sorted_array = sorted(self.get_previews(),key=lambda x: x.post_date_creation,reverse=True)

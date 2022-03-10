@@ -2,6 +2,7 @@ import sys
 import os
 from pathlib import Path
 
+
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -9,18 +10,13 @@ a=str(path.parent.absolute())
 sys.path.append(a)
 
 from interfaces.post_repository_interface import IPostRepository
-from models.post_preview import PostPreview
 from models.post import Post
-from databases.database_manager import Database
-
-
-
+from interfaces.database_interface import IDatabase
 
 class PostDbRepo(IPostRepository):
-   
-    def __init__(self):
-        self.posts = list()
-        self.db = Database()
+    posts = list()
+    def __init__(self, db:IDatabase):
+        self.db = db
     def create(self, post:Post) -> None:
         conn = self.db.create_conn()
         cur = conn.cursor()

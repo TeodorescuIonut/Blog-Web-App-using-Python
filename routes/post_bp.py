@@ -1,16 +1,15 @@
 from datetime import datetime
-from functools import wraps
-from databases.database_config import DatabaseConfig
-from decorators.decorators import check_setup, injector
+from decorators.decorator import check_setup
+from decorators.injector_di import injector
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models.post import Post
 from interfaces.post_repository_interface import IPostRepository
 
 @injector
 class PostBlueprint:
-    
-    def __init__(self,repo:IPostRepository):
-        self.post_bp = Blueprint('post_bp',__name__)
+    repo:IPostRepository
+    post_bp = Blueprint('post_bp',__name__)
+    def __init__(self,repo:IPostRepository):   
         self.repo = repo
 
     def create(self):       
@@ -21,7 +20,7 @@ class PostBlueprint:
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>', methods =["GET", "POST"])(self.delete_post)
         return self.post_bp
-  
+   
     @check_setup
     def blog(self):
         return render_template("blog.html", posts = self.repo.get_all(), length = len(self.repo.posts))

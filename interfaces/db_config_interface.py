@@ -6,12 +6,12 @@ from databases.database_settings import DatabaseSettings
 class IDatabaseConfig(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def save(self,database_settings:DatabaseSettings):
-        raise NotImplementedError
+        pass
     
     @abc.abstractmethod
     def load(self):
-        raise NotImplementedError
+        pass
     
     @abc.abstractmethod
     def is_configured(self):
-        raise NotImplementedError
+        pass
