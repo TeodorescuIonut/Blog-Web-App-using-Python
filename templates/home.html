@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block content %}
+<section class="jumbotron text-center">
+    <div class="container">
+        <p class="lead">Read about true experiences, challenges, and what the road to success really looks like straight from the team behind Baremetrics.</p>
+    </div>   
+</section>
+{% if length == 0 %}
+    <div class="text-center"><h2 class="center">There are no users.</h2></div>
+{% endif %}
+<div class="row">
+    {% for user in users %}
+    
+    <div class="users col-md-4 text-center">
+        <a class="user-link" href="{{url_for('user_bp.view_user',user_id = user.user_id )}}">
+        <div class="card mb-4 shadow-sm" >  
+            <div class="card-body user">
+              <img class="avatar center" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt="">
+              <h5 class="card-title">{{ user.user_name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ user.user_email }}</h6>
+    
+            </div>
+          </div>
+        </a>
+    </div>
+    
+    
+    {% endfor %}
+    
+</div>
+{% endblock %}

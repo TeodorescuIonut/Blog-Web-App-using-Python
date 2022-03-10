@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<br/>
+{% if buttonText != "Update" %}
+    {%set buttonText = "Submit"%}
+    {%set urlPage = url_for('user_bp.add_user')%}
+{% else %}
+{%set buttonText = "Update"%}
+{%set urlPage = url_for('user_bp.update_user',user_id = user.user_id)%}
+{%endif%}
+<div class="register_user container col-md-6 bg-light border rounded-3">
+
+
+<form action="{{urlPage}}" method="post">
+    <div class="form-group register-form" >
+        <label for="name">Name</label>
+        <input class="form-control " type="text" id="name" name="name" value="{{user.user_name}}"required><br>
+        <label for="email">Email</label>
+        <input class="form-control" type="email" id="email" name="email"value="{{user.user_email}}" required><br>
+        <label for="password">Password</label>
+        <input class="form-control" type="password" id="password" name="password" required value="{{user.user_password}}"><br>
+        <button type="submit" class="btn btn-primary">{{buttonText}}</button>
+    </div>
+</div>
+
+{% endblock %}
