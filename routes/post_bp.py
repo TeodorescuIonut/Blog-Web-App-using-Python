@@ -8,9 +8,10 @@ from interfaces.post_repository_interface import IPostRepository
 @injector
 class PostBlueprint:
     repo:IPostRepository
-    post_bp = Blueprint('post_bp',__name__)
+    
     def __init__(self,repo:IPostRepository):   
         self.repo = repo
+        self.post_bp = Blueprint('post_bp',__name__)
 
     def create(self):       
         self.post_bp.route('/')(self.blog)

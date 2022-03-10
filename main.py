@@ -16,6 +16,7 @@ from routes.post_bp import PostBlueprint
 from databases.database_bp import database_bp
 
 
+
 def create_app(test_config = False):
 
     app = Flask(__name__)
