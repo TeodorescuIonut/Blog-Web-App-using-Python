@@ -30,3 +30,6 @@
 .user-link:hover{
     text-decoration: none;
 }
+.dropdown-toggle::after{
+    
+}

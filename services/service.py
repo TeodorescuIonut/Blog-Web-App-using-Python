@@ -8,6 +8,7 @@ from databases.memory_database_config import MemoryDatabaseConfig
 from interfaces.user_repository_interface import IUserRepository
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
+from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
 
 
@@ -18,7 +19,7 @@ class ContainerService:
     memory_config = MemoryDatabaseConfig()
     services_production = {
     IPostRepository: PostDbRepo(Database(DatabaseConfig())),
-    IUserRepository: memory_user_repo,
+    IUserRepository: UserDbRepo(Database(DatabaseConfig())),
     IDatabaseConfig: DatabaseConfig(),
     IDatabase: Database(DatabaseConfig())
     }

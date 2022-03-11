@@ -25,8 +25,8 @@ class UserRepo(IUserRepository):
         for user in self.users:
             if user.user_id == user_id:
                 return user
-    def create(self, user)-> (Response | str):
-        user.post_id = self.count
+    def create(self, user:User)-> (Response | str):
+        user.user_id = self.count
         self.users.append(user)
         self.count += 1
     def update(self, user:User)-> None:

@@ -45,8 +45,18 @@ class Database(IDatabase):
             'post_title VARCHAR ( 255 ) NOT NULL,'
             'post_content VARCHAR NOT NULL,'
             'post_owner VARCHAR (255)) ;')
+        cur.execute(' CREATE TABLE IF NOT EXISTS users (user_id serial PRIMARY KEY,'
+            'user_date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
+            'user_date_modification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
+            'user_name VARCHAR ( 255 ) UNIQUE NOT NULL,'
+            'user_email VARCHAR NOT NULL,'
+            'user_password VARCHAR (255)) ;')
         self.close_and_save(con, cur)
-
+    def check_table_exists(self, table_name)-> bool:
+        con = self.create_conn() 
+        cur = con.cursor()
+        result = cur.execute('SELECT EXISTS (SELECT relname FROM pg_class WHERE relname = %s);',(table_name,))
+        return result
     def close_and_save(self, conn,cur):
         conn.commit()
         cur.close()

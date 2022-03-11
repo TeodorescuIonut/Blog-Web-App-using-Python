@@ -12,7 +12,8 @@
       <h2 class="blog-post-title">{{ user.user_name }}</h2>
       <br>
       <i class="d-inline far fa-clock"></i>
-      <p class="d-inline blog-post-meta">{{ user.user_date_creation }} by <a href="#">{{user.user_email}}</a></p><br>
+      <p class="d-inline blog-post-meta">{{ user.user_date_creation }} </p><br>
+      <i class="fa-light fa-envelope"></i><a class='d-inline' href="#">{{user.user_email}}</a>
       {% if user.user_date_modification != ""%}
       <p class="card-text"><small class="text-muted"> Modified on {{user.user_date_modification}}</small></p>
       {%endif%}
