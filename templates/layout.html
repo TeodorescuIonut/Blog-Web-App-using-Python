@@ -6,7 +6,7 @@
         <title>{% block title %}{% endblock %}</title>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/b142328a98.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
     </head>
 
@@ -26,8 +26,8 @@
                 <li class="nav-item dropdown">
                     <a href="{{ url_for('user_bp.home') }}" class="navbar-brand dropdown-toggle"  data-toggle="dropdown">Users</a>
                     <ul class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton2">
-                        <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.add_user') }}">Add User</a></li>
-                        <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.home') }}">Users</a></li>
+                        <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.add_user') }}"><i class="fa-solid fa-user"></i> Add User</a></li>
+                        <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.home') }}"><i class="fa-solid fa-user-group"></i> Users</a></li>
                     </ul>
                 </li>
                 

@@ -30,6 +30,6 @@
 .user-link:hover{
     text-decoration: none;
 }
-.dropdown-toggle::after{
-    
+.card-title{
+    margin-top: 0.75rem;
 }
