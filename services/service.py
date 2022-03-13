@@ -6,10 +6,12 @@ from databases.database_manager import Database
 from databases.memory_database import MemoryDatabase
 from databases.memory_database_config import MemoryDatabaseConfig
 from interfaces.user_repository_interface import IUserRepository
+from interfaces.password_interface import IPassword
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
 from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
+from services.password_hash import PasswordHashing
 
 
 class ContainerService:
@@ -21,13 +23,15 @@ class ContainerService:
     IPostRepository: PostDbRepo(Database(DatabaseConfig())),
     IUserRepository: UserDbRepo(Database(DatabaseConfig())),
     IDatabaseConfig: DatabaseConfig(),
-    IDatabase: Database(DatabaseConfig())
+    IDatabase: Database(DatabaseConfig()),
+    IPassword: PasswordHashing()
     }
     services_memory = {
     IPostRepository: memory_post_repo,
     IUserRepository: memory_user_repo,
     IDatabaseConfig: memory_config,
-    IDatabase:MemoryDatabase()
+    IDatabase:MemoryDatabase(),
+    IPassword: PasswordHashing()
     }
 
     @classmethod

@@ -1,17 +1,19 @@
 from datetime import datetime
-from decorators.decorator import check_setup
+from decorators.setup import check_setup
 from decorators.injector_di import injector
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from interfaces.user_repository_interface import IUserRepository
+from interfaces.password_interface import IPassword
 from models.user import User
 
 
 @injector
 class UserBlueprint:
     repo:IUserRepository
-    
-    def __init__(self,repo:IUserRepository):   
+    password_hash:IPassword
+    def __init__(self,repo:IUserRepository, password_hash:IPassword):   
         self.repo = repo
+        self.pass_hash = password_hash
         self.user_bp = Blueprint('user_bp',__name__)
 
     def create(self):       
@@ -32,14 +34,14 @@ class UserBlueprint:
             user_name = request.form.get("name")
             user_email = request.form.get("email")
             user_password = request.form.get("password")
-            user = User(user_name , user_email, user_password)
+            user = User(user_name , user_email, self.pass_hash.generate_password(user_password))
             error = None
             if not user_name:
-                error = "Please add a title"
+                error = "Please add a name"
             elif not user_email:
-                error = "Please add a owner"
+                error = "Please add an email"
             elif not user_password:
-                error = "Please add content"
+                error = "Please add password"
             if error:
                 flash(error)
                 return render_template("add_user.html", user = user, urlPage = self.add_user)
@@ -67,11 +69,9 @@ class UserBlueprint:
             user_password = request.form.get("password")
             error = None
             if not user_name :
-                error = "Please add a title"
+                error = "Please add a name"
             elif not user_email:
-                error = "Please add a owner"
-            elif not user_password:
-                    error = "Please add content"
+                error = "Please add an email"
             if error:
                     flash(error)
                     return render_template("add_user.html",
