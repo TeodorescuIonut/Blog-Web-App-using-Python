@@ -54,12 +54,10 @@ class PostDbRepo(IPostRepository):
                     return True
         return False
         
-
-
     def get_by_id(self, post_id:int) -> Post:
         conn = self.db.create_conn()
         cur = conn.cursor() 
-        cur.execute('SELECT * FROM posts WHERE post_id = %s', (post_id,))
+        cur.execute("SELECT post_id, to_char(post_created_on, 'dd/mm/yyyy HH24:MI'),to_char(post_modified_on, 'dd/mm/yyyy HH24:MI'), post_title, post_content, post_owner FROM posts WHERE post_id = %s", (post_id,))
         data = cur.fetchall()[0]
         post =Post("", "", "")
         post.post_id = data[0]

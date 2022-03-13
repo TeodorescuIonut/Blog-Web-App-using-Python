@@ -1,5 +1,5 @@
 from datetime import datetime
-from decorators.decorator import check_setup
+from decorators.setup import check_setup
 from decorators.injector_di import injector
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models.post import Post

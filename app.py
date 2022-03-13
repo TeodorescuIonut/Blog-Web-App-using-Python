@@ -2,7 +2,7 @@ import sys
 import os
 from pathlib import Path
 
-from decorators.decorator import check_setup
+from decorators.setup import check_setup
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)

@@ -60,7 +60,7 @@ class UserDbRepo(IUserRepository):
     def get_by_id(self, user_id:int) -> User:
         conn = self.db.create_conn()
         cur = conn.cursor() 
-        cur.execute('SELECT * FROM users WHERE user_id = %s', (user_id,))
+        cur.execute("SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'),to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password FROM users WHERE user_id = %s", (user_id,))
         data = cur.fetchall()[0]
         user =User("", "", "")
         user.user_id = data[0]
@@ -81,10 +81,9 @@ class UserDbRepo(IUserRepository):
         cur.execute("""
         UPDATE users
         SET user_name = %s,
-            user_email = %s,
-            user_password = %s
+            user_email = %s
         WHERE user_id = %s RETURNING *
-        """,(user.user_name, user.user_email, user.user_password, user.user_id))
+        """,(user.user_name, user.user_email, user.user_id))
         self.db.close_and_save(conn, cur)
         
         
