@@ -33,10 +33,27 @@
                 
             </ul> 
                 
-            <form class="form-inline my-2 my-lg-0"">
+            <form class="search-form form-inline my-2 my-lg-0"">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
+            </form> 
+                   
+              {% if "id" in session %} 
+                {%set buttonText = "Sign Out"%}
+                {%set urlPage = url_for('authenticate.sign_out')%}
+                <div class="nav-item dropleft">   
+                    <a href="#" id="avatar-link"  class="center navbar-brand dropdown-toggle" data-toggle="dropdown"><img class="avatar-sign-in" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt=""></a>
+                    <ul class="dropdown-menu bg-dark " aria-labelledby="dropdownMenuButton2">
+                    <li><a href="{{url_for('user_bp.view_user',user_id = session['id'] )}}"><p class="font-weight-bold dropdown-item text-light bg-dark">{{session['user_name']}}</p></a></li>
+                    <li><a href="{{urlPage}}" class="dropdown-item text-light bg-dark">{{buttonText}}</a></li>
+                    </ul>
+                </div> 
+                {% else %}
+                {%set buttonText = "Sign In"%}
+                {%set urlPage = url_for('authenticate.sign_in')%}
+                <a href="{{urlPage}}" class="d-flex btn btn-primary">{{buttonText}}</a>
+              {%endif%}
+            
             </div>  
         </div>
         {% for message in get_flashed_messages() %}

@@ -19,3 +19,7 @@ class IUserRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod 
     def delete(self, user):
         raise NotImplementedError
+    
+    @abc.abstractmethod
+    def get_user_by_email(self, user_email):
+        raise NotImplementedError

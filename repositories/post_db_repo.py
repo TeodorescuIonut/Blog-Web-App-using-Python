@@ -82,10 +82,7 @@ class PostDbRepo(IPostRepository):
             post_owner = %s
         WHERE post_id = %s RETURNING *
         """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
-        self.db.close_and_save(conn, cur)
-        
-        
-        
+        self.db.close_and_save(conn, cur)     
     
     def delete(self, post:Post) -> None:
         conn = self.db.create_conn()

@@ -36,3 +36,7 @@ class UserRepo(IUserRepository):
     def delete(self, user:User) -> None:
         self.users.remove(user)
     
+    def get_user_by_email(self, user_email):
+        for user in self.users:
+            if user.user_email== user_email:
+                return user

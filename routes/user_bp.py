@@ -49,7 +49,7 @@ class UserBlueprint:
                 new_user =  User(
                     user_name.title(),
                     user_email,
-                    user_password)
+                    self.pass_hash.generate_password(user_password))
             self.repo.create(new_user)
             flash("User added")
             return redirect(url_for('user_bp.view_user',user_id = new_user.user_id))

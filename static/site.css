@@ -33,3 +33,20 @@
 .card-title{
     margin-top: 0.75rem;
 }
+
+.avatar-sign-in{
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+#avatar-link::before{
+    display: none;
+}
+
+.dropleft .dropdown-menu{
+    top: auto;
+    right: 0;
+}
+.search-form{
+    margin-right: 5%;
+}

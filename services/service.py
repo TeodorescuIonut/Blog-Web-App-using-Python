@@ -7,11 +7,13 @@ from databases.memory_database import MemoryDatabase
 from databases.memory_database_config import MemoryDatabaseConfig
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.password_interface import IPassword
+from interfaces.authentication_interface import IAuthentication
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
 from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
 from services.password_hash import PasswordHashing
+from services.authentication import Authentication
 
 
 class ContainerService:
@@ -24,7 +26,8 @@ class ContainerService:
     IUserRepository: UserDbRepo(Database(DatabaseConfig())),
     IDatabaseConfig: DatabaseConfig(),
     IDatabase: Database(DatabaseConfig()),
-    IPassword: PasswordHashing()
+    IPassword: PasswordHashing(),
+    IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing())
     }
     services_memory = {
     IPostRepository: memory_post_repo,

@@ -1,3 +1,4 @@
+import email
 import sys
 import os
 from pathlib import Path
@@ -54,8 +55,6 @@ class UserDbRepo(IUserRepository):
                 if user_to_check.user_id == user.user_id:
                     return True
         return False
-        
-
 
     def get_by_id(self, user_id:int) -> User:
         conn = self.db.create_conn()
@@ -86,9 +85,6 @@ class UserDbRepo(IUserRepository):
         """,(user.user_name, user.user_email, user.user_id))
         self.db.close_and_save(conn, cur)
         
-        
-        
-    
     def delete(self, user:User) -> None:
         conn = self.db.create_conn()
         cur = conn.cursor()
@@ -104,3 +100,18 @@ class UserDbRepo(IUserRepository):
             if user.user_id == id:
                 return self.users.index(user)
     
+    def get_user_by_email(self, user_email):
+        conn = self.db.create_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users WHERE user_email = %s", (user_email,))
+        data = cur.fetchone()
+        if data is not None:
+            user =User("", "", "")
+            user.user_id = data[0]
+            user.user_date_creation = data[1]
+            user.user_date_modification = data[2]
+            user.user_name= data[3]
+            user.user_email= data[4]
+            user.user_password= data[5]
+            self.db.close_and_save(conn, cur)
+            return user
