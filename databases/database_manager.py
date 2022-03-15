@@ -48,7 +48,7 @@ class Database(IDatabase):
         cur.execute(' CREATE TABLE IF NOT EXISTS users (user_id serial PRIMARY KEY,'
             'user_date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
             'user_date_modification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
-            'user_name VARCHAR ( 255 ) UNIQUE NOT NULL,'
+            'user_name VARCHAR ( 255 ) NOT NULL,'
             'user_email VARCHAR NOT NULL,'
             'user_password VARCHAR (255)) ;')
         self.close_and_save(con, cur)

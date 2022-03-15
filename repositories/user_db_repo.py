@@ -44,18 +44,29 @@ class UserDbRepo(IUserRepository):
             user.user_name= row[3]
             user.user_email= row[4]
             user.user_password= row[5]
-            if self.check_user_exists(user) is False:
+            if self.check_user_id(user) is False:
                 self.users.append(user)
         self.db.close_and_save(conn, cur)
         return self.users
 
-    def check_user_exists(self,user_to_check:User)-> bool:
+    def check_user_id(self,user_to_check:User)-> bool:
         if len(self.users) > 0:
             for user in self.users:
                 if user_to_check.user_id == user.user_id:
                     return True
         return False
-
+    def check_user_email(self,user_to_check:User)-> bool:
+        if len(self.users) > 0:
+            for user in self.users:
+                if user_to_check.user_email == user.user_email:
+                    return True
+        return False
+    def check_user_name(self,user_to_check:User)-> bool:
+     if len(self.users) > 0:
+        for user in self.users:
+            if user_to_check.user_name.__eq__(user.user_name):
+                return True
+        return False
     def get_by_id(self, user_id:int) -> User:
         conn = self.db.create_conn()
         cur = conn.cursor() 

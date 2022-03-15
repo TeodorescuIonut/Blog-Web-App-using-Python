@@ -34,7 +34,8 @@ class ContainerService:
     IUserRepository: memory_user_repo,
     IDatabaseConfig: memory_config,
     IDatabase:MemoryDatabase(),
-    IPassword: PasswordHashing()
+    IPassword: PasswordHashing(),
+    IAuthentication: Authentication(memory_user_repo, PasswordHashing())
     }
 
     @classmethod

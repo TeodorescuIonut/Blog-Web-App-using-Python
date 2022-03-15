@@ -23,3 +23,10 @@ class IUserRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_user_by_email(self, user_email):
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def check_user_email(self,user_to_check)-> bool:
+        raise NotImplementedError
+    @abc.abstractmethod
+    def check_user_name(self,user_to_check)-> bool:
+        raise NotImplementedError

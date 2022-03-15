@@ -20,7 +20,6 @@ def client():
 def test_app(client):
     response = client.get('/USER/')
     assert response.status == '200 OK'
-    assert b'There are no users.' in response.data
 
 
 def add_user(client,name, email, password):
@@ -47,22 +46,22 @@ def view_user(client):
 
 def test_add_user(client):
     """Test if a new post can be added"""
-    result =  add_user(client, "Jhon", "bla@yahoo.com", "1234")
-    resp = client.get('/USER/VIEW/0',follow_redirects=True)
+    result =  add_user(client, "Jhonny", "blasss@yahoo.com", "1234")
+    resp = client.get('/USER/VIEW/1',follow_redirects=True)
     assert result.status == '200 OK'
-    assert b"Jhon" in resp.data
-    assert b"bla@yahoo.com" in resp.data
+    assert b"Jhonny" in resp.data
+    assert b"blasss@yahoo.com" in resp.data
 
 
 def test_add_two_users(client):
     """Test if a new post can be added"""
-    result =  add_user(client, "Jhon", "bla@yahoo.com", "1234")
+    result =  add_user(client, "Jhon", "bldda@yahoo.com", "1234")
     add_user(client, "Peter", "peter@yahoo.com", "1234")
-    resp1 = client.get('/USER/VIEW/1',follow_redirects=True)
-    resp2 = client.get('/USER/VIEW/2',follow_redirects=True)
+    resp1 = client.get('/USER/VIEW/2',follow_redirects=True)
+    resp2 = client.get('/USER/VIEW/3',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Jhon" in resp1.data
-    assert b'bla@yahoo.com' in resp1.data
+    assert b'bldda@yahoo.com' in resp1.data
     assert b"Peter" in resp2.data
     assert b"peter@yahoo.com" in resp2.data
 
@@ -88,7 +87,7 @@ def test_delete_user(client):
     """Test if a post can be deleted"""
     result = add_user(client,"Maggie", "new@yahoo.com", "67123")
     result = delete_user(client)
-    response = client.get('/POST/' , follow_redirects=True)
+    response = client.get('/USER/' , follow_redirects=True)
     assert b'User deleted' in result.data
     assert b'Maggie' not in response.data
     assert b'new@yahoo.com' not in response.data

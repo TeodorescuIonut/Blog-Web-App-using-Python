@@ -42,12 +42,16 @@ class UserBlueprint:
                 error = "Please add an email"
             elif not user_password:
                 error = "Please add password"
+            elif self.repo.check_user_email(user):
+                error = "Email already used!"
+            elif self.repo.check_user_name(user):
+                error = "Name already used!"
             if error:
                 flash(error)
                 return render_template("add_user.html", user = user, urlPage = self.add_user)
             else:
                 new_user =  User(
-                    user_name.title(),
+                    user_name,
                     user_email,
                     self.pass_hash.generate_password(user_password))
             self.repo.create(new_user)

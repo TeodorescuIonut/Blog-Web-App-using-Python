@@ -20,6 +20,7 @@ class Authentication(IAuthentication):
             session['id'] = self.user.user_id
             session['user_name'] = self.user.user_name
             return True
+        return False
 
     def sign_out(self):
         session.clear()
