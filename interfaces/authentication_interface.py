@@ -8,9 +8,13 @@ class IAuthentication(ABC):
         pass
 
     @abstractmethod
-    def get_user_details(self, user_email):
+    def get_user_details(self):
         pass
 
     @abstractmethod
     def sign_out(self):
+        pass
+
+    @abstractmethod
+    def is_logged_in(self):
         pass

@@ -10,6 +10,7 @@ class Authentication(IAuthentication):
     repo:IUserRepository
     password_hash:IPassword
     user:User
+    email:str = ""
     def __init__(self, repo:IUserRepository, password_hash:IPassword):
         self.repo = repo
         self.password_hash = password_hash
@@ -17,19 +18,23 @@ class Authentication(IAuthentication):
     def sign_in(self, user_email, password):
         self.user = self.repo.get_user_by_email(user_email)
         if self.user is not None and self.password_hash.check_password(self.user.user_password, password):
-            session['id'] = self.user.user_id
+            session['user_id'] = self.user.user_id
             session['user_name'] = self.user.user_name
+            self.email = user_email
             return True
         return False
 
     def sign_out(self):
-        session.clear()
+        session.pop("user_id")
+        session.pop("user_name")
         return True
 
-    def get_user_details(self, user_email)-> User:
-        return self.repo.get_user_by_email(user_email)
+    def get_user_details(self)-> User:
+        return self.repo.get_user_by_email(self.email)
 
-
+    def is_logged_in(self) -> bool:
+        if "user_id" in session:
+            return True
     
 
     

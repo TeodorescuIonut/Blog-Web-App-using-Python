@@ -37,7 +37,7 @@ def test_existing_user(input_test):
     ContainerService.memory_config.set_configuration = True
     add_user(input_test, "Jhon", "bla@yahoo.com", "1234")
     sign_in_user(input_test, "bla@yahoo.com", "1234")
-    response = input_test.get('/USER/',follow_redirects=True)
-    assert b'Welcome back Jhon' in response.data
+    response = input_test.get('/SIGNIN/',follow_redirects=True)
+    assert b'You are already logged in.' in response.data
 
     

@@ -1,13 +1,14 @@
 
 from functools import wraps
 from flask import flash, redirect, session, url_for
+from decorators.injector_di import injector
+from interfaces.authentication_interface import IAuthentication
 
 
 def check_login(setup): 
     @wraps(setup)
-    def wrapper(*args, **kwargs):
-        if "id" in session:
-            flash('You are already logged in.')
-            return redirect(url_for('main'))
-        return setup(*args, **kwargs)
+    @injector
+    def wrapper(authentication:IAuthentication,*args, **kwargs):
+        if authentication.is_logged_in():
+            return setup(authentication.is_logged_in(),*args, **kwargs)
     return wrapper

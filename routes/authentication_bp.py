@@ -8,21 +8,25 @@ from models.user import User
 authenticate = Blueprint('authenticate', __name__)
 
 @authenticate.route('/SIGNIN/', methods = ["GET", "POST"])
-@check_login
 @injector
 @check_setup
 def sign_in(authentication: IAuthentication):
+    status = authentication.is_logged_in()
+    if authentication.is_logged_in():
+        flash('You are already logged in.')
+        return redirect(url_for('post_bp.blog'))
     if request.method == "POST":
         user_email = request.form.get("email")
-        user_password = request.form.get("password")
+        user_password = request.form.get("password")           
         if authentication.sign_in(user_email, user_password):
-            user:User = authentication.get_user_details(user_email)
+            user:User = authentication.get_user_details()    
             flash(f"Welcome back {user.user_name}")
-            return redirect(url_for("main"))
+            status = authentication.is_logged_in()
+            return render_template("blog.html",logged_in = status, logged_user = user)
         else:
             flash("Wrong password or user, please try again.")
-            return render_template("sign-in.html", email = user_email)
-    return render_template("sign-in.html")
+            return render_template("sign-in.html", user_email = user_email)
+    return render_template("sign-in.html",logged_in = status, user = User)
 
 @authenticate.route('/SIGNOUT/', methods = ["GET", "POST"])
 @injector

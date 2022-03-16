@@ -61,12 +61,6 @@ class UserDbRepo(IUserRepository):
                 if user_to_check.user_email == user.user_email:
                     return True
         return False
-    def check_user_name(self,user_to_check:User)-> bool:
-     if len(self.users) > 0:
-        for user in self.users:
-            if user_to_check.user_name.__eq__(user.user_name):
-                return True
-        return False
     def get_by_id(self, user_id:int) -> User:
         conn = self.db.create_conn()
         cur = conn.cursor() 

@@ -45,10 +45,4 @@ class UserRepo(IUserRepository):
         for user in self.users:
             if user.user_email== user_email:
                 return user
-                
-    def check_user_name(self,user_to_check:User)-> bool:
-        if len(self.users) > 0:
-            for user in self.users:
-                if user_to_check.user_name.__eq__(user.user_name):
-                    return True
-        return False
+

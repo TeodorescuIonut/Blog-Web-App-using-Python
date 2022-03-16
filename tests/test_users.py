@@ -31,7 +31,7 @@ def add_user(client,name, email, password):
     , follow_redirects=True)
 
 def delete_user(client):
-    return client.post('/USER/DELETE/6', follow_redirects=True)
+    return client.post('/USER/DELETE/7', follow_redirects=True)
 
 def update_user(client, name, email, password):
     return client.post('/USER/UPDATE/1', data = dict(
@@ -42,7 +42,7 @@ def update_user(client, name, email, password):
     , follow_redirects=True)
 
 def view_user(client):
-    return client.get('/USER/VIEW/3')
+    return client.get('/USER/VIEW/4')
 
 def test_add_user(client):
     """Test if a new post can be added"""
