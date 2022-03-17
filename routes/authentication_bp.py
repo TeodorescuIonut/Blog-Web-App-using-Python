@@ -1,4 +1,3 @@
-from decorators.check_login import check_login
 from decorators.injector_di import injector
 from decorators.setup import check_setup
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -34,4 +33,4 @@ def sign_in(authentication: IAuthentication):
 def sign_out(authentication: IAuthentication):
     if authentication.sign_out():
         flash('You have been logged out')
-        return redirect(url_for("main"))
+        return redirect(url_for("post_bp.blog"))

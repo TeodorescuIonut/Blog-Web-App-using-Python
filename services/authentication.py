@@ -15,7 +15,7 @@ class Authentication(IAuthentication):
         self.repo = repo
         self.password_hash = password_hash
 
-    def sign_in(self, user_email, password):
+    def sign_in(self, user_email, password)-> bool:
         self.user = self.repo.get_user_by_email(user_email)
         if self.user is not None and self.password_hash.check_password(self.user.user_password, password):
             session['user_id'] = self.user.user_id
@@ -24,10 +24,12 @@ class Authentication(IAuthentication):
             return True
         return False
 
-    def sign_out(self):
-        session.pop("user_id")
-        session.pop("user_name")
-        return True
+    def sign_out(self) -> bool:
+        if 'user_id' in session:
+            session.pop("user_id", None)
+            session.pop("user_name",None)
+            return True
+        return False
 
     def get_user_details(self)-> User:
         return self.repo.get_user_by_email(self.email)

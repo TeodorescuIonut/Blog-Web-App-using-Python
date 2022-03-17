@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 import pytest
+from services.service import ContainerService
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -91,3 +92,27 @@ def test_delete_user(client):
     assert b'User deleted' in result.data
     assert b'Maggie' not in response.data
     assert b'new@yahoo.com' not in response.data
+
+def test_redirect_not_setup(client):
+    ContainerService.memory_config.set_configuration = False
+    response = client.get("/USER/",follow_redirects=True)
+    assert response.status == '200 OK'
+    assert b"Host" in response.data
+    assert b"Database" in response.data
+    assert b"User" in response.data
+    assert b"Password" in response.data
+    assert b"Read about true experiences," not in response.data
+    response = client.get("/USER/",follow_redirects=True)
+    assert b"Host" in response.data
+    response = client.get("/USER/VIEW/1",follow_redirects=True)
+    assert b"Host" in response.data
+    response = client.get("/USER/UPDATE/1",follow_redirects=True)
+    assert b"Host" in response.data
+    response = client.get("/USER/DELETE/1",follow_redirects=True)
+    assert b"Host" in response.data
+
+def test_redirect_setup_true(client):
+    ContainerService.memory_config.set_configuration = True
+    response = client.get('/USER/', follow_redirects=True)
+    assert response.status == '200 OK'
+    assert b"Read about true experiences" in response.data
