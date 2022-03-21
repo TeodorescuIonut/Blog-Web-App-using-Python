@@ -1,4 +1,4 @@
-import email
+from datetime import datetime
 import sys
 import os
 from pathlib import Path
@@ -23,8 +23,8 @@ class UserDbRepo(IUserRepository):
         conn = self.db.create_conn()
         cur = conn.cursor()
         cur.execute(
-                "INSERT INTO users (user_name, user_email, user_password) VALUES (%s, %s, %s) RETURNING user_id",
-                (user.user_name, user.user_email, user.user_password),
+                "INSERT INTO users (user_name, user_email, user_password, admin) VALUES (%s, %s, %s, %s) RETURNING user_id",
+                (user.user_name, user.user_email, user.user_password, False),
             )
         user.user_id = cur.fetchone()[0]
         self.users.append(user)
@@ -49,6 +49,7 @@ class UserDbRepo(IUserRepository):
         self.db.close_and_save(conn, cur)
         return self.users
 
+
     def check_user_id(self,user_to_check:User)-> bool:
         if len(self.users) > 0:
             for user in self.users:
@@ -56,11 +57,10 @@ class UserDbRepo(IUserRepository):
                     return True
         return False
     def check_user_email(self,user_to_check:User)-> bool:
-        if len(self.users) > 0:
-            for user in self.users:
-                if user_to_check.user_email == user.user_email:
-                    return True
-        return False
+        conn = self.db.create_conn()
+        cur = conn.cursor() 
+        cur.execute("SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'),to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password FROM users WHERE user_email = %s", (user_to_check.user_email,))
+        return cur.rowcount > 0
     def get_by_id(self, user_id:int) -> User:
         conn = self.db.create_conn()
         cur = conn.cursor() 
@@ -81,13 +81,16 @@ class UserDbRepo(IUserRepository):
         id = user.user_id
         index_user = self.get_user_index(id)
         self.users.remove(self.users[index_user])
-        self.users.append(user)      
+        self.users.append(user) 
+        user_date_modification = datetime.now().strftime("%B %d %Y %H:%M:%S")     
         cur.execute("""
         UPDATE users
         SET user_name = %s,
-            user_email = %s
-        WHERE user_id = %s RETURNING *
-        """,(user.user_name, user.user_email, user.user_id))
+            user_date_modification = %s,
+            user_email = %s,
+            user_password = %s
+        WHERE user_id = %s
+        """,(user.user_name,user_date_modification, user.user_email,user.user_password, user.user_id))
         self.db.close_and_save(conn, cur)
         
     def delete(self, user:User) -> None:
@@ -100,9 +103,9 @@ class UserDbRepo(IUserRepository):
         self.users.remove(self.users[user_index])
 
 
-    def get_user_index(self, id: int)-> int:
+    def get_user_index(self, id)-> int:
         for user in self.users:
-            if user.user_id == id:
+            if id == user.user_id:
                 return self.users.index(user)
     
     def get_user_by_email(self, user_email):
