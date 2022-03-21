@@ -1,6 +1,9 @@
 import sys
 import os
 from pathlib import Path
+from interfaces.database_upgrade_interface import IDatabaseUpgrade
+
+from services.database_upgrade_create import DatabaseUpgradeandCreate
 
 
 myDir = os.getcwd()
@@ -19,7 +22,7 @@ database_bp = Blueprint('database_bp', __name__)
 
 @database_bp.route('/setup/', methods = ['GET', 'POST'])
 @injector
-def setup(db_config:IDatabaseConfig, db:IDatabase):
+def setup(db_config:IDatabaseConfig, db_upgrade:IDatabaseUpgrade):
     if db_config.is_configured():
         flash("Database already configured")
         return redirect(url_for("main"))
@@ -30,7 +33,7 @@ def setup(db_config:IDatabaseConfig, db:IDatabase):
         request.form.get("user"),
         request.form.get("password"))
         db_config.save(database_settings)
-        db.create_table()
+        db_upgrade.upgrade_db()
         flash("Database configured!")
         return redirect(url_for("main"))
     return render_template("db_setup.html")

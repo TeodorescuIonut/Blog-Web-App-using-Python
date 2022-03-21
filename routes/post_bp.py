@@ -5,6 +5,7 @@ from flask import Blueprint, flash, render_template, request, redirect, url_for
 from interfaces.authentication_interface import IAuthentication
 from models.post import Post
 from interfaces.post_repository_interface import IPostRepository
+from models.user import User
 
 @injector
 class PostBlueprint:
@@ -30,19 +31,16 @@ class PostBlueprint:
     
     @check_setup
     def add_post(self):
+        owner:User = self.auth.get_user_details()
         if request.method == "POST":
             # getting input title in HTML form
             post_title = request.form.get("title")
-                # getting input owner in HTML form
-            post_owner = request.form.get("owner")
             # getting input content  in HTML form
             content = request.form.get("content")
-            post = Post(post_title, content, post_owner)
+            post = Post(post_title, content,owner.user_id)
             error = None
             if not post_title:
                 error = "Please add a title"
-            elif not post_owner:
-                error = "Please add a owner"
             elif not content:
                 error = "Please add content"
             if error:
@@ -52,7 +50,7 @@ class PostBlueprint:
                 new_post =  Post(
                     post_title.title(),
                     content,
-                    post_owner)
+                    owner.user_id)
             self.repo.create(new_post)
             flash("Post added")
             return redirect(url_for('post_bp.view_post',logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(),post_id = new_post.post_id))
@@ -69,15 +67,11 @@ class PostBlueprint:
         if request.method == "POST":
             # getting input title in HTML form
             post_title = request.form.get("title")
-                # getting input owner in HTML form
-            post_owner = request.form.get("owner")
             # getting input content  in HTML form
             content = request.form.get("content")
             error = None
             if not post_title:
                 error = "Please add a title"
-            elif not post_owner:
-                error = "Please add a owner"
             elif not content:
                 error = "Please add content"
             if error:
@@ -88,7 +82,6 @@ class PostBlueprint:
             else:
                 post.post_id = post_id
                 post.post_title = post_title
-                post.post_owner = post_owner
                 post.post_contents = content
                 post.post_date_modification = datetime.now().strftime("%B %d %Y")
                 self.repo.update(post)

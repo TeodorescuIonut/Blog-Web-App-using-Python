@@ -1,3 +1,4 @@
+from databases.database_config import DatabaseConfig
 from flask import Flask
 import sys
 import os
@@ -31,5 +32,4 @@ def create_app(test_config = False):
     app.register_blueprint(authenticate)
     app.register_blueprint(post_bp, url_prefix='/POST')
     app.register_blueprint(user_bp, url_prefix='/USER')
-
     return app

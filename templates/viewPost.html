@@ -4,6 +4,11 @@
 {% endblock %}
 {% block content %}
 
+{% if post.owner_id%}
+  {%set url_for_id = url_for('user_bp.view_user',user_id = post.owner_id )%}
+{% else %}
+  {%set url_for_id = '#' %}
+{%endif%}
 <br>
 <div class="row">
   <div class="col-md-12 blog-main">
@@ -11,7 +16,7 @@
       <h2 class="blog-post-title">{{ post.post_title }}</h2>
       <br>
       <i class="d-inline far fa-clock"></i>
-      <p class="d-inline blog-post-meta">{{ post.post_date_creation }} by <a href="#">{{post.post_owner}}</a></p><br>
+      <p class="d-inline blog-post-meta">{{ post.post_date_creation }} by <a href="{{url_for_id}}">{{logged_user.user_name}}</a></p><br>
       <p class="post-content">{{ post.post_contents }}</p>
       {% if post.post_date_modification != ""%}
       <p class="card-text"><small class="text-muted"> Modified on {{post.post_date_modification}}</small></p>

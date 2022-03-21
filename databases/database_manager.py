@@ -36,22 +36,7 @@ class Database(IDatabase):
         conn = self.create_conn()
         cur = conn.cursor()
         return cur
-    def create_table(self):
-        con = self.create_conn() 
-        cur = con.cursor()
-        cur.execute(' CREATE TABLE IF NOT EXISTS posts (post_id serial PRIMARY KEY,'
-            'post_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
-            'post_modified_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
-            'post_title VARCHAR ( 255 ) NOT NULL,'
-            'post_content VARCHAR NOT NULL,'
-            'post_owner VARCHAR (255)) ;')
-        cur.execute(' CREATE TABLE IF NOT EXISTS users (user_id serial PRIMARY KEY,'
-            'user_date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
-            'user_date_modification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,'
-            'user_name VARCHAR ( 255 ) NOT NULL,'
-            'user_email VARCHAR NOT NULL,'
-            'user_password VARCHAR (255)) ;')
-        self.close_and_save(con, cur)
+        
     def check_table_exists(self, table_name)-> bool:
         con = self.create_conn() 
         cur = con.cursor()

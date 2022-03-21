@@ -21,8 +21,8 @@ class PostDbRepo(IPostRepository):
         conn = self.db.create_conn()
         cur = conn.cursor()
         cur.execute(
-                "INSERT INTO posts (post_title, post_content, post_owner) VALUES (%s, %s, %s) RETURNING post_id",
-                (post.post_title, post.post_contents, post.post_owner),
+                "INSERT INTO posts (post_title, post_content) VALUES (%s, %s, %s) RETURNING post_id",
+                (post.post_title, post.post_contents),
             )
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
@@ -32,16 +32,16 @@ class PostDbRepo(IPostRepository):
     def get_all(self) -> list():
         conn = self.db.create_conn()
         cur = conn.cursor() 
-        cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), post_owner  FROM posts ORDER BY post_created_on DESC")
+        cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), owner_id  FROM posts ORDER BY post_created_on DESC")
         rows = cur.fetchall()
         for row in rows:
-            post =Post("", "", "")
+            post =Post("", "","")
             post.post_id = row[0]
             post.post_date_creation = row[1]
             post.post_date_modification = row[2]
             post.post_title= row[3]
             post.post_contents= row[4]
-            post.post_owner= row[5]
+            post.owner_id= row[5]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
         self.db.close_and_save(conn, cur)
@@ -57,7 +57,7 @@ class PostDbRepo(IPostRepository):
     def get_by_id(self, post_id:int) -> Post:
         conn = self.db.create_conn()
         cur = conn.cursor() 
-        cur.execute("SELECT post_id, to_char(post_created_on, 'dd/mm/yyyy HH24:MI'),to_char(post_modified_on, 'dd/mm/yyyy HH24:MI'), post_title, post_content, post_owner FROM posts WHERE post_id = %s", (post_id,))
+        cur.execute("SELECT post_id, to_char(post_created_on, 'dd/mm/yyyy HH24:MI'),to_char(post_modified_on, 'dd/mm/yyyy HH24:MI'), post_title, post_content, owner_id FROM posts WHERE post_id = %s", (post_id,))
         data = cur.fetchall()[0]
         post =Post("", "", "")
         post.post_id = data[0]
@@ -65,7 +65,7 @@ class PostDbRepo(IPostRepository):
         post.post_date_modification = data[2]
         post.post_title= data[3]
         post.post_contents= data[4]
-        post.post_owner= data[5]
+        post.owner_id= data[5]
         self.db.close_and_save(conn, cur)
         return post
     def update(self, post:Post) -> None:
@@ -78,10 +78,9 @@ class PostDbRepo(IPostRepository):
         cur.execute("""
         UPDATE posts
         SET post_title = %s,
-            post_content = %s,
-            post_owner = %s
+            post_content = %s
         WHERE post_id = %s RETURNING *
-        """,(post.post_title, post.post_contents, post.post_owner, post.post_id))
+        """,(post.post_title, post.post_contents, post.post_id))
         self.db.close_and_save(conn, cur)     
     
     def delete(self, post:Post) -> None:

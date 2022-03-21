@@ -1,3 +1,4 @@
+from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.db_config_interface import IDatabaseConfig
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.database_interface import IDatabase
@@ -14,6 +15,7 @@ from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
 from services.password_hash import PasswordHashing
 from services.authentication import Authentication
+from services.database_upgrade_create import DatabaseUpgradeandCreate
 
 
 class ContainerService:
@@ -27,7 +29,8 @@ class ContainerService:
     IDatabaseConfig: DatabaseConfig(),
     IDatabase: Database(DatabaseConfig()),
     IPassword: PasswordHashing(),
-    IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing())
+    IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
+    IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()))
     }
     services_memory = {
     IPostRepository: memory_post_repo,

@@ -18,7 +18,7 @@ def sign_in(authentication: IAuthentication):
         user_email = request.form.get("email")
         user_password = request.form.get("password")           
         if authentication.sign_in(user_email, user_password):
-            user:User = authentication.get_user_details()    
+            user:User = authentication.get_user_details()   
             flash(f"Welcome back {user.user_name}")
             status = authentication.is_logged_in()
             return render_template("blog.html",logged_in = status, logged_user = user)
