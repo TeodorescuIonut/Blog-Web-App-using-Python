@@ -1,3 +1,4 @@
+
 from datetime import datetime
 from decorators.setup import check_setup
 from decorators.injector_di import injector
@@ -37,22 +38,13 @@ class UserBlueprint:
             user_name = request.form.get("name")
             user_email = request.form.get("email")
             user_password = request.form.get("password")
-            user = User(user_name , user_email, self.pass_hash.generate_password(user_password))
-            error = None
-            if not user_name:
-                error = "Please add a name"
-            elif not user_email:
-                error = "Please add an email"
-            elif not user_password:
-                error = "Please add password"
-            if error:
-                flash(error)
-                return render_template("add_user.html",logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(), user = user, urlPage = self.add_user)
-            else:
-                new_user =  User(
+            new_user =  User(
                     user_name,
                     user_email,
                     self.pass_hash.generate_password(user_password))
+            if self.repo.check_user_email(new_user):
+                flash("User email already used")
+                return render_template("add_user.html", logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(), user = new_user, urlPage = self.add_user)
             self.repo.create(new_user)
             flash("User added")
             return redirect(url_for('user_bp.view_user',logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(), user_id = new_user.user_id))
@@ -65,30 +57,28 @@ class UserBlueprint:
 
     @check_setup
     def update_user(self,user_id):
-        user = self.repo.get_by_id(user_id)
+        user:User = self.repo.get_by_id(user_id)
         if request.method == "POST":
             user_name = request.form.get("name")
             user_email = request.form.get("email")
             user_password = request.form.get("password")
-            error = None
-            if not user_name :
-                error = "Please add a name"
-            elif not user_email:
-                error = "Please add an email"
-            if error:
-                flash(error)
-                return render_template("add_user.html",
-                user = user, buttonText = "Update",
-                urlPage = staticmethod(self.update_user))
+            if user_password =="":
+                user_password = user.user_password
             else:
-                user.user_id = user_id
-                user.user_name = user_name
-                user.user_email = user_email
-                user.user_password = user_password
-                user.user_date_modification = datetime.now().strftime("%B %d %Y")
-                self.repo.update(user)
-                flash("User updated")
-                return redirect(url_for('user_bp.view_user',user_id = user.user_id))
+                user_password = self.pass_hash.generate_password(user_password)
+                print(user_password)
+            if not user_name :
+                user_name = user.user_name
+            elif not user_email:
+                user_email =  user.user_email
+            user.user_id = user_id
+            user.user_name = user_name
+            user.user_email = user_email
+            user.user_password = user_password
+            user.user_date_modification = datetime.now().strftime("%B %d %Y")
+            self.repo.update(user)
+            flash("User updated")
+            return redirect(url_for('user_bp.view_user',user_id = user.user_id))
         return render_template("add_user.html",
                 user = user, buttonText = "Update",
                 urlPage = self.update_user, logged_in = self.auth.is_logged_in(), logged_user = self.auth.get_user_details())
