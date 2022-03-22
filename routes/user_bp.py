@@ -1,6 +1,7 @@
 
 from datetime import datetime
 from decorators.check_if_admin import check_if_admin
+from decorators.check_if_owner import check_if_owner
 from decorators.setup import check_setup
 from decorators.injector_di import injector
 from flask import Blueprint, flash, g, render_template, request, redirect, session, url_for
@@ -71,6 +72,7 @@ class UserBlueprint:
 
     @check_setup
     @check_if_admin
+    @check_if_owner
     def update_user(self,user_id):
         user:User = self.repo.get_by_id(user_id)
         if request.method == "POST":
@@ -81,7 +83,6 @@ class UserBlueprint:
                 user_password = user.user_password
             else:
                 user_password = self.pass_hash.generate_password(user_password)
-                print(user_password)
             if not user_name :
                 user_name = user.user_name
             elif not user_email:
