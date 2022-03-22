@@ -11,7 +11,7 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 from main import create_app
-from flask import g, redirect, render_template, request, url_for
+from flask import g, redirect, render_template
 
 
 

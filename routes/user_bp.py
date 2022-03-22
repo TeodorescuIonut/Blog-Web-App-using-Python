@@ -36,7 +36,10 @@ class UserBlueprint:
     def context_processor(self):
         if self.auth.is_logged_in():
             user= self.auth.get_user_details()
-            return dict(logged_user = user,logged_in = self.auth.is_logged_in())
+        else:
+            user = None
+        return dict(logged_user = user,logged_in = self.auth.is_logged_in())
+        
 
     @check_setup
     def home(self):
@@ -63,8 +66,8 @@ class UserBlueprint:
 
     @check_setup
     def view_user(self,user_id):
-        user = self.repo.get_by_id(user_id)
-        return render_template("view_user.html", user = user)
+            user = self.repo.get_by_id(user_id)
+            return render_template("view_user.html", user = user)
 
     @check_setup
     @check_if_admin

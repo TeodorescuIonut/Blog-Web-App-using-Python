@@ -30,8 +30,9 @@ class PostBlueprint:
     def context_processor(self):
         if self.auth.is_logged_in():
             user= self.auth.get_user_details()
-            return dict(logged_user = user,logged_in = self.auth.is_logged_in())
-        
+        else:
+            user = None
+        return dict(logged_user = user,logged_in = self.auth.is_logged_in())
 
     @check_setup
     def blog(self):
