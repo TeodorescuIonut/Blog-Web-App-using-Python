@@ -47,7 +47,7 @@ class PostBlueprint:
             post_title = request.form.get("title")
             # getting input content  in HTML form
             content = request.form.get("content")
-            post = Post(post_title, content,owner.user_id)
+            post = Post(owner.user_name,post_title, content,owner.user_id)
             error = None
             if not post_title:
                 error = "Please add a title"
@@ -58,6 +58,7 @@ class PostBlueprint:
                 return render_template("add_post.html", post = post, urlPage = self.add_post)
             else:
                 new_post =  Post(
+                    owner.user_name,
                     post_title.title(),
                     content,
                     owner.user_id)
