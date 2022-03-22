@@ -1,6 +1,7 @@
 from datetime import datetime
 from decorators.setup import check_setup
 from decorators.injector_di import injector
+from decorators.sing_in_required import sign_in_required
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from interfaces.authentication_interface import IAuthentication
 from models.post import Post
@@ -23,13 +24,21 @@ class PostBlueprint:
         self.post_bp.route('/VIEW/<int:post_id>')(self.view_post)
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>', methods =["GET", "POST"])(self.delete_post)
+        self.post_bp.context_processor(self.context_processor)
         return self.post_bp
-   
+    @check_setup
+    def context_processor(self):
+        if self.auth.is_logged_in():
+            user= self.auth.get_user_details()
+            return dict(logged_user = user,logged_in = self.auth.is_logged_in())
+        
+
     @check_setup
     def blog(self):
-        return render_template("blog.html",logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(), posts = self.repo.get_all(), length = len(self.repo.posts))
+        return render_template("blog.html",posts = self.repo.get_all(), length = len(self.repo.posts))
     
     @check_setup
+    @sign_in_required
     def add_post(self):
         owner:User = self.auth.get_user_details()
         if request.method == "POST":
@@ -53,15 +62,16 @@ class PostBlueprint:
                     owner.user_id)
             self.repo.create(new_post)
             flash("Post added")
-            return redirect(url_for('post_bp.view_post',logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(),post_id = new_post.post_id))
-        return render_template("add_post.html",logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(), post = Post, urlPage = self.add_post)
+            return redirect(url_for('post_bp.view_post',post_id = new_post.post_id))
+        return render_template("add_post.html", post = Post, urlPage = self.add_post)
 
     @check_setup
     def view_post(self,post_id):
         post = self.repo.get_by_id(post_id)
-        return render_template("viewPost.html",logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(), post = post)
+        return render_template("viewPost.html", post = post)
 
     @check_setup
+    @sign_in_required
     def update_post(self,post_id):
         post:Post = self.repo.get_by_id(post_id)
         if request.method == "POST":
@@ -86,10 +96,11 @@ class PostBlueprint:
                 post.post_date_modification = datetime.now().strftime("%B %d %Y")
                 self.repo.update(post)
                 flash("Post updated")
-                return render_template('viewPost.html',logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(),post_id = post.post_id, post = post)
-        return render_template("add_post.html",logged_in = self.auth.is_logged_in(),logged_user = self.auth.get_user_details(),post = post, buttonText = "Update")
+                return render_template('viewPost.html',post_id = post.post_id, post = post)
+        return render_template("add_post.html",post = post, buttonText = "Update")
 
     @check_setup
+    @sign_in_required
     def delete_post(self,post_id):
         post = self.repo.get_by_id(post_id)
         self.repo.delete(post)

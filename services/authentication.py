@@ -43,6 +43,11 @@ class Authentication(IAuthentication):
         if "user_id" in session:
             return True
     
+    def is_admin(self):
+        if 'admin' in session and session['admin'] == "true":
+            return True
+        return False
+    
 
     
         

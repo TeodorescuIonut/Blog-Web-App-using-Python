@@ -16,7 +16,6 @@
 {% endif %}
 <div class="row">
     {% for user in users %}
-    
     <div class="users col-md-4 text-center">
         <a class="user-link" href="{{url_for('user_bp.view_user',user_id = user.user_id )}}">
         <div class="card mb-4 shadow-sm" >  

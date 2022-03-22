@@ -21,8 +21,8 @@ class PostDbRepo(IPostRepository):
         conn = self.db.create_conn()
         cur = conn.cursor()
         cur.execute(
-                "INSERT INTO posts (post_title, post_content) VALUES (%s, %s, %s) RETURNING post_id",
-                (post.post_title, post.post_contents),
+                "INSERT INTO posts (post_title, post_content, owner_id) VALUES (%s, %s, %s) RETURNING post_id",
+                (post.post_title, post.post_contents, post.owner_id),
             )
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
