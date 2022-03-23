@@ -1,7 +1,7 @@
 from datetime import datetime
-from decorators.setup import check_setup
-from decorators.injector_di import injector
-from decorators.sing_in_required import sign_in_required
+from decorators.setup.setup import check_setup
+from decorators.dependency_injection.injector_di import injector
+from decorators.authentification.sing_in_required import sign_in_required
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from interfaces.authentication_interface import IAuthentication
 from models.post import Post

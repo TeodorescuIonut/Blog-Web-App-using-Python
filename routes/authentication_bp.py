@@ -1,5 +1,5 @@
-from decorators.injector_di import injector
-from decorators.setup import check_setup
+from decorators.dependency_injection.injector_di import injector
+from decorators.setup.setup import check_setup
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from interfaces.authentication_interface import IAuthentication
 from models.user import User

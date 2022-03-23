@@ -1,7 +1,7 @@
 
 from functools import wraps
 from flask import flash, redirect, url_for
-from decorators.injector_di import injector
+from decorators.dependency_injection.injector_di import injector
 from interfaces.authentication_interface import IAuthentication
 
 

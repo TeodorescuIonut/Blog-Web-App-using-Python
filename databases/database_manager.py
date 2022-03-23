@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 
-import psycopg2
+
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
@@ -13,6 +13,7 @@ sys.path.append(a)
 
 from interfaces.database_interface import IDatabase
 from interfaces.db_config_interface import IDatabaseConfig
+import psycopg2
 
 
 

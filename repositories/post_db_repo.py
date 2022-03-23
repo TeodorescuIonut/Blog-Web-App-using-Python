@@ -92,7 +92,8 @@ class PostDbRepo(IPostRepository):
         cur.execute('DELETE FROM posts WHERE post_id= %s', (id,)) 
         self.db.close_and_save(conn, cur)
         index_post = self.get_post_index(id)
-        self.posts.remove(self.posts[index_post])
+        if index_post is not None:
+            self.posts.remove(self.posts[index_post])
 
 
     def get_post_index(self, id: int)-> int:

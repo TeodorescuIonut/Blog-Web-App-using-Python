@@ -1,4 +1,3 @@
-
 from flask import g, session
 from interfaces.authentication_interface import IAuthentication
 from interfaces.user_repository_interface import IUserRepository
@@ -20,7 +19,7 @@ class Authentication(IAuthentication):
         if self.user is not None and self.password_hash.check_password(self.user.user_password, password):
             session['user_id'] = self.user.user_id
             session['user_name'] = self.user.user_name
-            if self.user.admin:
+            if self.user.admin is True:
                 session['admin'] = "true"
             else:
                 session['admin'] = "false"
@@ -42,11 +41,7 @@ class Authentication(IAuthentication):
     def is_logged_in(self) -> bool:
         if "user_id" in session:
             return True
-    
-    def is_admin(self):
-        if 'admin' in session and session['admin'] == "true":
-            return True
-        return False
+
     
 
     

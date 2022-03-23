@@ -1,4 +1,3 @@
-from databases.database_config import DatabaseConfig
 from flask import Flask
 import sys
 import os
@@ -20,9 +19,7 @@ from databases.database_bp import database_bp
 
 
 
-
 def create_app(test_config = False):
-
     app = Flask(__name__)
     app.config.from_object('config') 
     ContainerService.testing_config = test_config

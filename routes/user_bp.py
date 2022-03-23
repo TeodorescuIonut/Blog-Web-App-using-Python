@@ -1,9 +1,9 @@
 
 from datetime import datetime
-from decorators.check_if_admin import check_if_admin
-from decorators.check_if_owner import check_if_owner
-from decorators.setup import check_setup
-from decorators.injector_di import injector
+from decorators.authorization.check_if_admin_or_owner import check_if_admin_or_owner
+from decorators.authorization.check_if_admin import check_if_admin
+from decorators.setup.setup import check_setup
+from decorators.dependency_injection.injector_di import injector
 from flask import Blueprint, flash, g, render_template, request, redirect, session, url_for
 from interfaces.authentication_interface import IAuthentication
 from interfaces.user_repository_interface import IUserRepository
@@ -53,6 +53,17 @@ class UserBlueprint:
             user_name = request.form.get("name")
             user_email = request.form.get("email")
             user_password = request.form.get("password")
+            error = None
+            if not user_name:
+                error = "Please add a name"
+            elif not user_email:
+                error = "Please add an email"
+            elif not user_password:
+                error = "Please add a password"
+            if error:
+                flash(error)
+                user = User(user_name,user_email, user_password)
+                return render_template("add_user.html", user = user, urlPage = self.add_user)
             new_user =  User(
                     user_name,
                     user_email,
@@ -68,11 +79,13 @@ class UserBlueprint:
     @check_setup
     def view_user(self,user_id):
             user = self.repo.get_by_id(user_id)
+            if not user:
+                flash("User not found")
+                return render_template("home.html")
             return render_template("view_user.html", user = user)
 
     @check_setup
-    @check_if_admin
-    @check_if_owner
+    @check_if_admin_or_owner
     def update_user(self,user_id):
         user:User = self.repo.get_by_id(user_id)
         if request.method == "POST":

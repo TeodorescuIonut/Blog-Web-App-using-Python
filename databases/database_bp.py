@@ -13,7 +13,7 @@ a=str(path.parent.absolute())
 sys.path.append(a)
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from databases.database_settings import DatabaseSettings
-from decorators.injector_di import injector
+from decorators.dependency_injection.injector_di import injector
 from interfaces.database_interface import IDatabase
 from interfaces.db_config_interface import IDatabaseConfig
 

@@ -18,7 +18,3 @@ class IAuthentication(ABC):
     @abstractmethod
     def is_logged_in(self):
         pass
-
-    @abstractmethod
-    def is_admin(self):
-        pass
