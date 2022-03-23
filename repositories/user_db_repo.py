@@ -65,7 +65,9 @@ class UserDbRepo(IUserRepository):
         conn = self.db.create_conn()
         cur = conn.cursor() 
         cur.execute("SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'),to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password FROM users WHERE user_id = %s", (user_id,))
-        data = cur.fetchall()[0]
+        data = cur.fetchone()
+        if data is None:
+            return None
         user =User("", "", "")
         user.user_id = data[0]
         user.user_date_creation = data[1]
@@ -98,9 +100,11 @@ class UserDbRepo(IUserRepository):
         cur = conn.cursor()
         id = user.user_id 
         cur.execute('DELETE FROM users WHERE user_id= %s', (id,)) 
+        cur.execute('DELETE FROM posts WHERE owner_id= %s', (id,))
         self.db.close_and_save(conn, cur)
         user_index = self.get_user_index(id)
-        self.users.remove(self.users[user_index])
+        if user_index is not None:
+            self.users.remove(self.users[user_index])
 
 
     def get_user_index(self, id)-> int:
@@ -114,12 +118,13 @@ class UserDbRepo(IUserRepository):
         cur.execute("SELECT * FROM users WHERE user_email = %s", (user_email,))
         data = cur.fetchone()
         if data is not None:
-            user =User("", "", "")
+            user =User("", "", "", "")
             user.user_id = data[0]
             user.user_date_creation = data[1]
             user.user_date_modification = data[2]
             user.user_name= data[3]
             user.user_email= data[4]
             user.user_password= data[5]
+            user.admin = data[6]
             self.db.close_and_save(conn, cur)
             return user

@@ -21,7 +21,7 @@ BEGIN
         ALTER TABLE posts
         ADD CONSTRAINT fk_user_id 
         FOREIGN KEY (owner_id) 
-        REFERENCES users(user_id);
+        REFERENCES users(user_id) ON DELETE CASCADE;
     END IF;
 END $$;    
 """
