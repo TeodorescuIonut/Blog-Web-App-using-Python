@@ -1,9 +1,11 @@
 import configparser
+from ensurepip import version
 import sys
 import os
 from pathlib import Path
 from interfaces.database_interface import IDatabase
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
+from interfaces.db_config_interface import IDatabaseConfig
 
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -16,23 +18,22 @@ from databases.queries import queries
 
 class DatabaseUpgradeandCreate(IDatabaseUpgrade):
 
-    def __init__(self, db:IDatabase):
+    def __init__(self, db:IDatabase, db_config:IDatabaseConfig):
         self.db = db
         self.version = 0.2
+        self.db_config = db_config
+    
+    def is_latest_db_version(self):
+        return self.version < self.db_config.get_db_version()
+
 
     def upgrade_db(self):
-        config = configparser.ConfigParser()
-        config.sections()
-        config.read('database.ini')
-        version = config.get("postgresql", "version") if config.has_option("postgresql", "version") else 0.1
         conn = self.db.create_conn()
         curs = conn.cursor()
-        if self.version > float(version):
-            config.set("postgresql", "version",str(self.version))
-            with open('database.ini', 'w',encoding='cp1251') as configfile:
-                config.write(configfile)
+        if self.is_latest_db_version() is False:
             for query in queries:
-                curs.execute(query)
-                conn.commit()
+                    curs.execute(query)
+                    conn.commit()
             curs.close()
             conn.close()
+            self.db_config.set_db_version(self.version)

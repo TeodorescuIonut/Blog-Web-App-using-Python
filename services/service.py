@@ -30,7 +30,7 @@ class ContainerService:
     IDatabase: Database(DatabaseConfig()),
     IPassword: PasswordHashing(),
     IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
-    IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()))
+    IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()),DatabaseConfig())
     }
     services_memory = {
     IPostRepository: memory_post_repo,

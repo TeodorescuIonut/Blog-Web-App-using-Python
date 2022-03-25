@@ -18,3 +18,9 @@ class MemoryDatabaseConfig(IDatabaseConfig):
     
     def set_configuration(self, config:bool):
         self.config = config
+
+    def get_db_version(self):
+        pass
+
+    def set_db_version(self, version):
+        pass

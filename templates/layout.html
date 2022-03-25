@@ -23,6 +23,8 @@
                 <li class="nav-item">
                     <a href="{{ url_for('post_bp.blog') }}" class="navbar-brand">Posts</a>
                 </li>
+                {%if logged_in is true and logged_user.admin is true%}
+
                 <li class="nav-item dropdown">
                     <a href="{{ url_for('user_bp.home') }}" class="navbar-brand dropdown-toggle"  data-toggle="dropdown">Users</a>
                     <ul class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton2">
@@ -30,6 +32,7 @@
                         <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.home') }}"><i class="fa-solid fa-user-group"></i> Users</a></li>
                     </ul>
                 </li>
+                {%endif%}
                 
             </ul> 
                 

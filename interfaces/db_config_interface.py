@@ -15,3 +15,11 @@ class IDatabaseConfig(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def is_configured(self):
         pass
+
+    @abc.abstractmethod
+    def get_db_version(self):
+        pass
+
+    @abc.abstractmethod
+    def set_db_version(self, version):
+        pass
