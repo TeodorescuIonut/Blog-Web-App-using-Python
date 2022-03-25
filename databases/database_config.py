@@ -47,8 +47,6 @@ class DatabaseConfig(IDatabaseConfig,Config):
         return float(version)
 
     def set_db_version(self, version):
-        self.config.read(self.file)
+        self.config.add_section("version")
         self.config.set("version", "version",str(version))
-        with open(self.file, 'w',encoding='cp1251') as configfile:
-            self.config.write(configfile)
-        # Config().save(self.config)
+        Config().save(self.config)
