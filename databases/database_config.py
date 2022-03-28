@@ -28,7 +28,7 @@ class DatabaseConfig(IDatabaseConfig,Config):
 
         
     def is_configured(self)->bool:
-        return os.path.exists(f"./{self.file}")
+        return Config().is_configured()
     
     def load(self):
        params = Config().load(self.config)

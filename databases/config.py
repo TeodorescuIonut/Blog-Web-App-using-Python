@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import os
 
 
 class Config:
@@ -38,3 +39,5 @@ class Config:
             else:
                 return False
 
+    def is_configured(self):
+        return os.path.exists(f"./{self.file}")
