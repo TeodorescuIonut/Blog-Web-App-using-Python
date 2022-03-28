@@ -34,3 +34,4 @@ def sign_out(authentication: IAuthentication):
     if authentication.sign_out():
         flash('You have been logged out')
         return redirect(url_for("post_bp.blog"))
+    return render_template("sign-in.html")

@@ -34,6 +34,7 @@ class PostDbRepo(IPostRepository):
         cur = conn.cursor() 
         cur.execute("SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), owner_id, user_name   FROM posts INNER JOIN users ON owner_id = user_id ORDER BY post_created_on DESC")
         rows = cur.fetchall()
+        self.posts.clear()
         for row in rows:
             post =Post("", "","","")
             post.post_id = row[0]

@@ -24,7 +24,7 @@ class UserDbRepo(IUserRepository):
         cur = conn.cursor()
         cur.execute(
                 "INSERT INTO users (user_name, user_email, user_password, admin) VALUES (%s, %s, %s, %s) RETURNING user_id",
-                (user.user_name, user.user_email, user.user_password, False),
+                (user.user_name, user.user_email, user.user_password, user.admin),
             )
         user.user_id = cur.fetchone()[0]
         self.users.append(user)
@@ -34,7 +34,7 @@ class UserDbRepo(IUserRepository):
     def get_all(self) -> list():
         conn = self.db.create_conn()
         cur = conn.cursor() 
-        cur.execute("SELECT user_id,user_date_creation,user_date_modification, user_name, user_email, user_password  FROM users ORDER BY user_date_creation DESC")
+        cur.execute("SELECT user_id,user_date_creation,user_date_modification, user_name, user_email, user_password, admin  FROM users ORDER BY user_date_creation DESC")
         rows = cur.fetchall()
         for row in rows:
             user =User("", "", "")
@@ -44,6 +44,7 @@ class UserDbRepo(IUserRepository):
             user.user_name= row[3]
             user.user_email= row[4]
             user.user_password= row[5]
+            user.admin = row[6]
             if self.check_user_id(user) is False:
                 self.users.append(user)
         self.db.close_and_save(conn, cur)
@@ -83,7 +84,7 @@ class UserDbRepo(IUserRepository):
         id = user.user_id
         index_user = self.get_user_index(id)
         if index_user is not None:
-            self.users.remove(self.users[user_index])
+            self.users.remove(self.users[index_user])
         self.users.append(user) 
         user_date_modification = datetime.now().strftime("%B %d %Y %H:%M:%S")     
         cur.execute("""
@@ -91,9 +92,10 @@ class UserDbRepo(IUserRepository):
         SET user_name = %s,
             user_date_modification = %s,
             user_email = %s,
-            user_password = %s
+            user_password = %s,
+            admin = %s
         WHERE user_id = %s
-        """,(user.user_name,user_date_modification, user.user_email,user.user_password, user.user_id))
+        """,(user.user_name,user_date_modification, user.user_email,user.user_password, user.admin,user.user_id))
         self.db.close_and_save(conn, cur)
         
     def delete(self, user:User) -> None:

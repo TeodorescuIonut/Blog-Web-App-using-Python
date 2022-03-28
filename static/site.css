@@ -50,3 +50,11 @@
 .search-form{
     margin-right: 5%;
 }
+
+.super-user{
+    position: absolute;
+    left: 46%;
+    top: 50%;
+    color: #343a40;
+    font-size: 27px;
+}

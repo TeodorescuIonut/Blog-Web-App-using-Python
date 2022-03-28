@@ -23,10 +23,14 @@
               <img class="avatar center" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt="">
               <h5 class="card-title">{{ user.user_name }}</h5>
               </i><h6 class="card-subtitle mb-2 text-muted"><i class="d-inline fa-solid fa-envelope"> </i>{{ user.user_email }}</h6>
-    
+              
             </div>
+            {% if user.admin is true %}
+              <i class="super-user fa-solid fa-gear"></i>
+              {%endif%}
           </div>
         </a>
+       
     </div>
     
     
