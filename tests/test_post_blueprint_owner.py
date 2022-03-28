@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 import pytest
+from services.authentication import Authentication
 from services.service import ContainerService
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -22,82 +23,104 @@ def test_app(client):
     """Check an empty blog"""
     response = client.get('/POST/')
     assert response.status == '200 OK'
-    assert b'There are no blog posts.' in response.data
+
+def sign_in_user(client, email, password):
+    return client.post('/SIGNIN/', data = dict(
+         email = email,
+         password = password
+    )
+    , follow_redirects=True)
+
+def sign_out_user(client):
+    return client.get('/SIGNOUT/', follow_redirects=True)
 
 
-def add_post(client,title, content, owner):
+def add_post(client,title, content, owner, owner_id):
     return client.post('/POST/CREATE/posts', data = dict(
          title = title,
          owner = owner,
-         content = content
+         content = content,
+         owner_id = owner_id
     )
     , follow_redirects=True)
 
 def delete_post(client):
-    return client.post('/POST/DELETE/6', follow_redirects=True)
+    return client.post('/POST/DELETE/12', follow_redirects=True)
 
 def update_post(client, title, content, owner):
-    return client.post('/POST/UPDATE/1', data = dict(
+    return client.post('/POST/UPDATE/11', data = dict(
          title = title,
          owner = owner,
          content = content
     )
     , follow_redirects=True)
-
+def add_user(client,name, email, password):
+    return client.post('/USER/CREATE/users', data = dict(
+         name = name,
+         email = email,
+         password = password
+    )
+    , follow_redirects=True)
 def view_post(client):
-    return client.get('/POST/VIEW/3')
+    return client.get('/POST/VIEW/11')
 
 def test_add_post(client):
     """Test if a new post can be added"""
-    result =  add_post(client, "Hello world", "bla bla", "Jhon")
-    resp = client.get('/POST/VIEW/0',follow_redirects=True)
+    sign_in_user(client, "admin@localhost.com", "1234")
+    add_user(client, "Peters", "blasss@yahoo.com", "1234")
+    sign_out_user(client)
+    sign_in_user(client, "blasss@yahoo.com", "1234")
+    result =  add_post(client, "Hello world", "bla bla", "Peters", 2)
+    resp = client.get('/POST/VIEW/8',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data
     assert b"bla bla" in resp.data
-    assert b"Jhon" in resp.data
+    assert b"Peters" in resp.data
 
 def test_add_two_posts(client):
     """Test if a new post can be added"""
-    result =  add_post(client, "Hello World", "bla bla", "Jhon")
-    add_post(client, "Hello", "bla bla bla", "Peter")
-    resp1 = client.get('/POST/VIEW/1',follow_redirects=True)
-    resp2 = client.get('/POST/VIEW/2',follow_redirects=True)
+    sign_in_user(client, "blasss@yahoo.com", "1234")
+    result =  add_post(client, "Hello World", "bla bla", "Peters", 1)
+    add_post(client, "Hello", "bla bla bla", "Peters", 1)
+    resp1 = client.get('/POST/VIEW/9',follow_redirects=True)
+    resp2 = client.get('/POST/VIEW/10',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp1.data
     assert b'bla bla' in resp1.data
-    assert b"Jhon"  in resp1.data
+    assert b"Peters"  in resp1.data
     assert b"Hello" in resp2.data
     assert b"bla bla bla" in resp2.data
-    assert b"Peter"  in resp2.data
+    assert b"Peters"  in resp2.data
 
 def test_view_post(client):
     """Test if a post can be viewed"""
-    add_post(client,"Hello world", "bla bla", "Jhon")
+    sign_in_user(client, "blasss@yahoo.com", "1234")
+    add_post(client,"Hello world", "bla bla", "Peters", 1)
     result = view_post(client)
     assert b'Hello World' in result.data
     assert b'bla bla' in result.data
-    assert b'Jhon' in result.data
+    assert b'Peters' in result.data
 
 
 def test_update_post(client):
     """Test if a post can be updated"""
-    add_post(client,"Hello world", "bla bla", "Jhon")
-    add_post(client, "Hello ", "bla bla bla", "PEter")
-    result = update_post(client, "Hello world update","bla bla update", "Jhon update")
+    sign_in_user(client, "blasss@yahoo.com", "1234")
+    add_post(client,"Hello world", "bla bla",'Peters', 1)
+    result = update_post(client, "Hello world update","bla bla update","Peters")
     assert result.status == '200 OK'
     assert b'Hello world update' in result.data
     assert b'bla bla update' in result.data
-    assert b'Jhon update' in result.data
+    assert b'Peters' in result.data
 
 def test_delete_post(client):
     """Test if a post can be deleted"""
-    result = add_post(client,"Hell world", "new content", "Grace")
+    sign_in_user(client, "blasss@yahoo.com", "1234")
+    result = add_post(client,"Hell world", "new content", "Peters",1)
     result = delete_post(client)
     response = client.get('/POST/' , follow_redirects=True)
     assert b'Post deleted' in result.data
     assert b'Hell world' not in response.data
     assert b'new content' not in response.data
-    assert b'Grace' not in response.data
 
 def test_redirect_not_setup_false(client):
     ContainerService.memory_config.set_configuration = False

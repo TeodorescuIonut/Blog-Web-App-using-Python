@@ -22,7 +22,12 @@ def test_app(client):
     response = client.get('/USER/')
     assert response.status == '200 OK'
 
-
+def sign_in_user(client, email, password):
+    return client.post('/SIGNIN/', data = dict(
+         email = email,
+         password = password
+    )
+    , follow_redirects=True)
 def add_user(client,name, email, password):
     return client.post('/USER/CREATE/users', data = dict(
          name = name,
@@ -32,7 +37,7 @@ def add_user(client,name, email, password):
     , follow_redirects=True)
 
 def delete_user(client):
-    return client.post('/USER/DELETE/7', follow_redirects=True)
+    return client.post('/USER/DELETE/8', follow_redirects=True)
 
 def update_user(client, name, email, password):
     return client.post('/USER/UPDATE/1', data = dict(
@@ -43,23 +48,25 @@ def update_user(client, name, email, password):
     , follow_redirects=True)
 
 def view_user(client):
-    return client.get('/USER/VIEW/4')
+    return client.get('/USER/VIEW/6')
 
 def test_add_user(client):
     """Test if a new post can be added"""
-    result =  add_user(client, "Jhonny", "blasss@yahoo.com", "1234")
-    resp = client.get('/USER/VIEW/1',follow_redirects=True)
+    sign_in_user(client, "admin@localhost.com", "1234")
+    result =  add_user(client, "Jhonny", "Jhonny@yahoo.com", "1234")
+    resp = client.get('/USER/VIEW/3',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Jhonny" in resp.data
-    assert b"blasss@yahoo.com" in resp.data
+    assert b"Jhonny@yahoo.com" in resp.data
 
 
 def test_add_two_users(client):
     """Test if a new post can be added"""
+    sign_in_user(client, "admin@localhost.com", "1234")
     result =  add_user(client, "Jhon", "bldda@yahoo.com", "1234")
     add_user(client, "Peter", "peter@yahoo.com", "1234")
-    resp1 = client.get('/USER/VIEW/2',follow_redirects=True)
-    resp2 = client.get('/USER/VIEW/3',follow_redirects=True)
+    resp1 = client.get('/USER/VIEW/4',follow_redirects=True)
+    resp2 = client.get('/USER/VIEW/5',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Jhon" in resp1.data
     assert b'bldda@yahoo.com' in resp1.data
@@ -68,6 +75,7 @@ def test_add_two_users(client):
 
 def test_view_user(client):
     """Test if a post can be viewed"""
+    sign_in_user(client, "admin@localhost.com", "1234")
     add_user(client,"Blacky", "bla@gmail.com", "7213")
     result = view_user(client)
     assert b'Blacky' in result.data
@@ -76,16 +84,17 @@ def test_view_user(client):
 
 def test_update_user(client):
     """Test if a post can be updated"""
-    add_user(client,"Jhon", "asd@yahoo.com", "sdasd")
-    add_user(client, "Peter ", "blass@yahoo.coma", "21")
-    result = update_user(client, "Jhon update","asd@yahooooo.com", "21")
+    sign_in_user(client, "admin@localhost.com", "1234")
+    add_user(client,"Jhon", "Jhon@yahoo.com", "sdasd")
+    result = update_user(client, "Jhon update","Jhon@yahoo.com", "21")
     assert result.status == '200 OK'
     assert b'Jhon update' in result.data
-    assert b'asd@yahooooo.com' in result.data
+    assert b'Jhon@yahoo.com' in result.data
 
 
 def test_delete_user(client):
     """Test if a post can be deleted"""
+    sign_in_user(client, "admin@localhost.com", "1234")
     result = add_user(client,"Maggie", "new@yahoo.com", "67123")
     result = delete_user(client)
     response = client.get('/USER/' , follow_redirects=True)

@@ -11,12 +11,13 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 from models.user import User
 from interfaces.user_repository_interface import IUserRepository
+from services.password_hash import generate_password_hash
 
 
 class UserRepo(IUserRepository):
     users = list()
     count = 0
-
+    users.append(User("admin","admin@localhost.com",generate_password_hash("1234"),True,999))
     def get_all(self)-> list():
         sorted_array = sorted(self.users,key=lambda x: x.user_date_creation,reverse=True)
         return sorted_array
