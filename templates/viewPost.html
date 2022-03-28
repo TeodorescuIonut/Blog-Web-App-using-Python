@@ -22,10 +22,12 @@
       <p class="card-text"><small class="text-muted"> Modified on {{post.post_date_modification}}</small></p>
       {%endif%}
       <!-- Button trigger modal -->
+      {%if logged_in is true and logged_user.admin is true or logged_user.user_id == post.owner_id %}
       <a href="{{url_for('post_bp.update_post',post_id = post.post_id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
       <a class="d-inline btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#exampleModal">
           Delete
       </a>
+      {%endif%}
       
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">

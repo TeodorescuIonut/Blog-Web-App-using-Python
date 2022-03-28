@@ -1,3 +1,4 @@
+from databases.database_upgrade_memory import MemodryDBUpgrade
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.db_config_interface import IDatabaseConfig
 from interfaces.post_repository_interface import IPostRepository
@@ -23,6 +24,7 @@ class ContainerService:
     memory_post_repo = PostRepo()
     memory_user_repo = UserRepo()       
     memory_config = MemoryDatabaseConfig()
+    memory_upgrade = MemodryDBUpgrade()
     services_production = {
     IPostRepository: PostDbRepo(Database(DatabaseConfig())),
     IUserRepository: UserDbRepo(Database(DatabaseConfig())),
@@ -38,7 +40,8 @@ class ContainerService:
     IDatabaseConfig: memory_config,
     IDatabase:MemoryDatabase(),
     IPassword: PasswordHashing(),
-    IAuthentication: Authentication(memory_user_repo, PasswordHashing())
+    IAuthentication: Authentication(memory_user_repo, PasswordHashing()),
+    IDatabaseUpgrade:memory_upgrade
     }
 
     @classmethod

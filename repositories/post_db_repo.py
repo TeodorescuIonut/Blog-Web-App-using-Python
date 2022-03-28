@@ -59,7 +59,7 @@ class PostDbRepo(IPostRepository):
         conn = self.db.create_conn()
         cur = conn.cursor() 
         cur.execute("SELECT post_id, to_char(post_created_on, 'dd/mm/yyyy HH24:MI'),to_char(post_modified_on, 'dd/mm/yyyy HH24:MI'), post_title, post_content, owner_id, user_name  FROM posts INNER JOIN users ON owner_id = user_id  WHERE post_id = %s", (post_id,))
-        data = cur.fetchall()[0]
+        data = cur.fetchone()
         post =Post("", "", "","")
         post.post_id = data[0]
         post.post_date_creation = data[1]

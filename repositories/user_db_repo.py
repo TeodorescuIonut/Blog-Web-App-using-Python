@@ -82,7 +82,8 @@ class UserDbRepo(IUserRepository):
         cur = conn.cursor() 
         id = user.user_id
         index_user = self.get_user_index(id)
-        self.users.remove(self.users[index_user])
+        if index_user is not None:
+            self.users.remove(self.users[user_index])
         self.users.append(user) 
         user_date_modification = datetime.now().strftime("%B %d %Y %H:%M:%S")     
         cur.execute("""

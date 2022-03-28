@@ -1,4 +1,6 @@
 from datetime import datetime
+from decorators.authorization.check_if_admin_or_owner import check_if_admin_or_owner
+from decorators.authorization.check_if_post_owner_or_admin import check_if_post_owner_or_admin
 from decorators.setup.setup import check_setup
 from decorators.dependency_injection.injector_di import injector
 from decorators.authentification.sing_in_required import sign_in_required
@@ -74,6 +76,7 @@ class PostBlueprint:
 
     @check_setup
     @sign_in_required
+    @check_if_post_owner_or_admin
     def update_post(self,post_id):
         post:Post = self.repo.get_by_id(post_id)
         if request.method == "POST":
@@ -103,6 +106,7 @@ class PostBlueprint:
 
     @check_setup
     @sign_in_required
+    @check_if_post_owner_or_admin
     def delete_post(self,post_id):
         post = self.repo.get_by_id(post_id)
         self.repo.delete(post)

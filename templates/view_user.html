@@ -18,10 +18,14 @@
       <p class="card-text"><small class="text-muted"> Modified on {{user.user_date_modification}}</small></p>
       {%endif%}
       <!-- Button trigger modal -->
+      {%if logged_in is true and logged_user.admin is true or logged_user.user_id == user.user_id %}
       <a href="{{url_for('user_bp.update_user',user_id = user.user_id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
+      {%if logged_in is true and logged_user.admin is true%}
       <a class="d-inline btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#exampleModal">
           Delete
       </a>
+      {%endif%}
+      {%endif%}
       
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
