@@ -2,6 +2,7 @@ from flask import Response
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
+from models.user import User
 
 
 
@@ -34,6 +35,10 @@ class PostRepo(IPostRepository):
             i -= 1
             if owner_id == self.posts[i].owner_id:
                 del self.posts[i]
+    def update_users_posts(self, updated_name, user_id):
+        for post in self.posts:
+            if post.owner_id == user_id:
+                post.post_owner = updated_name
 
     def get_previews(self)->list():
         posts_previews = []
