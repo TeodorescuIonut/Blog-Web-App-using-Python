@@ -46,7 +46,7 @@ def delete_post(client):
     return client.post('/POST/DELETE/6', follow_redirects=True)
 
 def update_post(client, title, content, owner):
-    return client.post('/POST/UPDATE/1', data = dict(
+    return client.post('/POST/UPDATE/4', data = dict(
          title = title,
          owner = owner,
          content = content
@@ -60,7 +60,7 @@ def test_add_post(client):
     """Test if a new post can be added"""
     sign_in_user(client, "admin@localhost.com", "1234")
     result =  add_post(client, "Hello world", "bla bla", "admin", 0)
-    resp = client.get('/POST/VIEW/1',follow_redirects=True)
+    resp = client.get('/POST/VIEW/4',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data
     assert b"bla bla" in resp.data
@@ -71,8 +71,8 @@ def test_add_two_posts(client):
     sign_in_user(client, "admin@localhost.com", "1234")
     result =  add_post(client, "Hello World", "bla bla", "admin", 0)
     add_post(client, "Hello", "bla bla bla", "admin", 1)
-    resp1 = client.get('/POST/VIEW/2',follow_redirects=True)
-    resp2 = client.get('/POST/VIEW/3',follow_redirects=True)
+    resp1 = client.get('/POST/VIEW/5',follow_redirects=True)
+    resp2 = client.get('/POST/VIEW/6',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp1.data
     assert b'bla bla' in resp1.data

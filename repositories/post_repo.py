@@ -36,6 +36,14 @@ class PostRepo(IPostRepository):
 
     def delete(self, post:Post) -> None:
         self.posts.remove(post)
+
+    def delete_all_user_posts(self, owner_id):
+        i = len(self.posts)
+        while i:
+            i -= 1
+            if owner_id == self.posts[i].owner_id:
+                del self.posts[i]
+
     
     def get_previews(self)->list():
         posts_previews = []
@@ -50,3 +58,7 @@ class PostRepo(IPostRepository):
         preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
         return preview
 
+    def get_post_index(self, owner_id)-> int:
+        for post in self.posts:
+            if owner_id== post.owner_id:
+                return self.posts.index(post)

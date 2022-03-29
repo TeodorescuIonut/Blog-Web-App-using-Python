@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 import pytest
-from services.authentication import Authentication
 from services.service import ContainerService
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -82,8 +81,8 @@ def test_add_two_posts(client):
     sign_in_user(client, "blasss@yahoo.com", "1234")
     result =  add_post(client, "Hello World", "bla bla", "Peters", 1)
     add_post(client, "Hello", "bla bla bla", "Peters", 1)
-    resp1 = client.get('/POST/VIEW/9',follow_redirects=True)
-    resp2 = client.get('/POST/VIEW/10',follow_redirects=True)
+    resp1 = client.get('/POST/VIEW/12',follow_redirects=True)
+    resp2 = client.get('/POST/VIEW/13',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp1.data
     assert b'bla bla' in resp1.data

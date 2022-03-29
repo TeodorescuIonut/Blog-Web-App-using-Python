@@ -19,6 +19,7 @@ def client():
     return testing_app.test_client()
 
 def test_app(client):
+    sign_in_user(client, "admin@localhost.com", "1234")
     response = client.get('/USER/')
     assert response.status == '200 OK'
 
@@ -40,7 +41,7 @@ def delete_user(client):
     return client.post('/USER/DELETE/8', follow_redirects=True)
 
 def update_user(client, name, email, password):
-    return client.post('/USER/UPDATE/1', data = dict(
+    return client.post('/USER/UPDATE/2', data = dict(
          name = name,
          email = email,
          password = password
@@ -122,6 +123,7 @@ def test_redirect_not_setup(client):
 
 def test_redirect_setup_true(client):
     ContainerService.memory_config.set_configuration = True
+    sign_in_user(client, "admin@localhost.com", "1234")
     response = client.get('/USER/', follow_redirects=True)
     assert response.status == '200 OK'
     assert b"Read about true experiences" in response.data
