@@ -1,13 +1,4 @@
-import sys
-import os
-
 from flask import Response
-
-myDir = os.getcwd()
-sys.path.append(myDir)
-from pathlib import Path
-path = Path(myDir)
-a=str(path.parent.absolute())
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
@@ -44,7 +35,6 @@ class PostRepo(IPostRepository):
             if owner_id == self.posts[i].owner_id:
                 del self.posts[i]
 
-    
     def get_previews(self)->list():
         posts_previews = []
         for post in self.posts:
@@ -55,7 +45,8 @@ class PostRepo(IPostRepository):
         content_preview = post.post_contents[0:200]
         creation_date = post.post_date_creation
         modification_date = post.post_date_modification
-        preview = PostPreview(post.post_id,post.post_title, content_preview, post.post_owner, creation_date, modification_date)
+        preview = PostPreview(post.post_id,post.post_title,
+        content_preview, post.post_owner, creation_date, modification_date)
         return preview
 
     def get_post_index(self, owner_id)-> int:

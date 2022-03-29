@@ -1,6 +1,6 @@
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from decorators.dependency_injection.injector_di import injector
 from decorators.setup.setup import check_setup
-from flask import Blueprint, flash, redirect, render_template, request, url_for
 from interfaces.authentication_interface import IAuthentication
 from models.user import User
 
@@ -16,9 +16,9 @@ def sign_in(authentication: IAuthentication):
         return redirect(url_for('post_bp.blog'))
     if request.method == "POST":
         user_email = request.form.get("email")
-        user_password = request.form.get("password")           
+        user_password = request.form.get("password")
         if authentication.sign_in(user_email, user_password):
-            user:User = authentication.get_user_details()   
+            user:User = authentication.get_user_details()
             flash(f"Welcome back {user.user_name}")
             status = authentication.is_logged_in()
             return render_template("blog.html",logged_in = status, logged_user = user)

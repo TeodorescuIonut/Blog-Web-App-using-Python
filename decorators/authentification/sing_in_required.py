@@ -5,7 +5,7 @@ from decorators.dependency_injection.injector_di import injector
 from interfaces.authentication_interface import IAuthentication
 
 
-def sign_in_required(setup): 
+def sign_in_required(setup):
     @wraps(setup)
     @injector
     def wrapper(authentication: IAuthentication,*args, **kwargs):

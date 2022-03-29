@@ -1,14 +1,5 @@
-import sys
-import os
-
 from flask import Response
 
-
-myDir = os.getcwd()
-sys.path.append(myDir)
-from pathlib import Path
-path = Path(myDir)
-a=str(path.parent.absolute())
 from models.user import User
 from interfaces.user_repository_interface import IUserRepository
 from services.password_hash import generate_password_hash
@@ -41,9 +32,8 @@ class UserRepo(IUserRepository):
 
     def delete(self, user:User) -> None:
         self.users.remove(user)
-    
+
     def get_user_by_email(self, user_email):
         for user in self.users:
             if user.user_email== user_email:
                 return user
-

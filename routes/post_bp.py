@@ -1,5 +1,4 @@
 from datetime import datetime
-from decorators.authorization.check_if_admin_or_owner import check_if_admin_or_owner
 from decorators.authorization.check_if_post_owner_or_admin import check_if_post_owner_or_admin
 from decorators.setup.setup import check_setup
 from decorators.dependency_injection.injector_di import injector
@@ -14,12 +13,12 @@ from models.user import User
 class PostBlueprint:
     repo:IPostRepository
     auth:IAuthentication
-    def __init__(self,repo:IPostRepository, authentication:IAuthentication):   
+    def __init__(self,repo:IPostRepository, authentication:IAuthentication):
         self.repo = repo
         self.post_bp = Blueprint('post_bp',__name__)
         self.auth = authentication
 
-    def create(self):       
+    def create(self):
         self.post_bp.route('/')(self.blog)
         self.post_bp.route('/POST')(self.blog)
         self.post_bp.route('/CREATE/posts', methods =["GET", "POST"])(self.add_post)
@@ -39,7 +38,6 @@ class PostBlueprint:
     @check_setup
     def blog(self):
         return render_template("blog.html",posts = self.repo.get_all(), length = len(self.repo.posts))
-    
     @check_setup
     @sign_in_required
     def add_post(self):

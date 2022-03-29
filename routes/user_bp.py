@@ -1,10 +1,10 @@
 
 from datetime import datetime
+from flask import Blueprint, flash, render_template, request, redirect, url_for
 from decorators.authorization.check_if_admin_or_owner import check_if_admin_or_owner
 from decorators.authorization.check_if_admin import check_if_admin
 from decorators.setup.setup import check_setup
 from decorators.dependency_injection.injector_di import injector
-from flask import Blueprint, flash, g, render_template, request, redirect, session, url_for
 from interfaces.authentication_interface import IAuthentication
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.password_interface import IPassword
@@ -17,7 +17,9 @@ class UserBlueprint:
     password_hash:IPassword
     auth:IAuthentication
 
-    def __init__(self,repo:IUserRepository, password_hash:IPassword, authentication:IAuthentication):   
+    def __init__(self,repo:IUserRepository,
+                password_hash:IPassword,
+                authentication:IAuthentication):
         self.repo = repo
         self.pass_hash = password_hash
         self.user_bp = Blueprint('user_bp',__name__)
@@ -45,7 +47,8 @@ class UserBlueprint:
     @check_setup
     @check_if_admin
     def home(self):
-        return render_template("home.html", users = self.repo.get_all(), length = len(self.repo.users))
+        return render_template("home.html", 
+        users = self.repo.get_all(), length = len(self.repo.users))
     
     @check_setup
     @check_if_admin
@@ -82,11 +85,11 @@ class UserBlueprint:
 
     @check_setup
     def view_user(self,user_id):
-            user = self.repo.get_by_id(user_id)
-            if not user:
-                flash("User not found")
-                return render_template("home.html")
-            return render_template("view_user.html", user = user)
+        user = self.repo.get_by_id(user_id)
+        if not user:
+            flash("User not found")
+            return render_template("home.html")
+        return render_template("view_user.html", user = user)
 
     @check_setup
     @check_if_admin_or_owner

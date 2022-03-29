@@ -1,20 +1,11 @@
-import sys
-import os
-from pathlib import Path
+import pytest
+from main import create_app
+from services.service import ContainerService
+from tests.test_authentication_blueprint import sign_in_user, sign_out_user
+from tests.test_post_blueprint_owner import add_post
 from decorators.dependency_injection.injector_di import injector
 from interfaces.post_repository_interface import IPostRepository
 
-import pytest
-from tests.test_authentication_blueprint import sign_in_user, sign_out_user
-from tests.test_post_blueprint_owner import add_post
-myDir = os.getcwd()
-sys.path.append(myDir)
-path = Path(myDir)
-a=str(path.parent.absolute())
-sys.path.append(a)
-
-from main import create_app
-from services.service import ContainerService
 test_app = create_app(test_config=True)
 
 @pytest.fixture(name='input_test')
@@ -42,6 +33,3 @@ def test_delete_user_should_delete_all_his_posts(input_test):
     assert b'Blue'not in response.data
     assert b'Yellow'not in response.data
     assert b'Green'not in response.data
-    
-
-

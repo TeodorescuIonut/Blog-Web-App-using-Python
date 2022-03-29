@@ -1,7 +1,5 @@
-from services.service import ContainerService
 from functools import wraps
-
-
+from services.service import ContainerService
 
 
 def injector(func):
@@ -19,3 +17,4 @@ def injector(func):
                     arguments.append(services[service])
             return func(*arguments, *args, **kwargs)
     return wrapper_services
+    
