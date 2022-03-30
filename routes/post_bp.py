@@ -1,5 +1,6 @@
 from datetime import datetime
 from decorators.authorization.check_if_post_owner_or_admin import check_if_post_owner_or_admin
+from decorators.authorization.check_post_exists import check_post_exists
 from decorators.setup.setup import check_setup
 from decorators.dependency_injection.injector_di import injector
 from decorators.authentification.sing_in_required import sign_in_required
@@ -68,11 +69,13 @@ class PostBlueprint:
         return render_template("add_post.html", post = Post, urlPage = self.add_post)
 
     @check_setup
+    @check_post_exists
     def view_post(self,post_id):
         post = self.repo.get_by_id(post_id)
         return render_template("viewPost.html", post = post)
 
     @check_setup
+    @check_post_exists
     @sign_in_required
     @check_if_post_owner_or_admin
     def update_post(self,post_id):
@@ -103,6 +106,7 @@ class PostBlueprint:
         return render_template("add_post.html",post = post, buttonText = "Update")
 
     @check_setup
+    @check_post_exists
     @sign_in_required
     @check_if_post_owner_or_admin
     def delete_post(self,post_id):

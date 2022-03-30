@@ -62,14 +62,17 @@ class PostDbRepo(IPostRepository):
         cur.execute("SELECT post_id, to_char(post_created_on, 'dd/mm/yyyy HH24:MI'),to_char(post_modified_on, 'dd/mm/yyyy HH24:MI'), post_title, post_content, owner_id, user_name  FROM posts INNER JOIN users ON owner_id = user_id  WHERE post_id = %s", (post_id,))
         data = cur.fetchone()
         post =Post("", "", "","")
-        post.post_id = data[0]
-        post.post_date_creation = data[1]
-        post.post_date_modification = data[2]
-        post.post_title= data[3]
-        post.post_contents= data[4]
-        post.owner_id= data[5]
-        post.post_owner = data[6]
-        self.db.close_and_save(conn, cur)
+        if data is not None:
+            post.post_id = data[0]
+            post.post_date_creation = data[1]
+            post.post_date_modification = data[2]
+            post.post_title= data[3]
+            post.post_contents= data[4]
+            post.owner_id= data[5]
+            post.post_owner = data[6]
+            self.db.close_and_save(conn, cur)
+        else:
+            post = None
         return post
     def update(self, post:Post) -> None:
         conn = self.db.create_conn()
