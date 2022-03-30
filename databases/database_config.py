@@ -40,13 +40,16 @@ class DatabaseConfig(IDatabaseConfig,Config):
        return database_settings
     
     def get_db_version(self):
-        if self.config.has_section("version"):
-            version = self.config.get("version", "version") if self.config.has_option("version", "version") else 0.1
+        version = 0
+        if Config().section_exists("version") is True:
+            config = Config().load(self.config)
+            version = config["version"]
         else:
             version = 0.1
         return float(version)
 
     def set_db_version(self, version):
-        self.config.add_section("version")
+        if Config().section_exists("version") is False:
+            self.config.add_section("version")
         self.config.set("version", "version",str(version))
         Config().save(self.config)
