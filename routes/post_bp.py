@@ -6,6 +6,7 @@ from decorators.dependency_injection.injector_di import injector
 from decorators.authentification.sing_in_required import sign_in_required
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from interfaces.authentication_interface import IAuthentication
+from interfaces.pagination_interface import IPagination
 from models.post import Post
 from interfaces.post_repository_interface import IPostRepository
 from models.user import User
@@ -14,14 +15,18 @@ from models.user import User
 class PostBlueprint:
     repo:IPostRepository
     auth:IAuthentication
-    def __init__(self,repo:IPostRepository, authentication:IAuthentication):
+    pagination: IPagination
+    def __init__(self,repo:IPostRepository,
+                 authentication:IAuthentication,
+                 pagination:IPagination):
         self.repo = repo
         self.post_bp = Blueprint('post_bp',__name__)
         self.auth = authentication
+        self.pagination = pagination
 
     def create(self):
-        self.post_bp.route('/')(self.blog)
-        self.post_bp.route('/POST')(self.blog)
+        self.post_bp.route('/',methods =["GET", "POST"])(self.blog)
+        self.post_bp.route('/POST',methods =["GET", "POST"])(self.blog)
         self.post_bp.route('/CREATE/posts', methods =["GET", "POST"])(self.add_post)
         self.post_bp.route('/VIEW/<int:post_id>')(self.view_post)
         self.post_bp.route('/UPDATE/<int:post_id>', methods =["GET", "POST"])(self.update_post)
@@ -38,7 +43,17 @@ class PostBlueprint:
 
     @check_setup
     def blog(self):
-        return render_template("blog.html",posts = self.repo.get_all(), length = len(self.repo.posts))
+        posts_per_page = 0
+        if request.method == "POST":
+            posts_per_page = request.form.get("input_no_of_posts")
+            if posts_per_page is None:
+                flash('Please add a valid option')
+                return redirect(url_for('post_bp.blog'))
+            self.pagination.set_no_per_page(int(posts_per_page))
+        posts = self.repo.get_all(self.pagination.no_per_page, self.pagination.offset())
+        no_of_posts = self.repo.no_posts
+        posts_pagination = self.pagination.set_pagination(no_of_posts)
+        return render_template("blog.html",posts = posts,pagination = posts_pagination, length = len(self.repo.posts))
     @check_setup
     @sign_in_required
     def add_post(self):

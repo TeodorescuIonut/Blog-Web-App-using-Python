@@ -6,6 +6,7 @@ from models.user import User
 
 class UserDbRepo(IUserRepository):
     users = list()
+    no_users= 0
     def __init__(self, database:IDatabase):
         self.database = database
     def create(self, user:User) -> None:
@@ -27,6 +28,7 @@ class UserDbRepo(IUserRepository):
         user_date_modification, user_name, user_email, user_password, admin
         FROM users ORDER BY user_date_creation DESC""")
         rows = cur.fetchall()
+        self.users.clear()
         for row in rows:
             user =User("", "", "")
             user.user_id = row[0]

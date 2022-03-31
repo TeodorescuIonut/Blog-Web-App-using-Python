@@ -11,8 +11,23 @@
         <p class="lead">Read about true experiences, challenges, and what the road to success really looks like straight from the team behind Baremetrics.</p>
     </div>   
 </section>
+
 {% if length == 0 %}
     <div class="text-center"><h2 class="center">There are no blog posts.</h2></div>
+{%else%}
+<form class="form-inline no_per_page justify-content-center" action="{{ url_for('post_bp.blog') }}" method="post">
+    <div class="form-group">
+        <label for="inputState">Choose number of posts displayed</label>
+        <select id="inputState" name ="input_no_of_posts" class="form-control input_no_of_posts">
+          <option disabled selected value> -- select an option -- </option>
+          <option value="4">4</option>
+          <option value="7">7</option>
+          <option value="10">10</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Set</button>
+      </div>
+    </br>
+</form>
 {% endif %}
 <div class="row">
     {% for post in posts %}
@@ -31,4 +46,32 @@
     {% endfor %}
     
 </div>
+{% if pagination.count > pagination.no_per_page %}
+<ul class="pagination justify-content-center">
+    {%if pagination.current_page > 1%}
+    <li class="page-item">
+        <a class="page-link" name="Previous" href="{{url_for('post_bp.blog',page = pagination.current_page-1)}}" tabindex="-1"><i class="fa-solid fa-angle-left"></i></a>
+      </li>
+      {%else%}
+     <li class="page-item disabled">
+        <a class="page-link" name="Previous" href="#"><i class="fa-solid fa-angle-left"></i></a>
+      </a>
+   </li>
+    {%endif%}
+    <li class="page-item active">
+        <a class="page-link" href="#">{{pagination.current_page}} <span class="sr-only">{{pagination.current_page}}</span></a>
+      </li>
+      {%if pagination.last_page> pagination.current_page%}
+      <li class="page-item">
+          <a class="page-link" name="Next" href="{{url_for('post_bp.blog',page = pagination.current_page+1)}}"><i class="fa-solid fa-angle-right"></i></a>
+        </a>
+     </li>
+     {%else%}
+     <li class="page-item disabled">
+        <a class="page-link" name="Next" href="{{url_for('post_bp.blog',page = pagination.current_page+1)}}"><i class="fa-solid fa-angle-right"></i></a>
+      </a>
+   </li>
+     {%endif%}
+  </ul>
+{%endif%}
 {% endblock %}

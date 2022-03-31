@@ -2,16 +2,17 @@ from flask import Response
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
-from models.user import User
 
 
 
 class PostRepo(IPostRepository):
     posts = list()
     count = 0
+    no_posts = 0
 
-    def get_all(self)-> list():
+    def get_all(self,per_page, offset)-> list():
         sorted_array = sorted(self.get_previews(),key=lambda x: x.post_date_creation,reverse=True)
+        self.no_posts = len(self.posts)
         return sorted_array
 
     def get_by_id(self, post_id:int)-> Post:
@@ -28,6 +29,7 @@ class PostRepo(IPostRepository):
 
     def delete(self, post:Post) -> None:
         self.posts.remove(post)
+        self.count -=1
 
     def delete_all_user_posts(self, owner_id):
         i = len(self.posts)

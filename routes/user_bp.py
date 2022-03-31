@@ -46,9 +46,8 @@ class UserBlueprint:
 
     @check_setup
     @check_if_admin
-    def home(self):
-        return render_template("home.html", 
-        users = self.repo.get_all(), length = len(self.repo.users))
+    def home(self):    
+        return render_template("home.html", users = self.repo.get_all(), length = len(self.repo.users))
     
     @check_setup
     @check_if_admin

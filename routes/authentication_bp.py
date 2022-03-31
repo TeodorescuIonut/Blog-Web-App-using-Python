@@ -2,6 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from decorators.dependency_injection.injector_di import injector
 from decorators.setup.setup import check_setup
 from interfaces.authentication_interface import IAuthentication
+from interfaces.pagination_interface import IPagination
 from models.user import User
 
 authenticate = Blueprint('authenticate', __name__)
@@ -21,7 +22,7 @@ def sign_in(authentication: IAuthentication):
             user:User = authentication.get_user_details()
             flash(f"Welcome back {user.user_name}")
             status = authentication.is_logged_in()
-            return render_template("blog.html",logged_in = status, logged_user = user)
+            return redirect(url_for('post_bp.blog'))
         else:
             flash("Wrong password or user, please try again.")
             return render_template("sign-in.html", user_email = user_email)
