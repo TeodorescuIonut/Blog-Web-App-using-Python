@@ -43,13 +43,13 @@ def update_post(test_client, title, content, owner):
     , follow_redirects=True)
 
 def view_post(test_client):
-    return test_client.get('/POST/VIEW/4')
+    return test_client.get('/POST/VIEW/11')
 
 def test_add_post(test_client):
     """Test if a new post can be added"""
     sign_in_user(test_client, "admin@localhost.com", "1234")
     result =  add_post(test_client, "Hello world", "bla bla", "admin", 0)
-    resp = test_client.get('/POST/VIEW/4',follow_redirects=True)
+    resp = test_client.get('/POST/VIEW/8',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data
     assert b"bla bla" in resp.data
@@ -60,8 +60,8 @@ def test_add_two_posts(test_client):
     sign_in_user(test_client, "admin@localhost.com", "1234")
     result =  add_post(test_client, "Hello World", "bla bla", "admin", 0)
     add_post(test_client, "Hello", "bla bla bla", "admin", 1)
-    resp1 = test_client.get('/POST/VIEW/5',follow_redirects=True)
-    resp2 = test_client.get('/POST/VIEW/6',follow_redirects=True)
+    resp1 = test_client.get('/POST/VIEW/9',follow_redirects=True)
+    resp2 = test_client.get('/POST/VIEW/10',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp1.data
     assert b'bla bla' in resp1.data

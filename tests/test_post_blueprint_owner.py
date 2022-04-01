@@ -35,10 +35,10 @@ def add_post(client,title, content, owner, owner_id):
     , follow_redirects=True)
 
 def delete_post(client):
-    return client.post('/POST/DELETE/12', follow_redirects=True)
+    return client.post('/POST/DELETE/19', follow_redirects=True)
 
 def update_post(client, title, content, owner):
-    return client.post('/POST/UPDATE/11', data = dict(
+    return client.post('/POST/UPDATE/15', data = dict(
          title = title,
          owner = owner,
          content = content
