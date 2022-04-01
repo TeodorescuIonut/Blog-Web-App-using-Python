@@ -10,7 +10,7 @@ class PostRepo(IPostRepository):
     count = 0
     no_posts = 0
 
-    def get_all(self,per_page, offset)-> list():
+    def get_all(self,per_page, offset, selected_owner_id)-> list():
         sorted_array = sorted(self.get_previews(),key=lambda x: x.post_date_creation,reverse=True)
         self.no_posts = len(self.posts)
         return sorted_array

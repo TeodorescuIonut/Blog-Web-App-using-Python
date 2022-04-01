@@ -30,10 +30,13 @@ class PostDbRepo(IPostRepository):
         self.db.close_and_save(conn,cur)
 
 
-    def get_all(self, per_page, offset) -> list():
+    def get_all(self, per_page, offset,selected_owner_id) -> list():
         conn = self.db.create_conn()
-        cur = conn.cursor() 
-        cur.execute(f"SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), owner_id, user_name,COUNT(*) OVER() AS full_count FROM posts INNER JOIN users ON owner_id = user_id ORDER BY post_created_on DESC OFFSET {offset}  LIMIT {per_page}")
+        cur = conn.cursor()
+        query = ""
+        if selected_owner_id != 0:
+            query = f"WHERE owner_id = {selected_owner_id}"
+        cur.execute(f"SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), owner_id, user_name,COUNT(*) OVER() AS full_count FROM posts INNER JOIN users ON owner_id = user_id {query} ORDER BY post_created_on DESC OFFSET {offset}  LIMIT {per_page}")
         rows = cur.fetchall()
         self.posts.clear()
         if len(rows) > 0:

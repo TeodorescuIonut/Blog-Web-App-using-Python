@@ -1,6 +1,7 @@
 from databases.database_upgrade_memory import MemodryDBUpgrade
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.db_config_interface import IDatabaseConfig
+from interfaces.filtering_interface import IFiltering
 from interfaces.pagination_interface import IPagination
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.database_interface import IDatabase
@@ -15,6 +16,7 @@ from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
 from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
+from services.filtering import Filtering
 from services.paginate import Paginate
 from services.password_hash import PasswordHashing
 from services.authentication import Authentication
@@ -35,7 +37,8 @@ class ContainerService:
     IPassword: PasswordHashing(),
     IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
     IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()),DatabaseConfig()),
-    IPagination:Paginate()
+    IPagination:Paginate(),
+    IFiltering:Filtering(UserDbRepo(Database(DatabaseConfig())))
     }
     services_memory = {
     IPostRepository: memory_post_repo,
@@ -45,7 +48,8 @@ class ContainerService:
     IPassword: PasswordHashing(),
     IAuthentication: Authentication(memory_user_repo, PasswordHashing()),
     IDatabaseUpgrade:memory_upgrade,
-    IPagination:Paginate()
+    IPagination:Paginate(),
+    IFiltering:Filtering(memory_user_repo)
     }
 
     @classmethod

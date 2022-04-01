@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 from decorators.setup.setup import check_setup
-from interfaces.authentication_interface import IAuthentication
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 myDir = os.getcwd()
 sys.path.append(myDir)

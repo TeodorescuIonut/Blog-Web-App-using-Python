@@ -6,6 +6,7 @@ from decorators.dependency_injection.injector_di import injector
 from decorators.authentification.sing_in_required import sign_in_required
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from interfaces.authentication_interface import IAuthentication
+from interfaces.filtering_interface import IFiltering
 from interfaces.pagination_interface import IPagination
 from models.post import Post
 from interfaces.post_repository_interface import IPostRepository
@@ -16,13 +17,16 @@ class PostBlueprint:
     repo:IPostRepository
     auth:IAuthentication
     pagination: IPagination
+    filtering:IFiltering
     def __init__(self,repo:IPostRepository,
                  authentication:IAuthentication,
-                 pagination:IPagination):
+                 pagination:IPagination,
+                 filtering:IFiltering):
         self.repo = repo
         self.post_bp = Blueprint('post_bp',__name__)
         self.auth = authentication
         self.pagination = pagination
+        self.filtering = filtering
 
     def create(self):
         self.post_bp.route('/',methods =["GET", "POST"])(self.blog)
@@ -35,11 +39,12 @@ class PostBlueprint:
         return self.post_bp
     @check_setup
     def context_processor(self):
+        selected_user_id = self.filtering.get_owner_id()
         if self.auth.is_logged_in():
             user= self.auth.get_user_details()
         else:
             user = None
-        return dict(logged_user = user,logged_in = self.auth.is_logged_in())
+        return dict(logged_user = user,logged_in = self.auth.is_logged_in(), selected_user_id=selected_user_id )
 
     @check_setup
     def blog(self):
@@ -50,10 +55,11 @@ class PostBlueprint:
                 flash('Please add a valid option')
                 return redirect(url_for('post_bp.blog'))
             self.pagination.set_no_per_page(int(posts_per_page))
-        posts = self.repo.get_all(self.pagination.no_per_page, self.pagination.offset())
+        filtering = self.filtering.return_filter()
+        posts = self.repo.get_all(self.pagination.no_per_page, self.pagination.offset(), filtering.selected_owner_id)
         no_of_posts = self.repo.no_posts
         posts_pagination = self.pagination.set_pagination(no_of_posts)
-        return render_template("blog.html",posts = posts,pagination = posts_pagination, length = len(self.repo.posts))
+        return render_template("blog.html",posts = posts,pagination = posts_pagination,filter = filtering, length = len(self.repo.posts))
     @check_setup
     @sign_in_required
     def add_post(self):

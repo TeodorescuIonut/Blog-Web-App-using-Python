@@ -2,7 +2,7 @@ import abc
 
 class IPostRepository(metaclass=abc.ABCMeta): 
     @abc.abstractmethod
-    def get_all(self,per_page, offset):
+    def get_all(self,per_page, offset, selected_owner_id):
         raise NotImplementedError
 
     @abc.abstractmethod
