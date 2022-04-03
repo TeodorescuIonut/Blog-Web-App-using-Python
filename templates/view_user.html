@@ -11,6 +11,9 @@
       <img class="avatar" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt="">
       <h2 class="blog-post-title">{{ user.user_name }}</h2>
       <br>
+      {% if user.admin is true%}
+      <p class="d-block link-primary"><strong>admin</strong></p>
+      {%endif%}
       <i class="d-inline far fa-clock"></i>
       <p class="d-inline blog-post-meta">{{ user.user_date_creation }} </p><br>
       <i class="d-inline fa-solid fa-envelope"></i><a class='d-inline' href="#">{{user.user_email}}</a>

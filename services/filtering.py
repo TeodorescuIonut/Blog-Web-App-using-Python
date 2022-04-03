@@ -11,7 +11,7 @@ class Filtering(IFiltering):
     def get_owner_id(self)-> int:
         self.selected_owner_id = request.args.get('selected_owner_id')
         if self.selected_owner_id is None:
-           self.selected_owner_id = 0
+           self.selected_owner_id = -1
         return int(self.selected_owner_id)
     
     def return_filter(self):

@@ -44,11 +44,26 @@ def test_no_of_posts_more_than_limit(client):
     response = client.get('/POST/',follow_redirects=True)
     assert b'Next' in response.data
     assert b'1' in response.data
+    assert b'Previous' not in response.data
+
+def test_posts_on_middle_page(client):
+    ContainerService.memory_config.set_configuration = True
+    sign_in_user(client, "bla@yahoo.com", "1234")
+    add_post(client,"pink","bla bla bla","Jhon" ,12)
+    add_post(client,"blue","same","Jhon" ,12)
+    add_post(client,"red","same","Jhon" ,12)
+    add_post(client,"brown","same","Jhon" ,12)
+    response = client.get('/POST/?page=2&selected_owner_id=-1',follow_redirects=True)
+    assert b'Green' in response.data
+    assert b'Jhon' in response.data
+    assert b'2' in response.data
+    assert b'Next' in response.data
     assert b'Previous' in response.data
 
 def test_posts_on_last_page(client):
     ContainerService.memory_config.set_configuration = True
-    response = client.get('/POST/?page=2/',follow_redirects=True)
-    assert b'Green' in response.data
-    assert b'Jhon' in response.data
-    assert b'2' in response.data
+    
+    response = client.get('/POST/?page=3&selected_owner_id=-1',follow_redirects=True)
+    assert b'Next'not in response.data
+    assert b'3' in response.data
+    assert b'Previous' in response.data

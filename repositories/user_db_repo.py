@@ -62,7 +62,7 @@ class UserDbRepo(IUserRepository):
         conn = self.database.create_conn()
         cur = conn.cursor()
         cur.execute("""SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'),
-        to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password 
+        to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password ,admin
         FROM users WHERE user_id = %s""", (user_id,))
         data = cur.fetchone()
         if data is None:
@@ -74,6 +74,7 @@ class UserDbRepo(IUserRepository):
         user.user_name= data[3]
         user.user_email= data[4]
         user.user_password= data[5]
+        user.admin = data[6]
         self.database.close_and_save(conn, cur)
         return user
     def update(self, user:User) -> None:
@@ -104,7 +105,6 @@ class UserDbRepo(IUserRepository):
         cur = conn.cursor()
         id_user = user.user_id
         cur.execute('DELETE FROM users WHERE user_id= %s', (id_user,))
-        cur.execute('DELETE FROM posts WHERE owner_id= %s', (id_user,))
         self.database.close_and_save(conn, cur)
         user_index = self.get_user_index(id_user)
         if user_index is not None:

@@ -38,7 +38,7 @@ def delete_post(client):
     return client.post('/POST/DELETE/19', follow_redirects=True)
 
 def update_post(client, title, content, owner):
-    return client.post('/POST/UPDATE/15', data = dict(
+    return client.post('/POST/UPDATE/22', data = dict(
          title = title,
          owner = owner,
          content = content
@@ -52,7 +52,7 @@ def add_user(client,name, email, password):
     )
     , follow_redirects=True)
 def view_post(client):
-    return client.get('/POST/VIEW/11')
+    return client.get('/POST/VIEW/21')
 
 def test_add_post(client):
     """Test if a new post can be added"""
@@ -61,7 +61,7 @@ def test_add_post(client):
     sign_out_user(client)
     sign_in_user(client, "blasss@yahoo.com", "1234")
     result =  add_post(client, "Hello world", "bla bla", "Peters", 2)
-    resp = client.get('/POST/VIEW/8',follow_redirects=True)
+    resp = client.get('/POST/VIEW/16',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data
     assert b"bla bla" in resp.data
@@ -72,8 +72,8 @@ def test_add_two_posts(client):
     sign_in_user(client, "blasss@yahoo.com", "1234")
     result =  add_post(client, "Hello World", "bla bla", "Peters", 1)
     add_post(client, "Hello", "bla bla bla", "Peters", 1)
-    resp1 = client.get('/POST/VIEW/12',follow_redirects=True)
-    resp2 = client.get('/POST/VIEW/13',follow_redirects=True)
+    resp1 = client.get('/POST/VIEW/19',follow_redirects=True)
+    resp2 = client.get('/POST/VIEW/20',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp1.data
     assert b'bla bla' in resp1.data

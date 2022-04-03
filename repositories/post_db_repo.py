@@ -34,11 +34,12 @@ class PostDbRepo(IPostRepository):
         conn = self.db.create_conn()
         cur = conn.cursor()
         query = ""
-        if selected_owner_id != 0:
+        if selected_owner_id != -1:
             query = f"WHERE owner_id = {selected_owner_id}"
         cur.execute(f"SELECT post_id,post_created_on,post_modified_on, post_title, LEFT(post_content, 500), owner_id, user_name,COUNT(*) OVER() AS full_count FROM posts INNER JOIN users ON owner_id = user_id {query} ORDER BY post_created_on DESC OFFSET {offset}  LIMIT {per_page}")
         rows = cur.fetchall()
         self.posts.clear()
+        self.no_posts = len(rows)
         if len(rows) > 0:
             self.no_posts = rows[0][7]
         for row in rows:

@@ -40,11 +40,14 @@ class PostBlueprint:
     @check_setup
     def context_processor(self):
         selected_user_id = self.filtering.get_owner_id()
+        selected_user = ""
+        if selected_user_id != -1:
+            selected_user = self.filtering.repo.get_by_id(selected_user_id).user_name
         if self.auth.is_logged_in():
             user= self.auth.get_user_details()
         else:
             user = None
-        return dict(logged_user = user,logged_in = self.auth.is_logged_in(), selected_user_id=selected_user_id )
+        return dict(logged_user = user,logged_in = self.auth.is_logged_in(), selected_user_id=selected_user_id, selected_user = selected_user)
 
     @check_setup
     def blog(self):
@@ -59,7 +62,7 @@ class PostBlueprint:
         posts = self.repo.get_all(self.pagination.no_per_page, self.pagination.offset(), filtering.selected_owner_id)
         no_of_posts = self.repo.no_posts
         posts_pagination = self.pagination.set_pagination(no_of_posts)
-        return render_template("blog.html",posts = posts,pagination = posts_pagination,filter = filtering, length = len(self.repo.posts))
+        return render_template("blog.html",posts = posts,pagination = posts_pagination,filter = filtering, length = len(posts))
     @check_setup
     @sign_in_required
     def add_post(self):

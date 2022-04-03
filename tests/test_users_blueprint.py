@@ -28,7 +28,7 @@ def add_user(client,name, email, password):
     , follow_redirects=True)
 
 def delete_user(client):
-    return client.post('/USER/DELETE/8', follow_redirects=True)
+    return client.post('/USER/DELETE/9', follow_redirects=True)
 
 def update_user(client, name, email, password):
     return client.post('/USER/UPDATE/2', data = dict(
@@ -39,13 +39,13 @@ def update_user(client, name, email, password):
     , follow_redirects=True)
 
 def view_user(client):
-    return client.get('/USER/VIEW/6')
+    return client.get('/USER/VIEW/7')
 
 def test_add_user(client):
     """Test if a new post can be added"""
     sign_in_user(client, "admin@localhost.com", "1234")
     result =  add_user(client, "Jhonny", "Jhonny@yahoo.com", "1234")
-    resp = client.get('/USER/VIEW/3',follow_redirects=True)
+    resp = client.get('/USER/VIEW/4',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Jhonny" in resp.data
     assert b"Jhonny@yahoo.com" in resp.data
@@ -56,8 +56,8 @@ def test_add_two_users(client):
     sign_in_user(client, "admin@localhost.com", "1234")
     result =  add_user(client, "Jhon", "bldda@yahoo.com", "1234")
     add_user(client, "Peter", "peter@yahoo.com", "1234")
-    resp1 = client.get('/USER/VIEW/4',follow_redirects=True)
-    resp2 = client.get('/USER/VIEW/5',follow_redirects=True)
+    resp1 = client.get('/USER/VIEW/5',follow_redirects=True)
+    resp2 = client.get('/USER/VIEW/6',follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Jhon" in resp1.data
     assert b'bldda@yahoo.com' in resp1.data
@@ -117,4 +117,3 @@ def test_redirect_setup_true(client):
     response = client.get('/USER/', follow_redirects=True)
     assert response.status == '200 OK'
     assert b"Read about true experiences" in response.data
-    

@@ -11,8 +11,8 @@ class PostRepo(IPostRepository):
     no_posts = 0
 
     def get_all(self,per_page, offset, selected_owner_id)-> list():
-        sorted_array = sorted(self.get_previews(),key=lambda x: x.post_date_creation,reverse=True)
-        self.no_posts = len(self.posts)
+        sorted_array = sorted(self.get_previews(selected_owner_id),key=lambda x: x.post_date_creation,reverse=True)
+        self.no_posts = len(sorted_array)
         return sorted_array
 
     def get_by_id(self, post_id:int)-> Post:
@@ -42,10 +42,13 @@ class PostRepo(IPostRepository):
             if post.owner_id == user_id:
                 post.post_owner = updated_name
 
-    def get_previews(self)->list():
+    def get_previews(self,selected_owner_id)->list():
         posts_previews = []
         for post in self.posts:
-            posts_previews.append(self.create_preview(post))
+            if post.owner_id == selected_owner_id:
+                posts_previews.append(self.create_preview(post))
+            elif selected_owner_id == -1:
+                posts_previews.append(self.create_preview(post))
         return posts_previews
 
     def create_preview(self,post:PostPreview):

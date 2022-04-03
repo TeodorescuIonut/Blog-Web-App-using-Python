@@ -28,14 +28,21 @@
 </form>
 
 <div class="dropdown text-center">
+    {%if selected_user_id  == -1%}
+        {%set text = "All users"%}
+    {%else%}
+        {%set text = selected_user%}
+    {%endif%}
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Choose an author
+        {{text}}
     </button>
     <ul class="dropdown-menu justify-content-center" aria-labelledby="dropdownMenu1">
+        <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id = -1) }}">All users</a></li>
         {% for owner in filter.owners %}
-            <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id =owner.user_id ) }}">{{owner.user_name}}</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id =owner.user_id) }}">{{owner.user_name}}</a></li>
         {% endfor %}
     </ul>
+    
 </div>
 </br>
 {% if length == 0 %}
@@ -62,27 +69,17 @@
 <ul class="pagination justify-content-center">
     {%if pagination.current_page > 1%}
     <li class="page-item">
-        <a class="page-link" name="Previous" href="{{url_for('post_bp.blog',page = pagination.current_page-1, selected_owner_id = selected_user_id )}}" tabindex="-1"><i class="fa-solid fa-angle-left"></i></a>
+        <a class="page-link" name="Previous" href="{{url_for('post_bp.blog',page = pagination.current_page-1, selected_owner_id = selected_user_id )}}" tabindex="-1">Previous</a>
       </li>
-      {%else%}
-     <li class="page-item disabled">
-        <a class="page-link" name="Previous" href="#"><i class="fa-solid fa-angle-left"></i></a>
-      </a>
-   </li>
     {%endif%}
     <li class="page-item active">
         <a class="page-link" href="#">{{pagination.current_page}} <span class="sr-only">{{pagination.current_page}}</span></a>
       </li>
       {%if pagination.last_page> pagination.current_page%}
       <li class="page-item">
-          <a class="page-link" name="Next" href="{{url_for('post_bp.blog',page = pagination.current_page+1, selected_owner_id = selected_user_id)}}"><i class="fa-solid fa-angle-right"></i></a>
+          <a class="page-link" name="Next" href="{{url_for('post_bp.blog',page = pagination.current_page+1, selected_owner_id = selected_user_id)}}">Next</a>
         </a>
      </li>
-     {%else%}
-     <li class="page-item disabled">
-        <a class="page-link" name="Next" href="{{url_for('post_bp.blog',page = pagination.current_page+1, selected_owner_id = selected_user_id)}}"><i class="fa-solid fa-angle-right"></i></a>
-      </a>
-   </li>
      {%endif%}
   </ul>
 {%endif%}
