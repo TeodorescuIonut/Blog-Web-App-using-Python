@@ -17,6 +17,7 @@ from interfaces.authentication_interface import IAuthentication
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
 from repositories.sql_alchemy_post_repo import SQLAlchemyPostRepo
+from repositories.sql_alchemy_user_repo import SQLAlchemyUserRepo
 from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
 from services.filtering import Filtering
@@ -58,14 +59,14 @@ class ContainerService:
 
     services_sqlalchemy = {
         IPostRepository: SQLAlchemyPostRepo(SQLAlchemyDatabase(DatabaseConfig())),
-        IUserRepository: UserDbRepo(Database(DatabaseConfig())),
+        IUserRepository: SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())),
         IDatabaseConfig: DatabaseConfig(),
         IDatabaseAlchemy: SQLAlchemyDatabase(DatabaseConfig()),
         IPassword: PasswordHashing(),
-        IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
-        IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()),DatabaseConfig()),
+        IAuthentication: Authentication(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())), PasswordHashing()),
+        IDatabaseUpgrade:DatabaseUpgradeandCreate(SQLAlchemyDatabase(DatabaseConfig()),DatabaseConfig()),
         IPagination:Paginate(),
-        IFiltering:Filtering(UserDbRepo(Database(DatabaseConfig())))
+        IFiltering:Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())))
     }
 
     @classmethod

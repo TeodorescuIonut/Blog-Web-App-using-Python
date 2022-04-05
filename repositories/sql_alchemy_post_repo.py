@@ -42,14 +42,17 @@ class SQLAlchemyPostRepo(IPostRepository):
 
     def check_post_exists(self,post_to_check:Post)-> bool:
         if len(self.posts) > 0:
-           for post in self.posts:
-               if post_to_check.post_id == post.post_id:
-                   return True
+            for post in self.posts:
+                if post_to_check.post_id == post.post_id:
+                    return True
         return False
 
     def get_by_id(self, post_id):
         conn = self.db.create_conn()
-        res = conn.query(PostSQLAlchemy,UserSQLAlchemy.user_name).join(UserSQLAlchemy).filter(PostSQLAlchemy.post_id == post_id).first()
+        res = conn.query(PostSQLAlchemy,UserSQLAlchemy.user_name).\
+        join(UserSQLAlchemy).filter(PostSQLAlchemy.post_id == post_id).first()
+        if res is None:
+            return None
         post = Post(res[1],res[0].post_title, res[0].post_contents,res[0].owner_id, res[0].post_id)
         self.db.close_and_save(conn)
         return post
@@ -71,7 +74,7 @@ class SQLAlchemyPostRepo(IPostRepository):
         self.db.close_and_save(conn)
 
     def delete(self, post):
-        conn = self.db.create_conn()
+        conn= self.db.create_conn()
         posts_table = PostSQLAlchemy.__table__
         stmt = (delete(posts_table).where(posts_table.c.post_id == post.post_id))
         conn.execute(stmt)
