@@ -13,20 +13,6 @@
 </section>
 
 
-<form class="form-inline no_per_page justify-content-center" action="{{ url_for('post_bp.blog', no_per_page = pagination.no_per_page) }}" method="post">
-    <div class="form-group">
-        <label for="inputState">Choose number of posts displayed</label>
-        <select id="inputState" name ="input_no_of_posts" class="form-control input_no_of_posts">
-          <option disabled selected value> -- select an option -- </option>
-          <option value="4">4</option>
-          <option value="7">7</option>
-          <option value="10">10</option>
-        </select>
-        <button type="submit" class="btn btn-primary">Set</button>
-      </div>
-    </br>
-</form>
-
 <div class="dropdown text-center">
     {%if selected_user_id  == -1%}
         {%set text = "All users"%}
@@ -36,7 +22,7 @@
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{text}}
     </button>
-    <ul class="dropdown-menu justify-content-center" aria-labelledby="dropdownMenu1">
+    <ul class="dropdown-menu justify-content-center filter_posts" aria-labelledby="dropdownMenu1">
         <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id = -1) }}">All users</a></li>
         {% for owner in filter.owners %}
             <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id =owner.user_id) }}">{{owner.user_name}}</a></li>
@@ -82,5 +68,21 @@
      </li>
      {%endif%}
   </ul>
+{%endif%}
+
+{% if length != 0 %}
+<form class="form-inline no_per_page justify-content-left" action="{{ url_for('post_bp.blog', no_per_page = pagination.no_per_page) }}" method="post">
+    <div class="form-group">
+        <label for="inputState">Choose number of posts displayed</label>
+        <select id="inputState" name ="input_no_of_posts" class="form-control input_no_of_posts">
+          <option disabled selected value> -- select an option -- </option>
+          <option value="4">4</option>
+          <option value="7">7</option>
+          <option value="10">10</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Set</button>
+      </div>
+    </br>
+</form>
 {%endif%}
 {% endblock %}

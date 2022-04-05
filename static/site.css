@@ -81,3 +81,8 @@
 .input_no_of_posts{
     margin: 0 10px;
 }
+.filter_posts{
+    z-index: 9999;
+    height: 150px;
+    overflow: auto;
+}

@@ -1,5 +1,7 @@
 from databases.database_upgrade_memory import MemodryDBUpgrade
+from databases.sql_alchemy_database_manager import SQLAlchemyDatabase
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
+from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
 from interfaces.db_config_interface import IDatabaseConfig
 from interfaces.filtering_interface import IFiltering
 from interfaces.pagination_interface import IPagination
@@ -14,6 +16,7 @@ from interfaces.password_interface import IPassword
 from interfaces.authentication_interface import IAuthentication
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
+from repositories.sql_alchemy_post_repo import SQLAlchemyPostRepo
 from repositories.user_db_repo import UserDbRepo
 from repositories.user_repo import UserRepo
 from services.filtering import Filtering
@@ -29,6 +32,7 @@ class ContainerService:
     memory_user_repo = UserRepo()       
     memory_config = MemoryDatabaseConfig()
     memory_upgrade = MemodryDBUpgrade()
+
     services_production = {
     IPostRepository: PostDbRepo(Database(DatabaseConfig())),
     IUserRepository: UserDbRepo(Database(DatabaseConfig())),
@@ -52,8 +56,21 @@ class ContainerService:
     IFiltering:Filtering(memory_user_repo)
     }
 
+    services_sqlalchemy = {
+        IPostRepository: SQLAlchemyPostRepo(SQLAlchemyDatabase(DatabaseConfig())),
+        IUserRepository: UserDbRepo(Database(DatabaseConfig())),
+        IDatabaseConfig: DatabaseConfig(),
+        IDatabaseAlchemy: SQLAlchemyDatabase(DatabaseConfig()),
+        IPassword: PasswordHashing(),
+        IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
+        IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()),DatabaseConfig()),
+        IPagination:Paginate(),
+        IFiltering:Filtering(UserDbRepo(Database(DatabaseConfig())))
+    }
+
     @classmethod
     def get_service(cls):
         if cls.testing_config:
             return cls.services_memory
-        return cls.services_production
+        # return cls.services_production
+        return cls.services_sqlalchemy
