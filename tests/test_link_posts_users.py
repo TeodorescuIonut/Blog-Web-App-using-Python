@@ -1,4 +1,3 @@
-from models.user import User
 import pytest
 from main import create_app
 from services.service import ContainerService

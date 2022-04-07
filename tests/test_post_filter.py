@@ -50,3 +50,4 @@ def test_filter_by_all_users(client):
     assert b'Previous'  in response.data
     assert b'5'  in response.data
     assert b'Next' not in response.data
+    

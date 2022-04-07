@@ -136,4 +136,3 @@ def test_redirect_setup_true(client):
     response = client.get('/POST/', follow_redirects=True)
     assert response.status == '200 OK'
     assert b"Read about true experiences," in response.data
-    

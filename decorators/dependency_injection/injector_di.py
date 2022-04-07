@@ -17,4 +17,3 @@ def injector(func):
                     arguments.append(services[service])
             return func(*arguments, *args, **kwargs)
     return wrapper_services
-    

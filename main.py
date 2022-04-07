@@ -9,7 +9,7 @@ from databases.database_bp import database_bp
 
 def create_app(test_config=False):
     app = Flask(__name__)
-    app.config.from_object('config') 
+    app.config.from_object('config')
     ContainerService.testing_config = test_config
     post_bp = PostBlueprint().create()
     user_bp = UserBlueprint().create()

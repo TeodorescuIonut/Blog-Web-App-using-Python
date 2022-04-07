@@ -10,4 +10,3 @@ class IPassword(ABC):
     @abstractmethod
     def check_password(self,hash_password, password):
         pass
-
