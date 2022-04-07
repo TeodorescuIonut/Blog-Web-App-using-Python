@@ -3,4 +3,5 @@ class Pagination:
         self.current_page = current_page
         self.no_per_page = no_per_page
         self.count = count
-        self.last_page = last_page 
+        self.last_page = last_page
+        

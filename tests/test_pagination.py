@@ -62,8 +62,8 @@ def test_posts_on_middle_page(client):
 
 def test_posts_on_last_page(client):
     ContainerService.memory_config.set_configuration = True
-    
     response = client.get('/POST/?page=3&selected_owner_id=-1',follow_redirects=True)
     assert b'Next'not in response.data
     assert b'3' in response.data
     assert b'Previous' in response.data
+    

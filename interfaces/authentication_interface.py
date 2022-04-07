@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class IAuthentication(ABC):
-    
     @abstractmethod
     def sign_in(self,user_email, password):
         pass
@@ -18,3 +17,4 @@ class IAuthentication(ABC):
     @abstractmethod
     def is_logged_in(self):
         pass
+    

@@ -10,7 +10,10 @@ class SQLAlchemyDatabase(IDatabaseAlchemy):
 
     def generate_engine(self):
         db_settings = self.db_config.load()
-        engine = create_engine(f"""postgresql://{db_settings.user}:{db_settings.password}@{db_settings.host}/{db_settings.database}""",echo = True)
+        engine = create_engine(f"""postgresql://
+        {db_settings.user}:
+        {db_settings.password}@{db_settings.host}/
+        {db_settings.database}""",echo = True)
         return engine
 
     def generate_session(self):

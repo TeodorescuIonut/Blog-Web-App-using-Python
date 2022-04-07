@@ -16,3 +16,4 @@ def check_post_exists(setup):
             return redirect(url_for('main'))
         return setup(*args, **kwargs)
     return wrapper
+    

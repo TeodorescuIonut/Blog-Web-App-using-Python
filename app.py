@@ -1,21 +1,14 @@
-import sys
-import os
-from pathlib import Path
-
-from decorators.setup.setup import check_setup
-from interfaces.database_upgrade_interface import IDatabaseUpgrade
-myDir = os.getcwd()
-sys.path.append(myDir)
-path = Path(myDir)
-a=str(path.parent.absolute())
-sys.path.append(a)
+from flask import redirect, url_for
 from main import create_app
-from flask import redirect, render_template, url_for
+from decorators.setup.setup import check_setup
 from decorators.dependency_injection.injector_di import injector
+from interfaces.database_upgrade_interface import IDatabaseUpgrade
 
 
 
-app = create_app() 
+
+
+app = create_app()
 
 
 @app.before_first_request
@@ -24,7 +17,7 @@ app = create_app()
 def db_upgrade(database:IDatabaseUpgrade):
     if database.is_latest_db_version() is False:
         database.upgrade_db()
-    
+
 @app.route('/')
 @check_setup
 def main():

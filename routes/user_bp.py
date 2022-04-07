@@ -26,7 +26,7 @@ class UserBlueprint:
         self.auth = authentication
 
 
-    def create(self):       
+    def create(self):
         self.user_bp.route('/')(self.home)
         self.user_bp.route('/USER')(self.home)
         self.user_bp.route('/CREATE/users', methods =["GET", "POST"])(self.add_user)
@@ -35,20 +35,22 @@ class UserBlueprint:
         self.user_bp.route('/DELETE/<int:user_id>', methods =["GET", "POST"])(self.delete_user)
         self.user_bp.context_processor(self.context_processor)
         return self.user_bp
-    
+
     def context_processor(self):
         if self.auth.is_logged_in():
             user= self.auth.get_user_details()
         else:
             user = None
         return dict(logged_user = user,logged_in = self.auth.is_logged_in())
-        
+
 
     @check_setup
     @check_if_admin
-    def home(self):    
-        return render_template("home.html", users = self.repo.get_all(), length = len(self.repo.users))
-    
+    def home(self):
+        return render_template("home.html",
+                                users = self.repo.get_all(),
+                                length = len(self.repo.users))
+
     @check_setup
     @check_if_admin
     def add_user(self):
@@ -124,7 +126,7 @@ class UserBlueprint:
         return render_template("add_user.html",
                 user = user, buttonText = "Update",
                 urlPage = self.update_user)
-    
+
     @check_setup
     @check_if_admin
     def delete_user(self,user_id):

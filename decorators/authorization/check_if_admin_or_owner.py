@@ -6,15 +6,15 @@ from decorators.dependency_injection.injector_di import injector
 from interfaces.authentication_interface import IAuthentication
 
 
-def check_if_admin_or_owner(setup): 
+def check_if_admin_or_owner(setup):
     @wraps(setup)
     @injector
     def wrapper(authentication: IAuthentication,*args, **kwargs):
         if authentication.is_logged_in() is True:
-            id= kwargs["user_id"]
+            user_id= kwargs["user_id"]
             singed_user_id = authentication.get_user_details().user_id
             admin = authentication.get_user_details().admin
-            if id != singed_user_id and admin is False:
+            if user_id != singed_user_id and admin is False:
                 flash("403 - Not allowed")
                 return redirect(url_for('main'))
         else:
@@ -22,3 +22,4 @@ def check_if_admin_or_owner(setup):
             return redirect(url_for('main'))
         return setup(*args, **kwargs)
     return wrapper
+    

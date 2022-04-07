@@ -1,6 +1,6 @@
 import abc
 
-class IPostRepository(metaclass=abc.ABCMeta): 
+class IPostRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_all(self,per_page, offset, selected_owner_id):
         raise NotImplementedError
@@ -12,15 +12,10 @@ class IPostRepository(metaclass=abc.ABCMeta):
     def create(self, post):
         raise NotImplementedError
 
-    @abc.abstractmethod    
+    @abc.abstractmethod
     def update(self, post):
         raise NotImplementedError
 
-    @abc.abstractmethod 
+    @abc.abstractmethod
     def delete(self, post):
         raise NotImplementedError
-
-
-    
-    
-

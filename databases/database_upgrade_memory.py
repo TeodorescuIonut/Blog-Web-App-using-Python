@@ -6,4 +6,5 @@ class MemodryDBUpgrade(IDatabaseUpgrade):
         pass
 
     def is_latest_db_version(self):
-        pass   
+        pass
+    

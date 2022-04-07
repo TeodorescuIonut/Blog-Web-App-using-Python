@@ -9,3 +9,4 @@ class User:
         self.user_date_creation = datetime.now().strftime("%B %d %Y %H:%M:%S")
         self.user_date_modification = ''
         self.admin = admin
+        

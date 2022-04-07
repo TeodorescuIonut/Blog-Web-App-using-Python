@@ -11,3 +11,4 @@ class MemoryDatabase(IDatabase):
         pass
     def create_table(self):
         pass
+    

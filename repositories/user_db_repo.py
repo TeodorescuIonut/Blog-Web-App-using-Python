@@ -50,6 +50,7 @@ class UserDbRepo(IUserRepository):
                 if user_to_check.user_id == user.user_id:
                     return True
         return False
+
     def check_user_email(self,user_to_check:User)-> bool:
         conn = self.database.create_conn()
         cur = conn.cursor()
@@ -58,6 +59,7 @@ class UserDbRepo(IUserRepository):
         user_name, user_email, user_password
         FROM users WHERE user_email = %s""", (user_to_check.user_email,))
         return cur.rowcount > 0
+
     def get_by_id(self, user_id:int) -> User:
         conn = self.database.create_conn()
         cur = conn.cursor()
@@ -77,6 +79,7 @@ class UserDbRepo(IUserRepository):
         user.admin = data[6]
         self.database.close_and_save(conn, cur)
         return user
+
     def update(self, user:User) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
@@ -100,6 +103,7 @@ class UserDbRepo(IUserRepository):
         user.user_password,
         user.admin,user.user_id))
         self.database.close_and_save(conn, cur)
+
     def delete(self, user:User) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
@@ -110,11 +114,11 @@ class UserDbRepo(IUserRepository):
         if user_index is not None:
             self.users.remove(self.users[user_index])
 
-
     def get_user_index(self, id_user)-> int:
         for user in self.users:
             if id_user == user.user_id:
                 return self.users.index(user)
+
     def get_user_by_email(self, user_email):
         conn = self.database.create_conn()
         cur = conn.cursor()
@@ -131,3 +135,4 @@ class UserDbRepo(IUserRepository):
             user.admin = data[6]
             self.database.close_and_save(conn, cur)
             return user
+            

@@ -10,4 +10,5 @@ class IDatabaseUpgrade(ABC):
 
     @abstractmethod
     def is_latest_db_version(self):
-        pass   
+        pass
+     

@@ -15,3 +15,4 @@ class IPagination(ABC):
     @abstractmethod
     def set_no_per_page(self, no_per_page):
         pass
+    

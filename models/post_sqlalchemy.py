@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer,ForeignKey,TIMESTAMP,VARCHAR
-from sqlalchemy.orm import declarative_base,column_property
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
@@ -11,4 +11,3 @@ class PostSQLAlchemy(Base):
     post_date_creation =Column("post_created_on",TIMESTAMP)
     post_date_modification = Column("post_modified_on", TIMESTAMP)
     owner_id = Column("owner_id",Integer, ForeignKey("users.user_id"))
-
