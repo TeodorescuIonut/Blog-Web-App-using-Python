@@ -22,7 +22,7 @@ class UserDbRepo(IUserRepository):
         self.users.append(user)
         self.database.close_and_save(conn, cur)
 
-    def get_all(self) -> list():
+    def get_all(self) -> []:
         conn = self.database.create_conn()
         cur = conn.cursor()
         cur.execute("""SELECT user_id,user_date_creation,

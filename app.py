@@ -4,7 +4,7 @@ from main import create_app
 from flask import redirect, url_for
 from decorators.dependency_injection.injector_di import injector
 
-app = create_app() 
+app = create_app()
 
 
 @app.before_first_request

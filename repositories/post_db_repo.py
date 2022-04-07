@@ -105,7 +105,7 @@ class PostDbRepo(IPostRepository):
         if index_post is not None:
             self.posts.remove(self.posts[index_post])
 
-    def get_post_index(self, post_id: int) -> int:
+    def get_post_index(self, id_post: int) -> int:
         for post in self.posts:
-            if post.post_id == post_id:
+            if post.post_id == id_post:
                 return self.posts.index(post)

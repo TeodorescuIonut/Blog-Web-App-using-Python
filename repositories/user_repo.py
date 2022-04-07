@@ -1,5 +1,3 @@
-from flask import Response
-
 from models.user import User
 from interfaces.user_repository_interface import IUserRepository
 from services.password_hash import generate_password_hash
@@ -10,7 +8,7 @@ class UserRepo(IUserRepository):
     count = 0
     users.append(User("admin", "admin@localhost.com", generate_password_hash("1234"), True, 999))
 
-    def get_all(self) -> list():
+    def get_all(self) -> []:
         sorted_array = sorted(self.users, key=lambda x: x.user_date_creation, reverse=True)
         return sorted_array
 
@@ -25,7 +23,7 @@ class UserRepo(IUserRepository):
                 if user_to_check.user_email == user.user_email:
                     return True
 
-    def create(self, user: User) -> (Response | str):
+    def create(self, user: User):
         user.user_id = self.count
         self.users.append(user)
         self.count += 1

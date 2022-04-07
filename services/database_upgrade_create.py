@@ -10,7 +10,7 @@ class DatabaseUpgradeAndCreate(IDatabaseUpgrade):
         self.db = db
         self.version = 0.2
         self.db_config = db_config
-    
+
     def is_latest_db_version(self):
         if self.version > self.db_config.get_db_version():
             return False

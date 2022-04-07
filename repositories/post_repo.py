@@ -52,7 +52,8 @@ class PostRepo(IPostRepository):
                 posts_previews.append(self.create_preview(post))
         return posts_previews
 
-    def create_preview(self, post: PostPreview):
+    @staticmethod
+    def create_preview(post: PostPreview):
         content_preview = post.post_contents[0:200]
         creation_date = post.post_date_creation
         modification_date = post.post_date_modification
