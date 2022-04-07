@@ -1,6 +1,8 @@
 from datetime import datetime
+
+
 class Post:
-    def __init__(self,owner, title, contents, owner_id, post_id= 0):
+    def __init__(self, owner, title, contents, owner_id, post_id=0):
         self.post_id = post_id
         self.post_owner = str(owner)
         self.post_title = str(title)

@@ -1,17 +1,5 @@
 
 from flask import Flask
-import sys
-import os
-from pathlib import Path
-
-
-
-myDir = os.getcwd()
-sys.path.append(myDir)
-path = Path(myDir)
-a=str(path.parent.absolute())
-sys.path.append(a)
-
 from services.service import ContainerService
 from routes.post_bp import PostBlueprint
 from routes.user_bp import UserBlueprint
@@ -19,8 +7,7 @@ from routes.authentication_bp import authenticate
 from databases.database_bp import database_bp
 
 
-
-def create_app(test_config = False):
+def create_app(test_config=False):
     app = Flask(__name__)
     app.config.from_object('config') 
     ContainerService.testing_config = test_config

@@ -7,7 +7,9 @@ class MemoryDatabase(IDatabase):
 
     def create_cursor(self):
         pass
+
     def close_and_save(self, conn, cur):
         pass
+
     def create_table(self):
         pass

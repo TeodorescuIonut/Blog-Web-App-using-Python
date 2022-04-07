@@ -1,4 +1,4 @@
-from databases.database_upgrade_memory import MemodryDBUpgrade
+from databases.database_upgrade_memory import MemoryDBUpgrade
 from databases.sql_alchemy_database_manager import SQLAlchemyDatabase
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
@@ -24,37 +24,37 @@ from services.filtering import Filtering
 from services.paginate import Paginate
 from services.password_hash import PasswordHashing
 from services.authentication import Authentication
-from services.database_upgrade_create import DatabaseUpgradeandCreate
+from services.database_upgrade_create import DatabaseUpgradeAndCreate
 
 
 class ContainerService:
-    testing_config :bool
+    testing_config: bool
     memory_post_repo = PostRepo()
     memory_user_repo = UserRepo()       
     memory_config = MemoryDatabaseConfig()
-    memory_upgrade = MemodryDBUpgrade()
+    memory_upgrade = MemoryDBUpgrade()
 
     services_production = {
-    IPostRepository: PostDbRepo(Database(DatabaseConfig())),
-    IUserRepository: UserDbRepo(Database(DatabaseConfig())),
-    IDatabaseConfig: DatabaseConfig(),
-    IDatabase: Database(DatabaseConfig()),
-    IPassword: PasswordHashing(),
-    IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
-    IDatabaseUpgrade:DatabaseUpgradeandCreate(Database(DatabaseConfig()),DatabaseConfig()),
-    IPagination:Paginate(),
-    IFiltering:Filtering(UserDbRepo(Database(DatabaseConfig())))
+        IPostRepository: PostDbRepo(Database(DatabaseConfig())),
+        IUserRepository: UserDbRepo(Database(DatabaseConfig())),
+        IDatabaseConfig: DatabaseConfig(),
+        IDatabase: Database(DatabaseConfig()),
+        IPassword: PasswordHashing(),
+        IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
+        IDatabaseUpgrade: DatabaseUpgradeAndCreate(Database(DatabaseConfig()), DatabaseConfig()),
+        IPagination: Paginate(),
+        IFiltering: Filtering(UserDbRepo(Database(DatabaseConfig())))
     }
     services_memory = {
-    IPostRepository: memory_post_repo,
-    IUserRepository: memory_user_repo,
-    IDatabaseConfig: memory_config,
-    IDatabase:MemoryDatabase(),
-    IPassword: PasswordHashing(),
-    IAuthentication: Authentication(memory_user_repo, PasswordHashing()),
-    IDatabaseUpgrade:memory_upgrade,
-    IPagination:Paginate(),
-    IFiltering:Filtering(memory_user_repo)
+        IPostRepository: memory_post_repo,
+        IUserRepository: memory_user_repo,
+        IDatabaseConfig: memory_config,
+        IDatabase: MemoryDatabase(),
+        IPassword: PasswordHashing(),
+        IAuthentication: Authentication(memory_user_repo, PasswordHashing()),
+        IDatabaseUpgrade: memory_upgrade,
+        IPagination: Paginate(),
+        IFiltering: Filtering(memory_user_repo)
     }
 
     services_sqlalchemy = {
@@ -64,9 +64,9 @@ class ContainerService:
         IDatabaseAlchemy: SQLAlchemyDatabase(DatabaseConfig()),
         IPassword: PasswordHashing(),
         IAuthentication: Authentication(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())), PasswordHashing()),
-        IDatabaseUpgrade:DatabaseUpgradeandCreate(SQLAlchemyDatabase(DatabaseConfig()),DatabaseConfig()),
-        IPagination:Paginate(),
-        IFiltering:Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())))
+        IDatabaseUpgrade: DatabaseUpgradeAndCreate(SQLAlchemyDatabase(DatabaseConfig()), DatabaseConfig()),
+        IPagination: Paginate(),
+        IFiltering: Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())))
     }
 
     @classmethod

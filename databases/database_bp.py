@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 
-from services.database_upgrade_create import DatabaseUpgradeandCreate
+from services.database_upgrade_create import DatabaseUpgradeAndCreate
 
 
 myDir = os.getcwd()

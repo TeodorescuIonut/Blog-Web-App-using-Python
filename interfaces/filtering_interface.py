@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class IFiltering(ABC):
-   
+
     @abstractmethod
     def return_filter(self):
         pass

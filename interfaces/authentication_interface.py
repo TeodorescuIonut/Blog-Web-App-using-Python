@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class IAuthentication(ABC):
-    
+
     @abstractmethod
-    def sign_in(self,user_email, password):
+    def sign_in(self, user_email, password):
         pass
 
     @abstractmethod
