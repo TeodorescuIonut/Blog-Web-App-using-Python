@@ -88,11 +88,10 @@ class SQLAlchemyUserRepo(IUserRepository):
     def get_user_by_email(self, user_email):
         conn = self.database.create_conn()
         res = conn.query(UserSQLAlchemy).filter(UserSQLAlchemy.user_email == user_email).first()
-        user = User(res.user_name, res.user_email, res.user_password, res.admin, res.user_id)
-        if res is None:
-            return None
-        self.database.close_and_save(conn)
-        return user
+        if res is not None:   
+            user = User(res.user_name, res.user_email, res.user_password, res.admin, res.user_id)
+            self.database.close_and_save(conn)
+            return user
 
     def check_user_email(self, user_to_check) -> bool:
         conn = self.database.create_conn()
