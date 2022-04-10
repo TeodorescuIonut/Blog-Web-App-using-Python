@@ -1,5 +1,15 @@
 from configparser import ConfigParser
+import sys
+import os
+from pathlib import Path
+
 from interfaces.db_config_interface import IDatabaseConfig
+
+myDir = os.getcwd()
+sys.path.append(myDir)
+path = Path(myDir)
+a = str(path.parent.absolute())
+sys.path.append(a)
 from databases.database_settings import DatabaseSettings
 from databases.config import Config
 

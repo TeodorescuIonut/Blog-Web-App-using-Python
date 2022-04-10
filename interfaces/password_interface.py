@@ -8,5 +8,5 @@ class IPassword(ABC):
         pass
 
     @abstractmethod
-    def check_password(self,hash_password, password):
+    def check_password(self, hash_password, password):
         pass

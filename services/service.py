@@ -30,7 +30,7 @@ from services.database_upgrade_create import DatabaseUpgradeAndCreate
 class ContainerService:
     testing_config: bool
     memory_post_repo = PostRepo()
-    memory_user_repo = UserRepo()       
+    memory_user_repo = UserRepo()
     memory_config = MemoryDatabaseConfig()
     memory_upgrade = MemoryDBUpgrade()
 
