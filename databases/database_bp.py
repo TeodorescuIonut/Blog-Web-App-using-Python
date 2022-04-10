@@ -1,9 +1,8 @@
-from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from flask import Blueprint, flash, render_template, request, redirect, url_for
+from interfaces.database_upgrade_interface import IDatabaseUpgrade
+from interfaces.db_config_interface import IDatabaseConfig
 from databases.database_settings import DatabaseSettings
 from decorators.dependency_injection.injector_di import injector
-from interfaces.db_config_interface import IDatabaseConfig
-
 database_bp = Blueprint('database_bp', __name__)
 
 

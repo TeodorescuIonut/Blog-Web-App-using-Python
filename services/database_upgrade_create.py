@@ -6,8 +6,8 @@ from databases.queries import queries
 
 class DatabaseUpgradeAndCreate(IDatabaseUpgrade):
 
-    def __init__(self, db: IDatabase, db_config: IDatabaseConfig):
-        self.db = db
+    def __init__(self, database: IDatabase, db_config: IDatabaseConfig):
+        self.database = database
         self.version = 0.2
         self.db_config = db_config
 
@@ -16,7 +16,7 @@ class DatabaseUpgradeAndCreate(IDatabaseUpgrade):
             return False
 
     def upgrade_db(self):
-        conn = self.db.create_conn()
+        conn = self.database.create_conn()
         curs = conn.cursor()
         if self.is_latest_db_version() is False:
             for query in queries:

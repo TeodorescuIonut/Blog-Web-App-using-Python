@@ -1,8 +1,8 @@
+from flask import redirect, url_for
 from decorators.setup.setup import check_setup
+from decorators.dependency_injection.injector_di import injector
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from main import create_app
-from flask import redirect, url_for
-from decorators.dependency_injection.injector_di import injector
 
 app = create_app()
 

@@ -20,7 +20,8 @@ class SQLAlchemyUserRepo(IUserRepository):
                          UserSQLAlchemy.user_name,
                          UserSQLAlchemy.user_email,
                          UserSQLAlchemy.user_password,
-                         UserSQLAlchemy.admin).order_by(desc(UserSQLAlchemy.user_date_creation)).all()
+                         UserSQLAlchemy.admin).\
+                         order_by(desc(UserSQLAlchemy.user_date_creation)).all()
         self.users.clear()
         for row in res:
             user = User("", "", "")
@@ -88,7 +89,7 @@ class SQLAlchemyUserRepo(IUserRepository):
     def get_user_by_email(self, user_email):
         conn = self.database.create_conn()
         res = conn.query(UserSQLAlchemy).filter(UserSQLAlchemy.user_email == user_email).first()
-        if res is not None:   
+        if res is not None:
             user = User(res.user_name, res.user_email, res.user_password, res.admin, res.user_id)
             self.database.close_and_save(conn)
             return user
