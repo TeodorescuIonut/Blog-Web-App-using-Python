@@ -12,3 +12,4 @@ class PostSQLAlchemy(Base):
     post_date_creation = Column("post_created_on", TIMESTAMP)
     post_date_modification = Column("post_modified_on", TIMESTAMP)
     owner_id = Column("owner_id", Integer, ForeignKey("users.user_id"))
+    image = Column("image", VARCHAR(255))

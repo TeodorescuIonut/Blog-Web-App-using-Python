@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class Post:
-    def __init__(self, owner, title, contents, owner_id, post_id=0):
+    def __init__(self, owner, title, contents, owner_id, image=None, post_id=0):
         self.post_id = post_id
         self.post_owner = str(owner)
         self.post_title = str(title)
@@ -10,3 +10,4 @@ class Post:
         self.post_date_creation = datetime.now().strftime("%B %d %Y %H:%M:%S")
         self.post_date_modification = ''
         self.owner_id = owner_id
+        self.image = image

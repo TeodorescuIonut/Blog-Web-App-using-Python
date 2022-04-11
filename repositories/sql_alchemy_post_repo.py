@@ -19,6 +19,7 @@ class SQLAlchemyPostRepo(IPostRepository):
                          PostSQLAlchemy.post_date_creation,
                          PostSQLAlchemy.post_date_modification,
                          PostSQLAlchemy.post_title,
+                         PostSQLAlchemy.image,
                          func.count(PostSQLAlchemy.post_id).over().label('total'),
                          func.substr(PostSQLAlchemy.post_contents, 0, 100),
                          UserSQLAlchemy.user_name). \
@@ -29,15 +30,16 @@ class SQLAlchemyPostRepo(IPostRepository):
         self.posts.clear()
         self.no_posts = len(res)
         if len(res) > 0:
-            self.no_posts = res[0][4]
+            self.no_posts = res[0][5]
         for row in res:
             post = Post("", "", "", "")
             post.post_id = row[0]
             post.post_date_creation = row[1]
             post.post_date_modification = row[2]
             post.post_title = row[3]
-            post.post_contents = row[5]
-            post.post_owner = row[6]
+            post.image = row[4]
+            post.post_contents = row[6]
+            post.post_owner = row[7]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
         self.database.close_and_save(conn)
@@ -60,7 +62,9 @@ class SQLAlchemyPostRepo(IPostRepository):
                     res[0].post_title,
                     res[0].post_contents,
                     res[0].owner_id,
-                    res[0].post_id)
+                    res[0].image,
+                    res[0].post_id,
+                    )
         self.database.close_and_save(conn)
         return post
 
@@ -70,6 +74,7 @@ class SQLAlchemyPostRepo(IPostRepository):
         stmt = (insert(posts_table).\
         values(post_title=post.post_title,
                post_content=post.post_contents,
+               image=post.image,
                owner_id=post.owner_id).returning(posts_table.c.post_id))
         res = conn.execute(stmt).first()[0]
         post.post_id = res
@@ -80,7 +85,8 @@ class SQLAlchemyPostRepo(IPostRepository):
         posts_table = PostSQLAlchemy.__table__
         stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
                 values(post_title=post.post_title,
-                       post_content=post.post_contents))
+                       post_content=post.post_contents,
+                       image=post.image))
         conn.execute(stmt)
         self.database.close_and_save(conn)
 

@@ -3,7 +3,6 @@ from interfaces.database_interface import IDatabase
 from interfaces.db_config_interface import IDatabaseConfig
 
 
-
 class Database(IDatabase):
     def __init__(self, db_config: IDatabaseConfig):
         self.db_config = db_config

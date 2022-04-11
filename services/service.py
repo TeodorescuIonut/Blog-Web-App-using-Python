@@ -1,3 +1,4 @@
+from interfaces.image_support_interface import IImageSupport
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
 from interfaces.db_config_interface import IDatabaseConfig
@@ -25,6 +26,7 @@ from services.paginate import Paginate
 from services.password_hash import PasswordHashing
 from services.authentication import Authentication
 from services.database_upgrade_create import DatabaseUpgradeAndCreate
+from services.image_support import ImageSupport
 
 
 class ContainerService:
@@ -43,7 +45,8 @@ class ContainerService:
         IAuthentication: Authentication(UserDbRepo(Database(DatabaseConfig())), PasswordHashing()),
         IDatabaseUpgrade: DatabaseUpgradeAndCreate(Database(DatabaseConfig()), DatabaseConfig()),
         IPagination: Paginate(),
-        IFiltering: Filtering(UserDbRepo(Database(DatabaseConfig())))
+        IFiltering: Filtering(UserDbRepo(Database(DatabaseConfig()))),
+        IImageSupport: ImageSupport()
     }
     services_memory = {
         IPostRepository: memory_post_repo,
@@ -67,10 +70,11 @@ class ContainerService:
             SQLAlchemyDatabase(DatabaseConfig())),
             PasswordHashing()),
         IDatabaseUpgrade: DatabaseUpgradeAndCreate(
-                          SQLAlchemyDatabase(DatabaseConfig()),
-                          DatabaseConfig()),
+            Database(DatabaseConfig()),
+            DatabaseConfig()),
         IPagination: Paginate(),
-        IFiltering: Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())))
+        IFiltering: Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig()))),
+        IImageSupport: ImageSupport()
     }
 
     @classmethod

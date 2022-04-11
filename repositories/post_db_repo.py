@@ -17,9 +17,10 @@ class PostDbRepo(IPostRepository):
         cur.execute(
             """INSERT INTO posts (post_title,
                                   post_content,
-                                  owner_id)
-                VALUES (%s, %s, %s) RETURNING post_id""",
-            (post.post_title, post.post_contents, post.owner_id),
+                                  owner_id,
+                                  image)
+                VALUES (%s, %s, %s, %s) RETURNING post_id""",
+            (post.post_title, post.post_contents, post.owner_id, post.image),
         )
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
@@ -38,6 +39,7 @@ class PostDbRepo(IPostRepository):
                        post_title,
                        LEFT(post_content, 500),
                        owner_id,
+                       image,
                        user_name,
                        COUNT(*) OVER() AS full_count
                 FROM posts INNER JOIN users ON owner_id = user_id {query}
@@ -46,7 +48,7 @@ class PostDbRepo(IPostRepository):
         self.posts.clear()
         self.no_posts = len(rows)
         if len(rows) > 0:
-            self.no_posts = rows[0][7]
+            self.no_posts = rows[0][8]
         for row in rows:
             post = Post("", "", "", "")
             post.post_id = row[0]
@@ -55,7 +57,8 @@ class PostDbRepo(IPostRepository):
             post.post_title = row[3]
             post.post_contents = row[4]
             post.owner_id = row[5]
-            post.post_owner = row[6]
+            post.image = row[6]
+            post.post_owner = row[7]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
         self.database.close_and_save(conn, cur)
@@ -78,6 +81,7 @@ class PostDbRepo(IPostRepository):
                       post_title,
                       post_content,
                       owner_id,
+                      image,
                       user_name
                 FROM posts INNER JOIN users ON owner_id = user_id
                 WHERE post_id = %s""",
@@ -91,7 +95,8 @@ class PostDbRepo(IPostRepository):
             post.post_title = data[3]
             post.post_contents = data[4]
             post.owner_id = data[5]
-            post.post_owner = data[6]
+            post.image = data[6]
+            post.post_owner = data[7]
             self.database.close_and_save(conn, cur)
         else:
             post = None
@@ -107,9 +112,10 @@ class PostDbRepo(IPostRepository):
         cur.execute("""
         UPDATE posts
         SET post_title = %s,
-            post_content = %s
+            post_content = %s,
+            image = %s
         WHERE post_id = %s RETURNING *
-        """, (post.post_title, post.post_contents, post.post_id))
+        """, (post.post_title, post.post_contents, post.image, post.post_id))
         self.database.close_and_save(conn, cur)
 
     def delete(self, post: Post) -> None:
