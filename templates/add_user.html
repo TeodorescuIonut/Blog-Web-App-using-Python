@@ -45,12 +45,14 @@
 
     </div>
     <div class="mb-3 form-check">
-        {% if buttonText == "Update" and logged_user.admin is true %}
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" name="make_admin" value="True">
-        <label class="form-check-label" for="exampleCheck1">Make admin</label>
-        
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" name="make_user" value="True">
-        <label class="form-check-label" for="exampleCheck1">Make user</label>
+        {% if logged_user.admin is true %}
+        {% if user.admin is true %}
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" checked name="make_admin" value="True">
+        <label class="form-check-label" for="exampleCheck1" >Make admin</label>
+        {% else %}
+        <input type="checkbox" class="form-check-input" id="exampleCheck2"  name="make_admin" value="True">
+        <label class="form-check-label" for="exampleCheck1" >Make admin</label>
+        {%endif%}
         {%endif%}
       </div>
         <button type="submit" class="btn btn-primary">{{buttonText}}</button>
