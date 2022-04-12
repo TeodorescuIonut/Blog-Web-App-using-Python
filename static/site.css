@@ -86,3 +86,30 @@
     height: 150px;
     overflow: auto;
 }
+#formFile{
+    border: none;
+    padding: 0;
+}
+#form_add img {
+    width:20%;
+    display:none;
+    margin-bottom:30px;
+}
+#formFile::-webkit-file-upload-button {
+  color: white;
+  display: inline-block;
+  background: #007bff;
+  border: none;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  border-radius: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.view-picture{
+    margin-bottom: 25px;
+}

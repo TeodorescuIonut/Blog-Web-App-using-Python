@@ -13,6 +13,12 @@
 <div class="row">
   <div class="col-md-12 blog-main">
     <div class="blog-post">
+      {% if post.image %}
+                {%set image_path = "/static/images/"+post.image%}
+            {%else%}
+                {%set image_path = 'https://www.groupestate.gr/images/joomlart/demo/default.jpg'%}
+            {% endif %}
+            <img src="{{image_path}}" class="card-img-top view-picture" alt="...">
       <h2 class="blog-post-title">{{ post.post_title }}</h2>
       <br>
       <i class="d-inline far fa-clock"></i>
