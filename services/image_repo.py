@@ -1,9 +1,9 @@
 import os
 
-from interfaces.image_support_interface import IImageSupport
+from interfaces.image_support_interface import IImageRepo
 
 
-class ImageSupport(IImageSupport):
+class ImageRepo(IImageRepo):
     def save_image(self, file, filename):
         if file:
             path = os.path.join(os.path.abspath('./static/images'), filename)

@@ -4,6 +4,9 @@ from models.post import Post
 
 
 class PostRepo(IPostRepository):
+    def process_image(self, image_file):
+        pass
+
     posts = list()
     count = 0
     no_posts = 0

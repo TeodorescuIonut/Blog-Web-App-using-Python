@@ -1,4 +1,4 @@
-from interfaces.image_support_interface import IImageSupport
+from interfaces.image_support_interface import IImageRepo
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
 from interfaces.db_config_interface import IDatabaseConfig
@@ -26,7 +26,7 @@ from services.paginate import Paginate
 from services.password_hash import PasswordHashing
 from services.authentication import Authentication
 from services.database_upgrade_create import DatabaseUpgradeAndCreate
-from services.image_support import ImageSupport
+from services.image_repo import ImageRepo
 
 
 class ContainerService:
@@ -37,7 +37,7 @@ class ContainerService:
     memory_upgrade = MemoryDBUpgrade()
 
     services_production = {
-        IPostRepository: PostDbRepo(Database(DatabaseConfig())),
+        IPostRepository: PostDbRepo(Database(DatabaseConfig()), ImageRepo()),
         IUserRepository: UserDbRepo(Database(DatabaseConfig())),
         IDatabaseConfig: DatabaseConfig(),
         IDatabase: Database(DatabaseConfig()),
@@ -46,7 +46,7 @@ class ContainerService:
         IDatabaseUpgrade: DatabaseUpgradeAndCreate(Database(DatabaseConfig()), DatabaseConfig()),
         IPagination: Paginate(),
         IFiltering: Filtering(UserDbRepo(Database(DatabaseConfig()))),
-        IImageSupport: ImageSupport()
+        IImageRepo: ImageRepo()
     }
     services_memory = {
         IPostRepository: memory_post_repo,
@@ -61,7 +61,7 @@ class ContainerService:
     }
 
     services_sqlalchemy = {
-        IPostRepository: SQLAlchemyPostRepo(SQLAlchemyDatabase(DatabaseConfig())),
+        IPostRepository: SQLAlchemyPostRepo(SQLAlchemyDatabase(DatabaseConfig()), ImageRepo()),
         IUserRepository: SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())),
         IDatabaseConfig: DatabaseConfig(),
         IDatabaseAlchemy: SQLAlchemyDatabase(DatabaseConfig()),
@@ -74,7 +74,7 @@ class ContainerService:
             DatabaseConfig()),
         IPagination: Paginate(),
         IFiltering: Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig()))),
-        IImageSupport: ImageSupport()
+        IImageRepo: ImageRepo()
     }
 
     @classmethod

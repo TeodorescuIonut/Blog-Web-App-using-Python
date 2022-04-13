@@ -1,5 +1,6 @@
 from sqlalchemy import func, case, insert, update, delete, desc
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
+from interfaces.image_support_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
 from models.post import Post
 from models.post_sqlalchemy import PostSQLAlchemy
@@ -10,8 +11,9 @@ class SQLAlchemyPostRepo(IPostRepository):
     posts = list()
     no_posts = 0
 
-    def __init__(self, database: IDatabaseAlchemy):
+    def __init__(self, database: IDatabaseAlchemy, image_service: IImageRepo):
         self.database = database
+        self.image_service = image_service
 
     def get_all(self, per_page, offset, selected_owner_id):
         conn = self.database.create_conn()
@@ -96,3 +98,6 @@ class SQLAlchemyPostRepo(IPostRepository):
         stmt = (delete(posts_table).where(posts_table.c.post_id == post.post_id))
         conn.execute(stmt)
         self.database.close_and_save(conn)
+
+    def process_image(self, image_file):
+        self.image_service.save_image(image_file, image_file.filename)

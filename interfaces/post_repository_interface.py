@@ -21,3 +21,7 @@ class IPostRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def delete(self, post):
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def process_image(self, image_file):
+        raise NotImplementedError

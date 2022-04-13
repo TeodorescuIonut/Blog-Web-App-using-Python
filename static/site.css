@@ -112,4 +112,18 @@
 
 .view-picture{
     margin-bottom: 25px;
+    object-fit: cover;
+    height: 50vh;
+}
+
+.picture{
+    object-fit: cover;
+    height: 30vh;
+}
+
+/*   Media queries*/
+@media screen and (max-width: 992px) and (min-width: 768px){
+.picture{
+    height: 20vh;
+}
 }

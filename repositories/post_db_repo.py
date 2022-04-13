@@ -1,3 +1,4 @@
+from interfaces.image_support_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.database_interface import IDatabase
 from models.post import Post
@@ -8,8 +9,9 @@ class PostDbRepo(IPostRepository):
     posts = list()
     no_posts = 0
 
-    def __init__(self, database: IDatabase):
+    def __init__(self, database: IDatabase, image_service: IImageRepo):
         self.database = database
+        self.image_service = image_service
 
     def create(self, post: Post) -> None:
         conn = self.database.create_conn()
@@ -132,3 +134,6 @@ class PostDbRepo(IPostRepository):
         for post in self.posts:
             if post.post_id == id_post:
                 return self.posts.index(post)
+
+    def process_image(self, image_file):
+        self.image_service.save_image(image_file, image_file.filename)

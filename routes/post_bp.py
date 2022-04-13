@@ -7,7 +7,6 @@ from decorators.dependency_injection.injector_di import injector
 from decorators.authentification.sing_in_required import sign_in_required
 from interfaces.authentication_interface import IAuthentication
 from interfaces.filtering_interface import IFiltering
-from interfaces.image_support_interface import IImageSupport
 from interfaces.pagination_interface import IPagination
 from interfaces.post_repository_interface import IPostRepository
 from models.post import Post
@@ -20,20 +19,17 @@ class PostBlueprint:
     auth: IAuthentication
     pagination: IPagination
     filtering: IFiltering
-    image_support: IImageSupport
 
     def __init__(self, repo: IPostRepository,
                  authentication: IAuthentication,
                  pagination: IPagination,
-                 filtering: IFiltering,
-                 image_support: IImageSupport
+                 filtering: IFiltering
                  ):
         self.repo = repo
         self.post_bp = Blueprint('post_bp', __name__)
         self.auth = authentication
         self.pagination = pagination
         self.filtering = filtering
-        self.image_support = image_support
 
     def create(self):
         self.post_bp.route('/', methods=["GET", "POST"])(self.blog)
@@ -90,10 +86,7 @@ class PostBlueprint:
                 flash('No image part')
                 return redirect(request.url)
             image_file = request.files['image']
-            self.image_support.save_image(image_file, image_file.filename)
-            if image_file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
+            self.repo.process_image(image_file)
             post = Post(owner.user_name, post_title, content, owner.user_id, image_file.filename)
             error = None
             if not post_title:
@@ -137,7 +130,7 @@ class PostBlueprint:
                 flash('No image part')
                 return redirect(request.url)
             image_file = request.files['image']
-            self.image_support.save_image(image_file, image_file.filename)
+            self.repo.process_image(image_file)
             if image_file.filename == '':
                 flash('No selected file')
                 return redirect(request.url)
