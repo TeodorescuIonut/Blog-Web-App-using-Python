@@ -96,6 +96,7 @@ class SQLAlchemyPostRepo(IPostRepository):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
         stmt = (delete(posts_table).where(posts_table.c.post_id == post.post_id))
+        self.image_service.remove_image(post.image)
         conn.execute(stmt)
         self.database.close_and_save(conn)
 

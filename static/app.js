@@ -7,8 +7,8 @@ if (firstPost != undefined){
 var file = document.getElementById('formFile');
 if (file != null){
     file.onchange = function(e) {
-      var ext = this.value.match(/\.([^\.]+)$/)[1];
-      switch (ext) {
+      var ext = this.value.match(/\.([^\.]+)$/i)[1];
+      switch (ext.toLowerCase()) {
         case 'jpg':
         case 'bmp':
         case 'png':

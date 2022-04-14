@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from decorators.authorization.check_if_post_owner_or_admin import check_if_post_owner_or_admin
@@ -86,6 +87,9 @@ class PostBlueprint:
                 flash('No image part')
                 return redirect(request.url)
             image_file = request.files['image']
+            if image_file is not None:
+                n = random.randint(1, 100)
+                image_file.filename = str(n) + image_file.filename
             self.repo.process_image(image_file)
             post = Post(owner.user_name, post_title, content, owner.user_id, image_file.filename)
             error = None

@@ -57,7 +57,8 @@ class ContainerService:
         IAuthentication: Authentication(memory_user_repo, PasswordHashing()),
         IDatabaseUpgrade: memory_upgrade,
         IPagination: Paginate(),
-        IFiltering: Filtering(memory_user_repo)
+        IFiltering: Filtering(memory_user_repo),
+        IImageRepo: ImageRepo()
     }
 
     services_sqlalchemy = {

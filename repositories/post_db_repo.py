@@ -127,6 +127,7 @@ class PostDbRepo(IPostRepository):
         cur.execute('DELETE FROM posts WHERE post_id= %s', (id_post,))
         self.database.close_and_save(conn, cur)
         index_post = self.get_post_index(id_post)
+        self.image_service.remove_image(post.image)
         if index_post is not None:
             self.posts.remove(self.posts[index_post])
 
