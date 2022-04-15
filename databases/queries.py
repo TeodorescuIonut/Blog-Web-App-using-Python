@@ -27,26 +27,32 @@ BEGIN
 END $$;    
 """
 
-GENERATE_OWNER_IDS = """DO $$ DECLARE post record; BEGIN IF EXISTS(SELECT column_name FROM information_schema.columns 
-WHERE table_name = 'posts' and column_name = 'post_owner') THEN FOR post IN SELECT * FROM posts LOOP IF 
-post.post_owner IN (SELECT user_name FROM users) THEN UPDATE posts SET owner_id = (SELECT user_id FROM users WHERE 
-user_name =post.post_owner) WHERE post_owner= post.post_owner; END IF; END LOOP; END IF; END; $$ """
+GENERATE_OWNER_IDS = """DO $$ DECLARE post record; BEGIN IF EXISTS(SELECT column_name FROM 
+information_schema.columns WHERE table_name = 'posts' and column_name = 'post_owner') THEN FOR 
+post IN SELECT * FROM posts LOOP IF post.post_owner IN (SELECT user_name FROM users) THEN UPDATE 
+posts SET owner_id = (SELECT user_id FROM users WHERE user_name =post.post_owner) WHERE 
+post_owner= post.post_owner; END IF; END LOOP; END IF; END; $$ """
 GENERATE_USERS_FOR_POSTS = """DO $$ DECLARE post record; BEGIN IF EXISTS(SELECT column_name FROM 
-information_schema.columns WHERE table_name = 'posts' and column_name = 'post_owner') THEN FOR post IN SELECT * FROM 
-posts LOOP IF post.post_owner NOT IN (SELECT user_name FROM users) THEN INSERT INTO users (user_id, 
-user_date_creation, user_date_modification,user_name, user_email, user_password) VALUES (DEFAULT, DEFAULT, DEFAULT, 
-post.post_owner, post.post_owner, '1234'); END IF; END LOOP; END IF; END; $$ """
-ADD_ADMIN_USER = """DO $$ BEGIN IF NOT EXISTS(SELECT user_name FROM users WHERE user_name = 'admin') THEN INSERT INTO 
-users(user_date_creation, user_date_modification,user_name, user_email, user_password, admin) VALUES (DEFAULT, 
-DEFAULT,'admin','admin@localhost.com', 
-'sha256$rHEVul4CLa9kYwkm$6eace29a89092b5df84a8eea8aa2259c281b2f9c196331c1a5ce0afbe306626f', true); END IF; END; $$ """
-GENERATE_NON_ADMINS = """DO $$ DECLARE user record; BEGIN FOR user IN SELECT * FROM users LOOP IF EXISTS(SELECT 
-column_name from information_schema.columns WHERE table_name  = 'users' AND column_name ='admin') THEN UPDATE users 
-SET admin= false WHERE admin IS NULL AND user_name <> 'admin'; END IF; END LOOP; END; $$ """
+information_schema.columns WHERE table_name = 'posts' and column_name = 'post_owner') THEN FOR 
+post IN SELECT * FROM posts LOOP IF post.post_owner NOT IN (SELECT user_name FROM users) THEN 
+INSERT INTO users (user_id, user_date_creation, user_date_modification,user_name, user_email, 
+user_password) VALUES (DEFAULT, DEFAULT, DEFAULT, post.post_owner, post.post_owner, '1234'); END 
+IF; END LOOP; END IF; END; $$ """
+ADD_ADMIN_USER = """DO $$ BEGIN IF NOT EXISTS(SELECT user_name FROM users WHERE user_name = 
+'admin') THEN INSERT INTO users(user_date_creation, user_date_modification,user_name, user_email, 
+user_password, admin) VALUES (DEFAULT, DEFAULT,'admin','admin@localhost.com', 
+'sha256$rHEVul4CLa9kYwkm$6eace29a89092b5df84a8eea8aa2259c281b2f9c196331c1a5ce0afbe306626f', 
+true); END IF; END; $$ """
+GENERATE_NON_ADMINS = """DO $$ DECLARE user record; BEGIN FOR user IN SELECT * FROM users LOOP IF 
+EXISTS(SELECT column_name from information_schema.columns WHERE table_name  = 'users' AND 
+column_name ='admin') THEN UPDATE users SET admin= false WHERE admin IS NULL AND user_name <> 
+'admin'; END IF; END LOOP; END; $$ """
 DELETE_POST_OWNER_COLUMN = """
 ALTER TABLE posts DROP COLUMN post_owner;
 """
-queries = [CREATE_POSTS_TABLE, CREATE_USERS_TABLE, ADD_COLUMN_POST_OWNER, ADD_IMAGE_COLUMN, GENERATE_USERS_FOR_POSTS,
+queries = [CREATE_POSTS_TABLE, CREATE_USERS_TABLE, ADD_COLUMN_POST_OWNER, ADD_IMAGE_COLUMN,
+           GENERATE_USERS_FOR_POSTS,
            ADD_OWNER_ID_COLUMN,
-           GENERATE_OWNER_IDS, LINK_POST_OWNER_TO_USER, ADD_ADMIN_COLUMN, ADD_ADMIN_USER, GENERATE_NON_ADMINS,
+           GENERATE_OWNER_IDS, LINK_POST_OWNER_TO_USER, ADD_ADMIN_COLUMN, ADD_ADMIN_USER,
+           GENERATE_NON_ADMINS,
            DELETE_POST_OWNER_COLUMN]
