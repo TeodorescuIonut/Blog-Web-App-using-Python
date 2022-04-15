@@ -4,14 +4,14 @@ import os
 from pathlib import Path
 
 from interfaces.db_config_interface import IDatabaseConfig
+from databases.database_settings import DatabaseSettings
+from databases.config import Config
 
 myDir = os.getcwd()
 sys.path.append(myDir)
 path = Path(myDir)
 a = str(path.parent.absolute())
 sys.path.append(a)
-from databases.database_settings import DatabaseSettings
-from databases.config import Config
 
 
 class DatabaseConfig(IDatabaseConfig, Config):
@@ -40,7 +40,6 @@ class DatabaseConfig(IDatabaseConfig, Config):
         return database_settings
 
     def get_db_version(self):
-        version = 0
         if Config().section_exists("version") is True:
             config = Config().load(self.config)
             version = config["version"]

@@ -8,7 +8,6 @@ class Database(IDatabase):
         self.db_config = db_config
 
     def create_conn(self):
-        conn = None
         data_settings = self.db_config.load()
         conn = psycopg2.connect(host=data_settings.host,
                                 database=data_settings.database,

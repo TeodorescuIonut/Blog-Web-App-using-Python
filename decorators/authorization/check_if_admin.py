@@ -8,7 +8,7 @@ from interfaces.authentication_interface import IAuthentication
 def check_if_admin(setup):
     @wraps(setup)
     @injector
-    def wrapper(authentication: IAuthentication,*args, **kwargs):
+    def wrapper(authentication: IAuthentication, *args, **kwargs):
         if not authentication.is_logged_in():
             flash('You need to be an admin to access this feature!')
             return redirect(url_for('main'))
