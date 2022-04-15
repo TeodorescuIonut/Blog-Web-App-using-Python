@@ -1,4 +1,4 @@
-from interfaces.image_support_interface import IImageRepo
+from interfaces.image_repo_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.database_interface import IDatabase
 from models.post import Post
@@ -136,7 +136,7 @@ class PostDbRepo(IPostRepository):
             if post.post_id == id_post:
                 return self.posts.index(post)
 
-    def process_image(self, image_file, old_image=None):
+    def process_image(self, image_file, old_image=''):
         self.image_service.save_image(image_file, image_file.filename)
         if old_image != '':
             self.image_service.remove_image(old_image)

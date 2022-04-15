@@ -1,6 +1,6 @@
 from sqlalchemy import func, case, insert, update, delete, desc
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
-from interfaces.image_support_interface import IImageRepo
+from interfaces.image_repo_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
 from models.post import Post
 from models.post_sqlalchemy import PostSQLAlchemy
@@ -100,7 +100,7 @@ class SQLAlchemyPostRepo(IPostRepository):
         conn.execute(stmt)
         self.database.close_and_save(conn)
 
-    def process_image(self, image_file, old_image=None):
+    def process_image(self, image_file, old_image=''):
         self.image_service.save_image(image_file, image_file.filename)
         if old_image != '':
             self.image_service.remove_image(old_image)
