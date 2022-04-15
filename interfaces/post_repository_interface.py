@@ -23,5 +23,5 @@ class IPostRepository(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def process_image(self, image_file):
+    def process_image(self, image_file, old_image):
         raise NotImplementedError

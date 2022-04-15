@@ -130,14 +130,15 @@ class PostBlueprint:
             post_title = request.form.get("title")
             # getting input content  in HTML form
             content = request.form.get("content")
-            if 'image' not in request.files:
-                flash('No image part')
-                return redirect(request.url)
             image_file = request.files['image']
-            self.repo.process_image(image_file)
-            if image_file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
+            old_image = ''
+            if image_file.filename != '':
+                n = random.randint(1, 100)
+                image_file.filename = str(n) + image_file.filename
+                old_image = post.image
+                self.repo.process_image(image_file, old_image)
+            else:
+                image_file.filename = post.image
             error = None
             if not post_title:
                 error = "Please add a title"
