@@ -1,4 +1,3 @@
-import random
 from datetime import datetime
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from decorators.authorization.check_if_post_owner_or_admin import check_if_post_owner_or_admin
@@ -87,11 +86,7 @@ class PostBlueprint:
                 flash('No image part')
                 return redirect(request.url)
             image_file = request.files['image']
-            if image_file is not None:
-                n = random.randint(1, 100)
-                image_file.filename = str(n) + image_file.filename
-            self.repo.process_image(image_file)
-            post = Post(owner.user_name, post_title, content, owner.user_id, image_file.filename)
+            post = Post(owner.user_name, post_title, content, owner.user_id)
             error = None
             if not post_title:
                 error = "Please add a title"
@@ -108,7 +103,7 @@ class PostBlueprint:
                     owner.user_id,
                     image_file.filename
                     )
-            self.repo.create(new_post)
+            self.repo.create(new_post, image_file)
             flash("Post added")
             return redirect(url_for('post_bp.view_post', post_id=new_post.post_id))
         return render_template("add_post.html", post=Post, urlPage=self.add_post)
@@ -131,14 +126,6 @@ class PostBlueprint:
             # getting input content  in HTML form
             content = request.form.get("content")
             image_file = request.files['image']
-            old_image = ''
-            if image_file.filename != '':
-                n = random.randint(1, 100)
-                image_file.filename = str(n) + image_file.filename
-                old_image = post.image
-                self.repo.process_image(image_file, old_image)
-            else:
-                image_file.filename = post.image
             error = None
             if not post_title:
                 error = "Please add a title"
@@ -154,8 +141,8 @@ class PostBlueprint:
                 post.post_title = post_title
                 post.post_contents = content
                 post.post_date_modification = datetime.now().strftime("%B %d %Y")
-                post.image = image_file.filename
-                self.repo.update(post)
+                post.image = post.image
+                self.repo.update(post, image_file)
                 flash("Post updated")
                 return render_template('viewPost.html', post_id=post.post_id, post=post)
         return render_template("add_post.html", post=post, buttonText="Update")

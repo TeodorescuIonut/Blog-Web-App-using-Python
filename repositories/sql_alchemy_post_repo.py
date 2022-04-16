@@ -70,21 +70,31 @@ class SQLAlchemyPostRepo(IPostRepository):
         self.database.close_and_save(conn)
         return post
 
-    def create(self, post: Post):
+    def create(self, post: Post, image_file):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
         stmt = (insert(posts_table).\
         values(post_title=post.post_title,
                post_content=post.post_contents,
-               image=post.image,
+               image=image_file.filename,
                owner_id=post.owner_id).returning(posts_table.c.post_id))
         res = conn.execute(stmt).first()[0]
         post.post_id = res
+        image_file.filename = str(post.post_id) + image_file.filename
+        self.image_service.save_image(image_file, image_file.filename)
+        stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
+                values(image=image_file.filename ))
+        conn.execute(stmt)
         self.database.close_and_save(conn)
 
-    def update(self, post: Post):
+    def update(self, post: Post, image_file):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
+        if image_file.filename != '' and str(post.post_id) + image_file.filename != post.image:
+            image_file.filename = str(post.post_id) + image_file.filename
+            self.image_service.save_image(image_file, image_file.filename)
+            self.image_service.remove_image(post.image)
+            post.image = image_file.filename
         stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
                 values(post_title=post.post_title,
                        post_content=post.post_contents,
@@ -99,8 +109,3 @@ class SQLAlchemyPostRepo(IPostRepository):
         self.image_service.remove_image(post.image)
         conn.execute(stmt)
         self.database.close_and_save(conn)
-
-    def process_image(self, image_file, old_image=''):
-        self.image_service.save_image(image_file, image_file.filename)
-        if old_image != '':
-            self.image_service.remove_image(old_image)

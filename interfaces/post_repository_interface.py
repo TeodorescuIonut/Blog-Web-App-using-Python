@@ -11,17 +11,13 @@ class IPostRepository(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create(self, post):
+    def create(self, post, image_file):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def update(self, post):
+    def update(self, post, image_file):
         raise NotImplementedError
 
     @abc.abstractmethod
     def delete(self, post):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def process_image(self, image_file, old_image):
         raise NotImplementedError
