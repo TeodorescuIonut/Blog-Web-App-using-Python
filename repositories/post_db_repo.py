@@ -4,7 +4,6 @@ from interfaces.database_interface import IDatabase
 from models.post import Post
 
 
-
 class PostDbRepo(IPostRepository):
     posts = list()
     no_posts = 0
@@ -13,7 +12,7 @@ class PostDbRepo(IPostRepository):
         self.database = database
         self.image_service = image_service
 
-    def create(self, post: Post) -> None:
+    def create(self, post: Post, image_file) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
         cur.execute(
@@ -26,6 +25,14 @@ class PostDbRepo(IPostRepository):
         )
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
+        image_file.filename = str(post.post_id) + image_file.filename
+        self.image_service.save_image(image_file, image_file.filename)
+        cur.execute("""
+                UPDATE posts
+                SET
+                    image = %s
+                WHERE post_id = %s
+                """, (image_file.filename, post.post_id))
         self.database.close_and_save(conn, cur)
 
     def get_all(self, per_page, offset, selected_owner_id) -> []:
@@ -104,13 +111,18 @@ class PostDbRepo(IPostRepository):
             post = None
         return post
 
-    def update(self, post: Post) -> None:
+    def update(self, post: Post, image_file) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
         id_post = post.post_id
         index_post = self.get_post_index(id_post)
         self.posts.remove(self.posts[index_post])
         self.posts.append(post)
+        if image_file.filename != '' and str(post.post_id) + image_file.filename != post.image:
+            image_file.filename = str(post.post_id) + image_file.filename
+            self.image_service.save_image(image_file, image_file.filename)
+            self.image_service.remove_image(post.image)
+            post.image = image_file.filename
         cur.execute("""
         UPDATE posts
         SET post_title = %s,
@@ -135,9 +147,4 @@ class PostDbRepo(IPostRepository):
         for post in self.posts:
             if post.post_id == id_post:
                 return self.posts.index(post)
-
-    def process_image(self, image_file, old_image=''):
-        self.image_service.save_image(image_file, image_file.filename)
-        if old_image != '':
-            self.image_service.remove_image(old_image)
 
