@@ -82,11 +82,11 @@ class PostBlueprint:
             post_title = request.form.get("title")
             # getting input content  in HTML form
             content = request.form.get("content")
-            if 'image' not in request.files:
-                flash('No image part')
-                return redirect(request.url)
-            image_file = request.files['image']
             post = Post(owner.user_name, post_title, content, owner.user_id)
+            if 'image' not in request.files:
+                image_file = None
+            else:
+                image_file = request.files['image']
             error = None
             if not post_title:
                 error = "Please add a title"
@@ -101,7 +101,7 @@ class PostBlueprint:
                     post_title.title(),
                     content,
                     owner.user_id,
-                    image_file.filename
+                    image_file
                     )
             self.repo.create(new_post, image_file)
             flash("Post added")
@@ -125,7 +125,10 @@ class PostBlueprint:
             post_title = request.form.get("title")
             # getting input content  in HTML form
             content = request.form.get("content")
-            image_file = request.files['image']
+            if 'image' not in request.files:
+                image_file = None
+            else:
+                image_file = request.files['image']
             error = None
             if not post_title:
                 error = "Please add a title"

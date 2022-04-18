@@ -5,6 +5,7 @@ from tests.test_authentication_blueprint import sign_in_user, sign_out_user
 from tests.test_post_blueprint_owner import add_post
 from decorators.dependency_injection.injector_di import injector
 from interfaces.post_repository_interface import IPostRepository
+from tests.test_support_for_image import create_test_image
 
 test_app = create_app(test_config=True)
 

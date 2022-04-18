@@ -21,11 +21,12 @@ class PostDbRepo(IPostRepository):
                                   owner_id,
                                   image)
                 VALUES (%s, %s, %s, %s) RETURNING post_id""",
-            (post.post_title, post.post_contents, post.owner_id, post.image),
+            (post.post_title, post.post_contents, post.owner_id, image_file.filename),
         )
         post.post_id = cur.fetchone()[0]
         self.posts.append(post)
-        image_file.filename = str(post.post_id) + image_file.filename
+        if image_file.filename != '':
+            image_file.filename = str(post.post_id) + image_file.filename
         self.image_service.save_image(image_file, image_file.filename)
         cur.execute("""
                 UPDATE posts

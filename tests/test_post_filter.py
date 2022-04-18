@@ -20,7 +20,7 @@ def test_filter_by_user_with_posts(client):
     response = client.get('/POST/?page=2&selected_owner_id=0', follow_redirects=True)
     assert b'Jhon_update' in response.data
     assert b'Previous' in response.data
-    assert b'Next' not in response.data
+    assert b'Next' in response.data
     assert b'Hello world update' in response.data
 
 

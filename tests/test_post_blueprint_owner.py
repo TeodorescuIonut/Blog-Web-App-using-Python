@@ -28,18 +28,19 @@ def sign_out_user(client):
     return client.get('/SIGNOUT/', follow_redirects=True)
 
 
-def add_post(client, title, content, owner, owner_id):
+def add_post(client, title, content, owner, owner_id, image=''):
     return client.post('/POST/CREATE/posts', data=dict(
         title=title,
         owner=owner,
         content=content,
-        owner_id=owner_id
+        owner_id=owner_id,
+        image=image
     )
-                       , follow_redirects=True)
+                       , follow_redirects=True, content_type='multipart/form-data')
 
 
 def delete_post(client):
-    return client.post('/POST/DELETE/19', follow_redirects=True)
+    return client.post('/POST/DELETE/23', follow_redirects=True)
 
 
 def update_post(client, title, content, owner):
@@ -71,7 +72,7 @@ def test_add_post(client):
     sign_out_user(client)
     sign_in_user(client, "blasss@yahoo.com", "1234")
     result = add_post(client, "Hello world", "bla bla", "Peters", 2)
-    resp = client.get('/POST/VIEW/16', follow_redirects=True)
+    resp = client.get('/POST/VIEW/18', follow_redirects=True)
     assert result.status == '200 OK'
     assert b"Hello World" in resp.data
     assert b"bla bla" in resp.data

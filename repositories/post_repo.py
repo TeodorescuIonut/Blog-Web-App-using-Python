@@ -1,15 +1,18 @@
+import base64
+
+from interfaces.image_memory_repo_interface import IImageMemoryRepo
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
 
 
 class PostRepo(IPostRepository):
-    def process_image(self, image_file):
-        pass
-
     posts = list()
     count = 0
     no_posts = 0
+
+    def __init__(self, image_service: IImageMemoryRepo):
+        self.image_service = image_service
 
     def get_all(self, per_page, offset, selected_owner_id) -> []:
         sorted_array = sorted(self.get_previews(selected_owner_id),
@@ -22,13 +25,21 @@ class PostRepo(IPostRepository):
             if post.post_id == post_id:
                 return post
 
-    def create(self, post):
+    def create(self, post, image_file):
+        if post.image is None:
+            post.image = 'default.png'
+        else:
+            post.image = self.image_service.save_image(image_file)
         post.post_id = self.count
         self.posts.append(post)
         self.count += 1
 
-    def update(self, post: Post) -> None:
+    def update(self, post: Post, image_file) -> None:
         self.posts.remove(post)
+        if post.image is None:
+            post.image = 'default.png'
+        else:
+            post.image = self.image_service.save_image(image_file)
         self.posts.append(post)
 
     def delete(self, post: Post) -> None:
@@ -69,3 +80,4 @@ class PostRepo(IPostRepository):
         for post in self.posts:
             if owner_id == post.owner_id:
                 return self.posts.index(post)
+

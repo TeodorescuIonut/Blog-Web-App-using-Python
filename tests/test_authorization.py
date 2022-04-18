@@ -2,6 +2,8 @@ import pytest
 from tests.test_post_blueprint_owner import add_post
 from main import create_app
 from services.service import ContainerService
+from static.image_seed import DATA_IMAGE
+from tests.test_support_for_image import create_test_image
 
 test_app = create_app(test_config=True)
 

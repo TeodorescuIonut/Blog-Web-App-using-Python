@@ -1,4 +1,5 @@
-from interfaces.image_support_interface import IImageRepo
+from interfaces.image_memory_repo_interface import IImageMemoryRepo
+from interfaces.image_repo_interface import IImageRepo
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
 from interfaces.db_config_interface import IDatabaseConfig
@@ -15,6 +16,7 @@ from databases.database_config import DatabaseConfig
 from databases.database_manager import Database
 from databases.memory_database import MemoryDatabase
 from databases.memory_database_config import MemoryDatabaseConfig
+from repositories.image_memory_repo import ImageMemoryRepo
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
 from repositories.sql_alchemy_post_repo import SQLAlchemyPostRepo
@@ -31,7 +33,8 @@ from services.image_repo import ImageRepo
 
 class ContainerService:
     testing_config: bool
-    memory_post_repo = PostRepo()
+    memory_image_repo = ImageMemoryRepo()
+    memory_post_repo = PostRepo(memory_image_repo)
     memory_user_repo = UserRepo()
     memory_config = MemoryDatabaseConfig()
     memory_upgrade = MemoryDBUpgrade()
@@ -58,7 +61,7 @@ class ContainerService:
         IDatabaseUpgrade: memory_upgrade,
         IPagination: Paginate(),
         IFiltering: Filtering(memory_user_repo),
-        IImageRepo: ImageRepo()
+        IImageMemoryRepo: memory_image_repo
     }
 
     services_sqlalchemy = {

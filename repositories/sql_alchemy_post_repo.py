@@ -80,7 +80,8 @@ class SQLAlchemyPostRepo(IPostRepository):
                owner_id=post.owner_id).returning(posts_table.c.post_id))
         res = conn.execute(stmt).first()[0]
         post.post_id = res
-        image_file.filename = str(post.post_id) + image_file.filename
+        if image_file.filename != '':
+            image_file.filename = str(post.post_id) + image_file.filename
         self.image_service.save_image(image_file, image_file.filename)
         stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
                 values(image=image_file.filename ))
