@@ -56,7 +56,6 @@ class PostBlueprint:
 
     @check_setup
     def blog(self):
-        posts_per_page = 0
         if request.method == "POST":
             posts_per_page = request.form.get("input_no_of_posts")
             if posts_per_page is None:

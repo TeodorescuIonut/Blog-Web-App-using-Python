@@ -20,8 +20,7 @@ def sign_in_user(client, email, password):
     return client.post('/SIGNIN/', data=dict(
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def add_user(client, name, email, password):
@@ -29,8 +28,7 @@ def add_user(client, name, email, password):
         name=name,
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def delete_user(client):
@@ -42,8 +40,7 @@ def update_user(client, name, email, password):
         name=name,
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def view_user(client):

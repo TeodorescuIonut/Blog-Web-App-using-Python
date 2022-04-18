@@ -2,7 +2,6 @@ import pytest
 from tests.test_post_blueprint_owner import add_post
 from main import create_app
 from services.service import ContainerService
-from tests.test_support_for_image import create_test_image
 
 test_app = create_app(test_config=True)
 
@@ -16,8 +15,7 @@ def sign_in_user(client, email, password):
     return client.post('/SIGNIN/', data=dict(
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def sign_out_user(client):
@@ -29,8 +27,7 @@ def add_user(client, name, email, password):
         name=name,
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def test_no_of_posts_below_limit(client):

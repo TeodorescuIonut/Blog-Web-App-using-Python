@@ -20,8 +20,8 @@ class SQLAlchemyUserRepo(IUserRepository):
                          UserSQLAlchemy.user_name,
                          UserSQLAlchemy.user_email,
                          UserSQLAlchemy.user_password,
-                         UserSQLAlchemy.admin).\
-                         order_by(desc(UserSQLAlchemy.user_date_creation)).all()
+                         UserSQLAlchemy.admin). \
+            order_by(desc(UserSQLAlchemy.user_date_creation)).all()
         self.users.clear()
         for row in res:
             user = User("", "", "")
@@ -57,11 +57,10 @@ class SQLAlchemyUserRepo(IUserRepository):
     def create(self, user: User):
         conn = self.database.create_conn()
         users_table = UserSQLAlchemy.__table__
-        stmt = (insert(users_table). \
-                values(user_name=user.user_name,
-                       user_email=user.user_email,
-                       user_password=user.user_password,
-                       admin=user.admin).returning(users_table.c.user_id))
+        stmt = (insert(users_table).values(user_name=user.user_name,
+                                           user_email=user.user_email,
+                                           user_password=user.user_password,
+                                           admin=user.admin).returning(users_table.c.user_id))
         res = conn.execute(stmt).first()[0]
         user.user_id = res
         self.database.close_and_save(conn)
@@ -70,7 +69,7 @@ class SQLAlchemyUserRepo(IUserRepository):
         conn = self.database.create_conn()
         users_table = UserSQLAlchemy.__table__
         user_date_modification = datetime.now().strftime("%B %d %Y %H:%M:%S")
-        stmt = (update(users_table).where(users_table.c.user_id == user.user_id). \
+        stmt = (update(users_table).where(users_table.c.user_id == user.user_id).
                 values(user_name=user.user_name,
                        user_date_modification=user_date_modification,
                        user_email=user.user_email,

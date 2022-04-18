@@ -1,5 +1,3 @@
-import base64
-
 from interfaces.image_memory_repo_interface import IImageMemoryRepo
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
@@ -80,4 +78,3 @@ class PostRepo(IPostRepository):
         for post in self.posts:
             if owner_id == post.owner_id:
                 return self.posts.index(post)
-

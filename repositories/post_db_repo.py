@@ -148,4 +148,3 @@ class PostDbRepo(IPostRepository):
         for post in self.posts:
             if post.post_id == id_post:
                 return self.posts.index(post)
-

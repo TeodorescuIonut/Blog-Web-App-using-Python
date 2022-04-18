@@ -15,8 +15,7 @@ def sign_in_user(client, email, password):
     return client.post('/SIGNIN/', data=dict(
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def sign_out_user(client):
@@ -48,7 +47,6 @@ def test_wrong_user(client):
 
 def test_already_signed_in_user(client):
     ContainerService.memory_config.set_configuration = True
-    response = sign_in_user(client, "bla@yahoo.com", "1234")
     response = sign_in_user(client, "bla@yahoo.com", "1234")
     assert b'You are already logged in.' in response.data
 

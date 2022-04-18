@@ -84,7 +84,7 @@ class SQLAlchemyPostRepo(IPostRepository):
             image_file.filename = str(post.post_id) + image_file.filename
         self.image_service.save_image(image_file, image_file.filename)
         stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
-                values(image=image_file.filename ))
+                values(image=image_file.filename))
         conn.execute(stmt)
         self.database.close_and_save(conn)
 

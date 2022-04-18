@@ -1,7 +1,6 @@
 import pytest
 from services.service import ContainerService
 from main import create_app
-from tests.test_support_for_image import create_test_image
 
 testing_app = create_app(test_config=True)
 
@@ -21,19 +20,17 @@ def sign_in_user(test_client, email, password):
     return test_client.post('/SIGNIN/', data=dict(
         email=email,
         password=password
-    )
-                            , follow_redirects=True)
+    ), follow_redirects=True)
 
 
-def add_post(test_client, title, content, owner, owner_id, image_file = None):
+def add_post(test_client, title, content, owner, owner_id, image_file=None):
     return test_client.post('/POST/CREATE/posts', data=dict(
         title=title,
         owner=owner,
         content=content,
         owner_id=owner_id,
-        image = image_file
-    )
-                            , follow_redirects=True)
+        image=image_file
+    ), follow_redirects=True)
 
 
 def delete_post(test_client):
@@ -45,9 +42,8 @@ def update_post(test_client, title, content, owner, image=None):
         title=title,
         owner=owner,
         content=content,
-        image = image
-    )
-                            , follow_redirects=True)
+        image=image
+    ), follow_redirects=True)
 
 
 def view_post(test_client):

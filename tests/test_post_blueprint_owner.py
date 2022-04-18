@@ -20,8 +20,7 @@ def sign_in_user(client, email, password):
     return client.post('/SIGNIN/', data=dict(
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def sign_out_user(client):
@@ -35,8 +34,7 @@ def add_post(client, title, content, owner, owner_id, image=''):
         content=content,
         owner_id=owner_id,
         image=image
-    )
-                       , follow_redirects=True, content_type='multipart/form-data')
+    ), follow_redirects=True, content_type='multipart/form-data')
 
 
 def delete_post(client):
@@ -48,8 +46,7 @@ def update_post(client, title, content, owner):
         title=title,
         owner=owner,
         content=content
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def add_user(client, name, email, password):
@@ -57,8 +54,7 @@ def add_user(client, name, email, password):
         name=name,
         email=email,
         password=password
-    )
-                       , follow_redirects=True)
+    ), follow_redirects=True)
 
 
 def view_post(client):

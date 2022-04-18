@@ -18,7 +18,6 @@ class DatabaseUpgradeAndCreate(IDatabaseUpgrade):
     def upgrade_db(self):
         conn = self.database.create_conn()
         curs = conn.cursor()
-        conn
         if self.is_latest_db_version() is False:
             for query in queries:
                 curs.execute(query)

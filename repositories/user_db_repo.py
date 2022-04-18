@@ -63,9 +63,9 @@ class UserDbRepo(IUserRepository):
     def get_by_id(self, user_id: int) -> User:
         conn = self.database.create_conn()
         cur = conn.cursor()
-        cur.execute("""SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'),
-        to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password ,admin
-        FROM users WHERE user_id = %s""", (user_id,))
+        cur.execute("""SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'), to_char(
+        user_date_modification, 'dd/mm/yyyy HH24:MI'), user_name, user_email, user_password ,
+        admin FROM users WHERE user_id = %s""", (user_id,))
         data = cur.fetchone()
         if data is None:
             return None
