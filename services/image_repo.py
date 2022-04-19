@@ -4,9 +4,12 @@ from interfaces.image_repo_interface import IImageRepo
 
 
 class ImageRepo(IImageRepo):
+    upload_path = '/static/images/'
+    default_image_path = '/static/images/default.jpg'
+
     def remove_image(self, filename):
         if filename != '' and filename is not None:
-            path = './static/images/' + filename
+            path = f".{self.upload_path}" + filename
             if os.path.exists(path):
                 os.remove(path)
             else:
@@ -14,5 +17,8 @@ class ImageRepo(IImageRepo):
 
     def save_image(self, file, filename):
         if file:
-            path = os.path.join(os.path.abspath('./static/images'), filename)
+            path = os.path.join(os.path.abspath(f".{self.upload_path}"), filename)
             file.save(path)
+            file.filename = self.upload_path + filename
+        if filename == '':
+            file.filename = self.default_image_path

@@ -24,7 +24,7 @@ class UserBlueprint:
         self.user_bp = Blueprint('user_bp', __name__)
         self.auth = authentication
 
-    def create(self):
+    def create(self) -> object:
         self.user_bp.route('/')(self.home)
         self.user_bp.route('/USER')(self.home)
         self.user_bp.route('/CREATE/users', methods=["GET", "POST"])(self.add_user)

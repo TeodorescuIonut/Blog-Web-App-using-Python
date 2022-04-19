@@ -38,13 +38,7 @@
     {% for post in posts %}
     <div class="posts col-md-4">
         <div class="card mb-4 shadow-sm" >
-            {% if post.image %}
-                {%set image_path = "../static/images/"+post.image%}
-            {%else%}
-                {%set image_path = 'https://www.groupestate.gr/images/joomlart/demo/default.jpg'%}
-            {% endif %}
-            <img src="{{image_path}}" class="card-img-top picture" alt="...">
-
+            <img src="{{post.image}}" class="card-img-top picture" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{ post.post_title }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ post.post_owner }}</h6>
