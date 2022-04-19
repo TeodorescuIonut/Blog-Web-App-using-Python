@@ -1,4 +1,4 @@
-from interfaces.image_memory_repo_interface import IImageMemoryRepo
+from interfaces.memory_image_interface import IImageMemoryRepo
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post

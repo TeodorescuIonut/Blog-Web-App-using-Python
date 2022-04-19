@@ -1,4 +1,4 @@
-from interfaces.image_memory_repo_interface import IImageMemoryRepo
+from interfaces.memory_image_interface import IImageMemoryRepo
 from interfaces.image_repo_interface import IImageRepo
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
@@ -16,7 +16,7 @@ from databases.database_config import DatabaseConfig
 from databases.database_manager import Database
 from databases.memory_database import MemoryDatabase
 from databases.memory_database_config import MemoryDatabaseConfig
-from repositories.image_memory_repo import ImageMemoryRepo
+from repositories.memory_image_repo import ImageMemoryRepo
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
 from repositories.sql_alchemy_post_repo import SQLAlchemyPostRepo
