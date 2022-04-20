@@ -24,10 +24,7 @@ class PostRepo(IPostRepository):
                 return post
 
     def create(self, post, image_file):
-        if post.image is None:
-            post.image = 'default.png'
-        else:
-            post.image = self.image_service.save_image(image_file)
+        post.image = self.image_service.save_image(image_file)
         post.post_id = self.count
         self.posts.append(post)
         self.count += 1
