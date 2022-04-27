@@ -16,6 +16,7 @@ from databases.database_config import DatabaseConfig
 from databases.database_manager import Database
 from databases.memory_database import MemoryDatabase
 from databases.memory_database_config import MemoryDatabaseConfig
+from interfaces.user_statistics_interface import IUserStatistics
 from repositories.memory_image_repo import ImageMemoryRepo
 from repositories.post_db_repo import PostDbRepo
 from repositories.post_repo import PostRepo
@@ -29,6 +30,7 @@ from services.password_hash import PasswordHashing
 from services.authentication import Authentication
 from services.database_upgrade_create import DatabaseUpgradeAndCreate
 from services.image_repo import ImageRepo
+from services.user_statistics import UserStatistics
 
 
 class ContainerService:
@@ -49,7 +51,9 @@ class ContainerService:
         IDatabaseUpgrade: DatabaseUpgradeAndCreate(Database(DatabaseConfig()), DatabaseConfig()),
         IPagination: Paginate(),
         IFiltering: Filtering(UserDbRepo(Database(DatabaseConfig()))),
-        IImageRepo: ImageRepo()
+        IImageRepo: ImageRepo(),
+        IUserStatistics: UserStatistics(PostDbRepo(Database(DatabaseConfig()), ImageRepo()),
+                                        UserDbRepo(Database(DatabaseConfig())))
     }
     services_memory = {
         IPostRepository: memory_post_repo,
@@ -61,7 +65,8 @@ class ContainerService:
         IDatabaseUpgrade: memory_upgrade,
         IPagination: Paginate(),
         IFiltering: Filtering(memory_user_repo),
-        IImageMemoryRepo: memory_image_repo
+        IImageMemoryRepo: memory_image_repo,
+        IUserStatistics: UserStatistics(memory_post_repo, memory_user_repo)
     }
 
     services_sqlalchemy = {
@@ -78,7 +83,10 @@ class ContainerService:
             DatabaseConfig()),
         IPagination: Paginate(),
         IFiltering: Filtering(SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig()))),
-        IImageRepo: ImageRepo()
+        IImageRepo: ImageRepo(),
+        IUserStatistics: UserStatistics(SQLAlchemyPostRepo(SQLAlchemyDatabase(DatabaseConfig()),
+                                                           ImageRepo()),
+                                        SQLAlchemyUserRepo(SQLAlchemyDatabase(DatabaseConfig())))
     }
 
     @classmethod

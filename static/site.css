@@ -127,3 +127,15 @@
     height: 20vh;
 }
 }
+
+@media screen and (max-width: 992px){
+.search-form{
+    display: none;
+}
+
+.sign-in{
+    display: block!important;
+    width: fit-content;
+}
+
+}

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+
+{% endblock %}
+{% block content %}
+
+<h3>{{response}}</h3>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">User</th>
+      <th scope="col">Date</th>
+      <th scope="col">Number of posts</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in users%}
+    <tr>
+      <th scope="row">{{user.user_name}}</th>
+      <td>{{user.date}}</td>
+      <td>{{user.count}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock %}

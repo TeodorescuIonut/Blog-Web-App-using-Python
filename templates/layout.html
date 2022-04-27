@@ -30,6 +30,7 @@
                     <ul class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton2">
                         <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.add_user') }}"><i class="fa-solid fa-user"></i> Add User</a></li>
                         <li><a class="dropdown-item text-light bg-dark" href="{{ url_for('user_bp.home') }}"><i class="fa-solid fa-user-group"></i> Users</a></li>
+                        <li><a class="dropdown-item text-light bg-dark" href="{{url_for('user_statistics.statistics')}}"><i class="fa-solid fa-chart-column"></i> Statistics</a></li>
                     </ul>
                 </li>
                 {%endif%}
@@ -54,7 +55,7 @@
                 {% else %}
                 {%set buttonTexts = "Sign In"%}
                 {%set urlPages = url_for('authenticate.sign_in')%}
-                <a href="{{urlPages}}" class="d-flex btn btn-primary">{{buttonTexts}}</a>
+                <a href="{{urlPages}}" class="sign-in d-flex btn btn-primary">{{buttonTexts}}</a>
               {%endif%}
             
             </div>  

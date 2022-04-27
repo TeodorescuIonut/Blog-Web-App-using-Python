@@ -1,4 +1,6 @@
 from flask import Flask
+
+from routes.user_statistics_bp import user_statistics
 from services.service import ContainerService
 from routes.post_bp import PostBlueprint
 from routes.user_bp import UserBlueprint
@@ -16,4 +18,5 @@ def create_app(test_config=False):
     app.register_blueprint(authenticate)
     app.register_blueprint(post_bp, url_prefix='/POST')
     app.register_blueprint(user_bp, url_prefix='/USER')
+    app.register_blueprint(user_statistics)
     return app
