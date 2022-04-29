@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, render_template
 
 from decorators.authorization.check_if_admin import check_if_admin
 from decorators.dependency_injection.injector_di import injector
@@ -19,5 +19,5 @@ def statistics(auth: IAuthentication, data_statistics: IUserStatistics):
     else:
         user = None
     users = data_statistics.get_statistics()
-    return render_template("statistics.html", users=users,logged_user=user, logged_in=auth.is_logged_in())
-
+    return render_template("statistics.html", users=users,
+                           logged_user=user, logged_in=auth.is_logged_in())

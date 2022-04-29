@@ -1,7 +1,5 @@
 import pytest
 from main import create_app
-from io import BytesIO
-from PIL import Image
 
 from services.service import ContainerService
 

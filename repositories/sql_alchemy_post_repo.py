@@ -73,11 +73,11 @@ class SQLAlchemyPostRepo(IPostRepository):
     def create(self, post: Post, image_file):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
-        stmt = (insert(posts_table).\
-        values(post_title=post.post_title,
-               post_content=post.post_contents,
-               image=image_file.filename,
-               owner_id=post.owner_id).returning(posts_table.c.post_id))
+        stmt = (insert(posts_table).
+                values(post_title=post.post_title,
+                       post_content=post.post_contents,
+                       image=image_file.filename,
+                       owner_id=post.owner_id).returning(posts_table.c.post_id))
         res = conn.execute(stmt).first()[0]
         post.post_id = res
         if image_file.filename != '':
