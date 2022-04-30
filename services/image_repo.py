@@ -5,7 +5,7 @@ from interfaces.image_repo_interface import IImageRepo
 
 class ImageRepo(IImageRepo):
     upload_path = '/static/images/'
-    default_image_path = '/static/images/default.jpg'
+    default_image_path = '/static/default_post_image/default.jpg'
 
     def remove_image(self, filename):
         if filename != '' and filename is not None:
