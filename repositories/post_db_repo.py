@@ -39,6 +39,8 @@ class PostDbRepo(IPostRepository):
     def get_all(self, per_page, offset, selected_owner_id) -> []:
         conn = self.database.create_conn()
         cur = conn.cursor()
+        if per_page is None:
+            per_page = 'All'
         query = ""
         if selected_owner_id != -1:
             query = f"WHERE owner_id = {selected_owner_id}"

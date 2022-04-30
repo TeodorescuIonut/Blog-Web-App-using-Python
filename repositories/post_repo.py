@@ -1,4 +1,6 @@
-from interfaces.memory_image_interface import IImageMemoryRepo
+import datetime
+
+from interfaces.image_repo_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
 from models.post_preview import PostPreview
 from models.post import Post
@@ -9,7 +11,7 @@ class PostRepo(IPostRepository):
     count = 0
     no_posts = 0
 
-    def __init__(self, image_service: IImageMemoryRepo):
+    def __init__(self, image_service: IImageRepo):
         self.image_service = image_service
 
     def get_all(self, per_page, offset, selected_owner_id) -> []:
@@ -26,6 +28,8 @@ class PostRepo(IPostRepository):
     def create(self, post, image_file):
         post.image = self.image_service.save_image(image_file)
         post.post_id = self.count
+        format_data = '%B %d %Y %H:%M:%S'
+        post.post_date_creation = datetime.datetime.strptime(post.post_date_creation, format_data)
         self.posts.append(post)
         self.count += 1
 

@@ -1,4 +1,3 @@
-from interfaces.memory_image_interface import IImageMemoryRepo
 from interfaces.image_repo_interface import IImageRepo
 from interfaces.database_upgrade_interface import IDatabaseUpgrade
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
@@ -65,7 +64,7 @@ class ContainerService:
         IDatabaseUpgrade: memory_upgrade,
         IPagination: Paginate(),
         IFiltering: Filtering(memory_user_repo),
-        IImageMemoryRepo: memory_image_repo,
+        IImageRepo: memory_image_repo,
         IUserStatistics: UserStatistics(memory_post_repo, memory_user_repo)
     }
 
