@@ -12,7 +12,7 @@ class UserStatistics(IUserStatistics):
         self.post_repo = post_repo
         self.user_repo = user_repo
 
-    def get_statistics(self):
+    def get(self):
         per_page = None
         offset = 0
         users = self.user_repo.get_all()

@@ -13,11 +13,11 @@ user_statistics = Blueprint('user_statistics', __name__, url_prefix='/statistics
 @injector
 @check_setup
 @check_if_admin
-def statistics(auth: IAuthentication, data_statistics: IUserStatistics):
+def statistics(auth: IAuthentication, user_statistics_service: IUserStatistics):
     if auth.is_logged_in():
         user = auth.get_user_details()
     else:
         user = None
-    users = data_statistics.get_statistics()
+    users = user_statistics_service.get()
     return render_template("statistics.html", users=users,
                            logged_user=user, logged_in=auth.is_logged_in())
