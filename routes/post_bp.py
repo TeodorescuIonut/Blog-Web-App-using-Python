@@ -36,6 +36,7 @@ class PostBlueprint:
         self.post_bp.route('/POST', methods=["GET", "POST"])(self.blog)
         self.post_bp.route('/CREATE/posts', methods=["GET", "POST"])(self.add_post)
         self.post_bp.route('/VIEW/<int:post_id>')(self.view_post)
+        self.post_bp.route('/api/post/<int:post_id>')(self.api_post)
         self.post_bp.route('/UPDATE/<int:post_id>', methods=["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>', methods=["GET", "POST"])(self.delete_post)
         self.post_bp.context_processor(self.context_processor)
@@ -101,7 +102,7 @@ class PostBlueprint:
                     content,
                     owner.user_id,
                     image_file
-                    )
+                )
             self.repo.create(new_post, image_file)
             flash("Post added")
             return redirect(url_for('post_bp.view_post', post_id=new_post.post_id))
@@ -112,6 +113,11 @@ class PostBlueprint:
     def view_post(self, post_id):
         post = self.repo.get_by_id(post_id)
         return render_template("viewPost.html", post=post)
+
+    @check_setup
+    @check_post_exists
+    def api_post(self, post_id):
+        return render_template("post_api.html", post_id=post_id)
 
     @check_setup
     @check_post_exists
