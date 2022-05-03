@@ -1,9 +1,7 @@
-import datetime
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.user_statistics_interface import IUserStatistics
 from models.data_statistics import DataStatistics
-from repositories.sql_alchemy_post_repo import SQLAlchemyPostRepo
 
 
 class UserStatistics(IUserStatistics):

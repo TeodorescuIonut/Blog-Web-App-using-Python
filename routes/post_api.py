@@ -4,7 +4,7 @@ from decorators.dependency_injection.injector_di import injector
 from decorators.setup.setup import check_setup
 from interfaces.post_repository_interface import IPostRepository
 
-api = Blueprint('post_api', __name__)
+api = Blueprint('api', __name__)
 
 
 @api.route('/api/post/<int:post_id>/')
