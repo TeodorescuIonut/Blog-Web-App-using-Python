@@ -40,10 +40,10 @@
         <div class="card mb-4 shadow-sm" >
             <img src="{{post.image}}" class="card-img-top picture" alt="...">
             <div class="card-body">
-              <h5 class="card-title">{{ post.post_title }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ post.post_owner }}</h6>
-              <p class="card-text">{{ post.post_contents}}</p>
-              <a href="{{url_for('post_bp.view_post',post_id = post.post_id )}}" class="streched-link">Read More</a>
+              <h5 class="card-title">{{ post.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ post.owner }}</h6>
+              <p class="card-text">{{ post.contents}}</p>
+              <a href="{{url_for('post_bp.view_post',post_id = post.id )}}" class="streched-link">Read More</a>
             </div>
           </div>
     </div>

@@ -19,8 +19,8 @@ class UserStatistics(IUserStatistics):
             posts_per_user = self.post_repo.get_all(per_page, offset, user.user_id)
             count = 0
             for post in posts_per_user:
-                date = post.post_date_creation.strftime(
-                        "%B") + '-' + post.post_date_creation.strftime("%Y")
+                date = post.created_at.strftime(
+                        "%B") + '-' + post.created_at.strftime("%Y")
                 if any(data.user_name == user.user_name and data.date == date for data in datas) is False:
                     count = 0
                     datas.append(DataStatistics(user.user_name, date, count))

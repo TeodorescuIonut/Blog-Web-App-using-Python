@@ -6,7 +6,7 @@
 <br/>
 {% if buttonText == "Update" %}
     {%set buttonText = "Update"%}
-    {%set urlPage = url_for('post_bp.update_post',post_id = post.post_id)%}
+    {%set urlPage = url_for('post_bp.update_post',post_id = post.id)%}
 {% else %}
     {%set buttonText = "Submit"%}
     {%set urlPage = url_for('post_bp.add_post')%}
@@ -14,9 +14,9 @@
 <form id="form_add" action="{{urlPage}}" method="post" enctype="multipart/form-data">
     <div class="form-group" >
         <label for="title">Title</label>
-        <input class="form-control" type="text" id="title" name="title" value="{{post.post_title}}"required><br>
+        <input class="form-control" type="text" id="title" name="title" value="{{post.title}}"required><br>
         <label for="content">Content</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" name="content"value="{{post.post_contents}}"required>{{post.post_contents}}</textarea><br>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" name="content"value="{{post.contents}}"required>{{post.contents}}</textarea><br>
         <div class="mb-3">
           <label for="formFile" class="form-label">Add an image file:</label>
           <input class="form-control" type="file" id="formFile" name ="image" >

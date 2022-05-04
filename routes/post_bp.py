@@ -105,7 +105,7 @@ class PostBlueprint:
                 )
             self.repo.create(new_post, image_file)
             flash("Post added")
-            return redirect(url_for('post_bp.view_post', post_id=new_post.post_id))
+            return redirect(url_for('post_bp.view_post', post_id=new_post.id))
         return render_template("add_post.html", post=Post, urlPage=self.add_post)
 
     @check_setup
@@ -145,14 +145,14 @@ class PostBlueprint:
                                        post=post, buttonText="Update",
                                        urlPage=self.update_post)
             else:
-                post.post_id = post_id
-                post.post_title = post_title
-                post.post_contents = content
-                post.post_date_modification = datetime.now().strftime("%B %d %Y")
+                post.id = post_id
+                post.title = post_title
+                post.contents = content
+                post.modified_at = datetime.now().strftime("%B %d %Y")
                 post.image = post.image
                 self.repo.update(post, image_file)
                 flash("Post updated")
-                return render_template('viewPost.html', post_id=post.post_id, post=post)
+                return render_template('viewPost.html', post_id=post.id, post=post)
         return render_template("add_post.html", post=post, buttonText="Update")
 
     @check_setup

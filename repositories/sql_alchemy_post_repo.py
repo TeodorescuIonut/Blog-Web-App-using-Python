@@ -35,13 +35,13 @@ class SQLAlchemyPostRepo(IPostRepository):
             self.no_posts = res[0][5]
         for row in res:
             post = Post("", "", "", "")
-            post.post_id = row[0]
-            post.post_date_creation = row[1]
-            post.post_date_modification = row[2]
-            post.post_title = row[3]
+            post.id = row[0]
+            post.created_at = row[1]
+            post.modified_at = row[2]
+            post.title = row[3]
             post.image = row[4]
-            post.post_contents = row[6]
-            post.post_owner = row[7]
+            post.contents = row[6]
+            post.owner = row[7]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
         self.database.close_and_save(conn)
@@ -50,7 +50,7 @@ class SQLAlchemyPostRepo(IPostRepository):
     def check_post_exists(self, post_to_check: Post) -> bool:
         if len(self.posts) > 0:
             for post in self.posts:
-                if post_to_check.post_id == post.post_id:
+                if post_to_check.id == post.id:
                     return True
         return False
 
@@ -74,16 +74,16 @@ class SQLAlchemyPostRepo(IPostRepository):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
         stmt = (insert(posts_table).
-                values(post_title=post.post_title,
-                       post_content=post.post_contents,
+                values(post_title=post.title,
+                       post_content=post.contents,
                        image=image_file.filename,
                        owner_id=post.owner_id).returning(posts_table.c.post_id))
         res = conn.execute(stmt).first()[0]
-        post.post_id = res
+        post.id = res
         if image_file.filename != '':
-            image_file.filename = str(post.post_id) + image_file.filename
+            image_file.filename = str(post.id) + image_file.filename
         self.image_service.save_image(image_file, image_file.filename)
-        stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
+        stmt = (update(posts_table).where(posts_table.c.post_id == post.id).
                 values(image=image_file.filename))
         conn.execute(stmt)
         self.database.close_and_save(conn)
@@ -91,14 +91,14 @@ class SQLAlchemyPostRepo(IPostRepository):
     def update(self, post: Post, image_file):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
-        if image_file.filename != '' and str(post.post_id) + image_file.filename != post.image:
-            image_file.filename = str(post.post_id) + image_file.filename
+        if image_file.filename != '' and str(post.id) + image_file.filename != post.image:
+            image_file.filename = str(post.id) + image_file.filename
             self.image_service.save_image(image_file, image_file.filename)
             self.image_service.remove_image(post.image)
             post.image = image_file.filename
-        stmt = (update(posts_table).where(posts_table.c.post_id == post.post_id).
-                values(post_title=post.post_title,
-                       post_content=post.post_contents,
+        stmt = (update(posts_table).where(posts_table.c.post_id == post.id).
+                values(post_title=post.title,
+                       post_content=post.contents,
                        image=post.image))
         conn.execute(stmt)
         self.database.close_and_save(conn)
@@ -106,7 +106,7 @@ class SQLAlchemyPostRepo(IPostRepository):
     def delete(self, post):
         conn = self.database.create_conn()
         posts_table = PostSQLAlchemy.__table__
-        stmt = (delete(posts_table).where(posts_table.c.post_id == post.post_id))
+        stmt = (delete(posts_table).where(posts_table.c.post_id == post.id))
         self.image_service.remove_image(post.image)
         conn.execute(stmt)
         self.database.close_and_save(conn)

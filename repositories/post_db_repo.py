@@ -21,19 +21,19 @@ class PostDbRepo(IPostRepository):
                                   owner_id,
                                   image)
                 VALUES (%s, %s, %s, %s) RETURNING post_id""",
-            (post.post_title, post.post_contents, post.owner_id, image_file.filename),
+            (post.title, post.contents, post.owner_id, image_file.filename),
         )
-        post.post_id = cur.fetchone()[0]
+        post.id = cur.fetchone()[0]
         self.posts.append(post)
         if image_file.filename != '':
-            image_file.filename = str(post.post_id) + image_file.filename
+            image_file.filename = str(post.id) + image_file.filename
         self.image_service.save_image(image_file, image_file.filename)
         cur.execute("""
                 UPDATE posts
                 SET
                     image = %s
                 WHERE post_id = %s
-                """, (image_file.filename, post.post_id))
+                """, (image_file.filename, post.id))
         self.database.close_and_save(conn, cur)
 
     def get_all(self, per_page, offset, selected_owner_id) -> []:
@@ -63,14 +63,14 @@ class PostDbRepo(IPostRepository):
             self.no_posts = rows[0][8]
         for row in rows:
             post = Post("", "", "", "")
-            post.post_id = row[0]
-            post.post_date_creation = row[1]
-            post.post_date_modification = row[2]
-            post.post_title = row[3]
-            post.post_contents = row[4]
+            post.id = row[0]
+            post.created_at = row[1]
+            post.modified_at = row[2]
+            post.title = row[3]
+            post.contents = row[4]
             post.owner_id = row[5]
             post.image = row[6]
-            post.post_owner = row[7]
+            post.owner = row[7]
             if self.check_post_exists(post) is False:
                 self.posts.append(post)
         self.database.close_and_save(conn, cur)
@@ -79,7 +79,7 @@ class PostDbRepo(IPostRepository):
     def check_post_exists(self, post_to_check: Post) -> bool:
         if len(self.posts) > 0:
             for post in self.posts:
-                if post_to_check.post_id == post.post_id:
+                if post_to_check.id == post.id:
                     return True
         return False
 
@@ -101,14 +101,14 @@ class PostDbRepo(IPostRepository):
         data = cur.fetchone()
         post = Post("", "", "", "")
         if data is not None:
-            post.post_id = data[0]
-            post.post_date_creation = data[1]
-            post.post_date_modification = data[2]
-            post.post_title = data[3]
-            post.post_contents = data[4]
+            post.id = data[0]
+            post.created_at = data[1]
+            post.modified_at = data[2]
+            post.title = data[3]
+            post.contents = data[4]
             post.owner_id = data[5]
             post.image = data[6]
-            post.post_owner = data[7]
+            post.owner = data[7]
             self.database.close_and_save(conn, cur)
         else:
             post = None
@@ -117,12 +117,12 @@ class PostDbRepo(IPostRepository):
     def update(self, post: Post, image_file) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
-        id_post = post.post_id
+        id_post = post.id
         index_post = self.get_post_index(id_post)
         self.posts.remove(self.posts[index_post])
         self.posts.append(post)
-        if image_file.filename != '' and str(post.post_id) + image_file.filename != post.image:
-            image_file.filename = str(post.post_id) + image_file.filename
+        if image_file.filename != '' and str(post.id) + image_file.filename != post.image:
+            image_file.filename = str(post.id) + image_file.filename
             self.image_service.save_image(image_file, image_file.filename)
             self.image_service.remove_image(post.image)
             post.image = image_file.filename
@@ -132,13 +132,13 @@ class PostDbRepo(IPostRepository):
             post_content = %s,
             image = %s
         WHERE post_id = %s RETURNING *
-        """, (post.post_title, post.post_contents, post.image, post.post_id))
+        """, (post.title, post.contents, post.image, post.id))
         self.database.close_and_save(conn, cur)
 
     def delete(self, post: Post) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
-        id_post = post.post_id
+        id_post = post.id
         cur.execute('DELETE FROM posts WHERE post_id= %s', (id_post,))
         self.database.close_and_save(conn, cur)
         index_post = self.get_post_index(id_post)
@@ -148,5 +148,5 @@ class PostDbRepo(IPostRepository):
 
     def get_post_index(self, id_post: int) -> int:
         for post in self.posts:
-            if post.post_id == id_post:
+            if post.id == id_post:
                 return self.posts.index(post)

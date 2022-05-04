@@ -3,11 +3,11 @@ from datetime import datetime
 
 class Post:
     def __init__(self, owner, title, contents, owner_id, image=None, post_id=0):
-        self.post_id = post_id
-        self.post_owner = str(owner)
-        self.post_title = str(title)
-        self.post_contents = str(contents)
-        self.post_date_creation = datetime.now().strftime("%B %d %Y %H:%M:%S")
-        self.post_date_modification = ''
+        self.id = post_id
+        self.owner = str(owner)
+        self.title = str(title)
+        self.contents = str(contents)
+        self.created_at = datetime.now().strftime("%B %d %Y %H:%M:%S")
+        self.modified_at = ''
         self.owner_id = owner_id
         self.image = image

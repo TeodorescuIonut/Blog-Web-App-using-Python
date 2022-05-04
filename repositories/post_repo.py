@@ -16,20 +16,20 @@ class PostRepo(IPostRepository):
 
     def get_all(self, per_page, offset, selected_owner_id) -> []:
         sorted_array = sorted(self.get_previews(selected_owner_id),
-                              key=lambda x: x.post_date_creation, reverse=True)
+                              key=lambda x: x.created_at, reverse=True)
         self.no_posts = len(sorted_array)
         return sorted_array
 
     def get_by_id(self, post_id: int) -> Post:
         for post in self.posts:
-            if post.post_id == post_id:
+            if post.id == post_id:
                 return post
 
     def create(self, post, image_file):
         post.image = self.image_service.save_image(image_file)
-        post.post_id = self.count
+        post.id = self.count
         format_data = '%B %d %Y %H:%M:%S'
-        post.post_date_creation = datetime.datetime.strptime(post.post_date_creation, format_data)
+        post.created_at = datetime.datetime.strptime(post.created_at, format_data)
         self.posts.append(post)
         self.count += 1
 
@@ -55,7 +55,7 @@ class PostRepo(IPostRepository):
     def update_users_posts(self, updated_name, user_id):
         for post in self.posts:
             if post.owner_id == user_id:
-                post.post_owner = updated_name
+                post.owner = updated_name
 
     def get_previews(self, selected_owner_id) -> []:
         posts_previews = []

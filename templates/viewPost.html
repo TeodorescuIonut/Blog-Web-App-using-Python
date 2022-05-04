@@ -14,17 +14,17 @@
   <div class="col-md-12 blog-main">
     <div class="blog-post">
       <img src="{{post.image}}" class="card-img-top view-picture" alt="...">
-      <h2 class="blog-post-title">{{ post.post_title }}</h2>
+      <h2 class="blog-post-title">{{ post.title }}</h2>
       <br>
       <i class="d-inline far fa-clock"></i>
-      <p class="d-inline blog-post-meta">{{ post.post_date_creation }} by <a href="{{url_for_id}}">{{post.post_owner}}</a></p><br>
-      <p class="post-content">{{ post.post_contents }}</p>
-      {% if post.post_date_modification != ""%}
-      <p class="card-text"><small class="text-muted"> Modified on {{post.post_date_modification}}</small></p>
+      <p class="d-inline blog-post-meta">{{ post.created_at }} by <a href="{{url_for_id}}">{{post.owner}}</a></p><br>
+      <p class="post-content">{{ post.contents }}</p>
+      {% if post.modified_at != ""%}
+      <p class="card-text"><small class="text-muted"> Modified on {{post.modified_at}}</small></p>
       {%endif%}
       <!-- Button trigger modal -->
       {%if logged_in is true and logged_user.admin is true or logged_user.user_id == post.owner_id %}
-      <a href="{{url_for('post_bp.update_post',post_id = post.post_id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
+      <a href="{{url_for('post_bp.update_post',post_id = post.id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
       <a class="d-inline btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#exampleModal">
           Delete
       </a>
@@ -35,7 +35,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Post {{ post.post_title }}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Delete Post {{ post.title }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -45,7 +45,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="{{url_for('post_bp.delete_post',post_id = post.post_id )}}" class="btn btn-primary">Yes</a>
+                <a href="{{url_for('post_bp.delete_post',post_id = post.id )}}" class="btn btn-primary">Yes</a>
               </div>
             </div>
           </div>
