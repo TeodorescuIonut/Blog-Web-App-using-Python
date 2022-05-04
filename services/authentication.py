@@ -17,10 +17,10 @@ class Authentication(IAuthentication):
 
     def sign_in(self, user_email, password) -> bool:
         self.user: User = self.repo.get_user_by_email(user_email)
-        if self.user is not None and self.password_hash.check_password(self.user.user_password,
+        if self.user is not None and self.password_hash.check_password(self.user.password,
                                                                        password):
-            session['user_id'] = self.user.user_id
-            session['user_name'] = self.user.user_name
+            session['user_id'] = self.user.id
+            session['user_name'] = self.user.name
             if self.user.admin is True:
                 session['admin'] = "true"
             else:

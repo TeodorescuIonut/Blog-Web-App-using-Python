@@ -9,22 +9,22 @@ class UserRepo(IUserRepository):
     users.append(User("admin", "admin@localhost.com", generate_password_hash("1234"), True, 999))
 
     def get_all(self) -> []:
-        sorted_array = sorted(self.users, key=lambda x: x.user_date_creation, reverse=True)
+        sorted_array = sorted(self.users, key=lambda x: x.created_at, reverse=True)
         return sorted_array
 
     def get_by_id(self, user_id: int) -> User:
         for user in self.users:
-            if user.user_id == user_id:
+            if user.id == user_id:
                 return user
 
     def check_user_email(self, user_to_check: User) -> bool:
         if len(self.users) > 0:
             for user in self.users:
-                if user_to_check.user_email == user.user_email:
+                if user_to_check.email == user.email:
                     return True
 
     def create(self, user: User):
-        user.user_id = self.count
+        user.id = self.count
         self.users.append(user)
         self.count += 1
 
@@ -37,5 +37,5 @@ class UserRepo(IUserRepository):
 
     def get_user_by_email(self, user_email):
         for user in self.users:
-            if user.user_email == user_email:
+            if user.email == user_email:
                 return user

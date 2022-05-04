@@ -9,20 +9,20 @@
   <div class="col-md-12 blog-main">
     <div class="blog-post text-center">
       <img class="avatar" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt="">
-      <h2 class="blog-post-title">{{ user.user_name }}</h2>
+      <h2 class="blog-post-title">{{ user.name }}</h2>
       <br>
       {% if user.admin is true%}
       <p class="d-block link-primary"><strong>admin</strong></p>
       {%endif%}
       <i class="d-inline far fa-clock"></i>
-      <p class="d-inline blog-post-meta">{{ user.user_date_creation }} </p><br>
-      <i class="d-inline fa-solid fa-envelope"></i><a class='d-inline' href="#">{{user.user_email}}</a>
-      {% if user.user_date_modification != ""%}
-      <p class="card-text"><small class="text-muted"> Modified on {{user.user_date_modification}}</small></p>
+      <p class="d-inline blog-post-meta">{{ user.created_at }} </p><br>
+      <i class="d-inline fa-solid fa-envelope"></i><a class='d-inline' href="#">{{user.email}}</a>
+      {% if user.modified_at != ""%}
+      <p class="card-text"><small class="text-muted"> Modified on {{user.modified_at}}</small></p>
       {%endif%}
       <!-- Button trigger modal -->
-      {%if logged_in is true and logged_user.admin is true or logged_user.user_id == user.user_id %}
-      <a href="{{url_for('user_bp.update_user',user_id = user.user_id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
+      {%if logged_in is true and logged_user.admin is true or logged_user.id == user.id %}
+      <a href="{{url_for('user_bp.update_user',user_id = user.id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
       {%if logged_in is true and logged_user.admin is true%}
       <a class="d-inline btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#exampleModal">
           Delete
@@ -34,7 +34,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete User {{ user.user_name }}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Delete User {{ user.name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -44,7 +44,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="{{url_for('user_bp.delete_user',user_id = user.user_id )}}" class="btn btn-primary">Yes</a>
+                <a href="{{url_for('user_bp.delete_user',user_id = user.id )}}" class="btn btn-primary">Yes</a>
               </div>
             </div>
           </div>

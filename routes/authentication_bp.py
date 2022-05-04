@@ -20,7 +20,7 @@ def sign_in(authentication: IAuthentication):
         user_password = request.form.get("password")
         if authentication.sign_in(user_email, user_password):
             user: User = authentication.get_user_details()
-            flash(f"Welcome back {user.user_name}")
+            flash(f"Welcome back {user.name}")
             return redirect(url_for('post_bp.blog'))
         else:
             flash("Wrong password or user, please try again.")

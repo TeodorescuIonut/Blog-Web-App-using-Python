@@ -16,9 +16,9 @@ class UserDbRepo(IUserRepository):
         cur = conn.cursor()
         cur.execute("""INSERT INTO users (user_name, user_email, user_password, admin)
         VALUES (%s, %s, %s, %s) RETURNING user_id""",
-                    (user.user_name, user.user_email, user.user_password, user.admin),
+                    (user.name, user.email, user.password, user.admin),
                     )
-        user.user_id = cur.fetchone()[0]
+        user.id = cur.fetchone()[0]
         self.users.append(user)
         self.database.close_and_save(conn, cur)
 
@@ -32,12 +32,12 @@ class UserDbRepo(IUserRepository):
         self.users.clear()
         for row in rows:
             user = User("", "", "")
-            user.user_id = row[0]
-            user.user_date_creation = row[1]
-            user.user_date_modification = row[2]
-            user.user_name = row[3]
-            user.user_email = row[4]
-            user.user_password = row[5]
+            user.id = row[0]
+            user.created_at = row[1]
+            user.modified_at = row[2]
+            user.name = row[3]
+            user.email = row[4]
+            user.password = row[5]
             user.admin = row[6]
             if self.check_user_id(user) is False:
                 self.users.append(user)
@@ -47,7 +47,7 @@ class UserDbRepo(IUserRepository):
     def check_user_id(self, user_to_check: User) -> bool:
         if len(self.users) > 0:
             for user in self.users:
-                if user_to_check.user_id == user.user_id:
+                if user_to_check.id == user.id:
                     return True
         return False
 
@@ -57,7 +57,7 @@ class UserDbRepo(IUserRepository):
         cur.execute("""SELECT user_id,to_char(user_date_creation, 'dd/mm/yyyy HH24:MI'),
         to_char(user_date_modification, 'dd/mm/yyyy HH24:MI'), 
         user_name, user_email, user_password
-        FROM users WHERE user_email = %s""", (user_to_check.user_email,))
+        FROM users WHERE user_email = %s""", (user_to_check.email,))
         return cur.rowcount > 0
 
     def get_by_id(self, user_id: int) -> User:
@@ -70,12 +70,12 @@ class UserDbRepo(IUserRepository):
         if data is None:
             return None
         user = User("", "", "")
-        user.user_id = data[0]
-        user.user_date_creation = data[1]
-        user.user_date_modification = data[2]
-        user.user_name = data[3]
-        user.user_email = data[4]
-        user.user_password = data[5]
+        user.id = data[0]
+        user.created_at = data[1]
+        user.modified_at = data[2]
+        user.name = data[3]
+        user.email = data[4]
+        user.password = data[5]
         user.admin = data[6]
         self.database.close_and_save(conn, cur)
         return user
@@ -83,7 +83,7 @@ class UserDbRepo(IUserRepository):
     def update(self, user: User) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
-        id_user = user.user_id
+        id_user = user.id
         index_user = self.get_user_index(id_user)
         if index_user is not None:
             self.users.remove(self.users[index_user])
@@ -97,17 +97,17 @@ class UserDbRepo(IUserRepository):
             user_password = %s,
             admin = %s
         WHERE user_id = %s
-        """, (user.user_name,
+        """, (user.name,
               user_date_modification,
-              user.user_email,
-              user.user_password,
-              user.admin, user.user_id))
+              user.email,
+              user.password,
+              user.admin, user.id))
         self.database.close_and_save(conn, cur)
 
     def delete(self, user: User) -> None:
         conn = self.database.create_conn()
         cur = conn.cursor()
-        id_user = user.user_id
+        id_user = user.id
         cur.execute('DELETE FROM users WHERE user_id= %s', (id_user,))
         self.database.close_and_save(conn, cur)
         user_index = self.get_user_index(id_user)
@@ -116,7 +116,7 @@ class UserDbRepo(IUserRepository):
 
     def get_user_index(self, id_user) -> int:
         for user in self.users:
-            if id_user == user.user_id:
+            if id_user == user.id:
                 return self.users.index(user)
 
     def get_user_by_email(self, user_email):
@@ -126,12 +126,12 @@ class UserDbRepo(IUserRepository):
         data = cur.fetchone()
         if data is not None:
             user = User("", "", "", "")
-            user.user_id = data[0]
-            user.user_date_creation = data[1]
-            user.user_date_modification = data[2]
-            user.user_name = data[3]
-            user.user_email = data[4]
-            user.user_password = data[5]
+            user.id = data[0]
+            user.created_at = data[1]
+            user.modified_at = data[2]
+            user.name = data[3]
+            user.email = data[4]
+            user.password = data[5]
             user.admin = data[6]
             self.database.close_and_save(conn, cur)
             return user

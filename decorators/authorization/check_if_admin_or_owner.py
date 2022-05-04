@@ -12,7 +12,7 @@ def check_if_admin_or_owner(setup):
     def wrapper(authentication: IAuthentication, *args, **kwargs):
         if authentication.is_logged_in() is True:
             user_id = kwargs["user_id"]
-            singed_user_id = authentication.get_user_details().user_id
+            singed_user_id = authentication.get_user_details().id
             admin = authentication.get_user_details().admin
             if user_id != singed_user_id and admin is False:
                 flash("403 - Not allowed")

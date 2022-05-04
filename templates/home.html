@@ -17,12 +17,12 @@
 <div class="row">
     {% for user in users %}
     <div class="users col-md-4 text-center">
-        <a class="user-link" href="{{url_for('user_bp.view_user',user_id = user.user_id )}}">
+        <a class="user-link" href="{{url_for('user_bp.view_user',user_id = user.id )}}">
         <div class="card mb-4 shadow-sm" >  
             <div class="card-body user">
               <img class="avatar center" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt="">
-              <h5 class="card-title">{{ user.user_name }}</h5>
-              </i><h6 class="card-subtitle mb-2 text-muted"><i class="d-inline fa-solid fa-envelope"> </i>{{ user.user_email }}</h6>
+              <h5 class="card-title">{{ user.name }}</h5>
+              </i><h6 class="card-subtitle mb-2 text-muted"><i class="d-inline fa-solid fa-envelope"> </i>{{ user.email }}</h6>
               
             </div>
             {% if user.admin is true %}

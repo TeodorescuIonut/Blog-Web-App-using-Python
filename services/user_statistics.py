@@ -16,16 +16,16 @@ class UserStatistics(IUserStatistics):
         users = self.user_repo.get_all()
         datas = []
         for user in users:
-            posts_per_user = self.post_repo.get_all(per_page, offset, user.user_id)
+            posts_per_user = self.post_repo.get_all(per_page, offset, user.id)
             count = 0
             for post in posts_per_user:
                 date = post.created_at.strftime(
                         "%B") + '-' + post.created_at.strftime("%Y")
-                if any(data.user_name == user.user_name and data.date == date for data in datas) is False:
+                if any(data.user_name == user.name and data.date == date for data in datas) is False:
                     count = 0
-                    datas.append(DataStatistics(user.user_name, date, count))
+                    datas.append(DataStatistics(user.name, date, count))
                 count += 1
-                self.__update_count(count, datas, user.user_name, date)
+                self.__update_count(count, datas, user.name, date)
         return datas
 
     def __update_count(self, count, datas, user, date):

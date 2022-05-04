@@ -48,7 +48,7 @@
                 <div class="nav-item dropleft">   
                     <a href="#" id="avatar-link"  class="center navbar-brand dropdown-toggle" data-toggle="dropdown"><img class="avatar-sign-in" src="https://images.unsplash.com/placeholder-avatars/extra-large.jpg?dpr=1&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff" alt=""></a>
                     <ul class="dropdown-menu bg-dark " aria-labelledby="dropdownMenuButton2">
-                    <li><a href="{{url_for('user_bp.view_user',user_id = logged_user.user_id)}}"><p class="font-weight-bold dropdown-item text-light bg-dark">{{logged_user.user_name}}</p></a></li>
+                    <li><a href="{{url_for('user_bp.view_user',user_id = logged_user.id)}}"><p class="font-weight-bold dropdown-item text-light bg-dark">{{logged_user.name}}</p></a></li>
                     <li><a href="{{urlPages}}" class="dropdown-item text-light bg-dark">{{buttonTexts}}</a></li>
                     </ul>
                 </div> 

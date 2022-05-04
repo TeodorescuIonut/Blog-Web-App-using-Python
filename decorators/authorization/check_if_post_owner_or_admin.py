@@ -18,7 +18,7 @@ def check_if_post_owner_or_admin(setup):
         if isinstance(repo, IPostRepository):
             user_id = repo.get_by_id(post_id).owner_id
         if isinstance(authentication, IAuthentication):
-            signed_user_id = authentication.get_user_details().user_id
+            signed_user_id = authentication.get_user_details().id
             admin = authentication.get_user_details().admin
         if user_id != signed_user_id and admin is False:
             flash("403 - Not allowed")

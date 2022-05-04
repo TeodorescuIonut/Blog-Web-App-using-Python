@@ -76,7 +76,7 @@ class UserBlueprint:
                 return render_template("add_user.html", user=new_user, urlPage=self.add_user)
             self.repo.create(new_user)
             flash("User added")
-            return redirect(url_for('user_bp.view_user', user_id=new_user.user_id))
+            return redirect(url_for('user_bp.view_user', user_id=new_user.id))
         return render_template("add_user.html", user=User, urlPage=self.add_user)
 
     @check_setup
@@ -102,22 +102,22 @@ class UserBlueprint:
             if make_user is True:
                 admin = False
             if user_password == "":
-                user_password = user.user_password
+                user_password = user.password
             else:
                 user_password = self.pass_hash.generate_password(user_password)
             if not user_name:
-                user_name = user.user_name
+                user_name = user.name
             elif not user_email:
-                user_email = user.user_email
-            user.user_id = user_id
-            user.user_name = user_name
-            user.user_email = user_email
-            user.user_password = user_password
-            user.user_date_modification = datetime.now().strftime("%B %d %Y")
+                user_email = user.email
+            user.id = user_id
+            user.name = user_name
+            user.email = user_email
+            user.password = user_password
+            user.modified_at = datetime.now().strftime("%B %d %Y")
             user.admin = admin
             self.repo.update(user)
             flash("User updated")
-            return redirect(url_for('user_bp.view_user', user_id=user.user_id))
+            return redirect(url_for('user_bp.view_user', user_id=user.id))
         return render_template("add_user.html",
                                user=user, buttonText="Update",
                                urlPage=self.update_user)

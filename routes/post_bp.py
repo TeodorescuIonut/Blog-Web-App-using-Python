@@ -47,7 +47,7 @@ class PostBlueprint:
         selected_user_id = self.filtering.get_owner_id()
         selected_user = ""
         if selected_user_id != -1:
-            selected_user = self.filtering.repo.get_by_id(selected_user_id).user_name
+            selected_user = self.filtering.repo.get_by_id(selected_user_id).name
         if self.auth.is_logged_in():
             user = self.auth.get_user_details()
         else:
@@ -82,7 +82,7 @@ class PostBlueprint:
             post_title = request.form.get("title")
             # getting input content  in HTML form
             content = request.form.get("content")
-            post = Post(owner.user_name, post_title, content, owner.user_id)
+            post = Post(owner.name, post_title, content, owner.id)
             if 'image' not in request.files:
                 image_file = None
             else:
@@ -97,10 +97,10 @@ class PostBlueprint:
                 return render_template("add_post.html", post=post, urlPage=self.add_post)
             else:
                 new_post = Post(
-                    owner.user_name,
+                    owner.name,
                     post_title.title(),
                     content,
-                    owner.user_id,
+                    owner.id,
                     image_file
                 )
             self.repo.create(new_post, image_file)

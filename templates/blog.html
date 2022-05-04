@@ -25,7 +25,7 @@
     <ul class="dropdown-menu justify-content-center filter_posts" aria-labelledby="dropdownMenu1">
         <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id = -1) }}">All users</a></li>
         {% for owner in filter.owners %}
-            <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id =owner.user_id) }}">{{owner.user_name}}</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('post_bp.blog', selected_owner_id =owner.id) }}">{{owner.name}}</a></li>
         {% endfor %}
     </ul>
     

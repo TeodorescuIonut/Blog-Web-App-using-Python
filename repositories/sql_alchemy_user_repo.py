@@ -25,12 +25,12 @@ class SQLAlchemyUserRepo(IUserRepository):
         self.users.clear()
         for row in res:
             user = User("", "", "")
-            user.user_id = row[0]
-            user.user_date_creation = row[1]
-            user.user_date_modification = row[2]
-            user.user_name = row[3]
-            user.user_email = row[4]
-            user.user_password = row[5]
+            user.id = row[0]
+            user.created_at = row[1]
+            user.modified_at = row[2]
+            user.name = row[3]
+            user.email = row[4]
+            user.password = row[5]
             user.admin = row[6]
             if self.check_user_id(user) is False:
                 self.users.append(user)
@@ -40,7 +40,7 @@ class SQLAlchemyUserRepo(IUserRepository):
     def check_user_id(self, user_to_check: User) -> bool:
         if len(self.users) > 0:
             for user in self.users:
-                if user_to_check.user_id == user.user_id:
+                if user_to_check.id == user.id:
                     return True
         return False
 
@@ -50,30 +50,30 @@ class SQLAlchemyUserRepo(IUserRepository):
         if res is None:
             return None
         user = User(res.user_name, res.user_email, res.user_password, res.admin, res.user_id)
-        user.user_date_modification = res.user_date_modification
+        user.modified_at = res.user_date_modification
         self.database.close_and_save(conn)
         return user
 
     def create(self, user: User):
         conn = self.database.create_conn()
         users_table = UserSQLAlchemy.__table__
-        stmt = (insert(users_table).values(user_name=user.user_name,
-                                           user_email=user.user_email,
-                                           user_password=user.user_password,
+        stmt = (insert(users_table).values(user_name=user.name,
+                                           user_email=user.email,
+                                           user_password=user.password,
                                            admin=user.admin).returning(users_table.c.user_id))
         res = conn.execute(stmt).first()[0]
-        user.user_id = res
+        user.id = res
         self.database.close_and_save(conn)
 
     def update(self, user: User):
         conn = self.database.create_conn()
         users_table = UserSQLAlchemy.__table__
         user_date_modification = datetime.now().strftime("%B %d %Y %H:%M:%S")
-        stmt = (update(users_table).where(users_table.c.user_id == user.user_id).
-                values(user_name=user.user_name,
+        stmt = (update(users_table).where(users_table.c.user_id == user.id).
+                values(user_name=user.name,
                        user_date_modification=user_date_modification,
-                       user_email=user.user_email,
-                       user_password=user.user_password,
+                       user_email=user.email,
+                       user_password=user.password,
                        admin=user.admin))
         conn.execute(stmt)
         self.database.close_and_save(conn)
@@ -81,7 +81,7 @@ class SQLAlchemyUserRepo(IUserRepository):
     def delete(self, user):
         conn = self.database.create_conn()
         users_table = UserSQLAlchemy.__table__
-        stmt = (delete(users_table).where(users_table.c.user_id == user.user_id))
+        stmt = (delete(users_table).where(users_table.c.user_id == user.id))
         conn.execute(stmt)
         self.database.close_and_save(conn)
 
@@ -97,7 +97,7 @@ class SQLAlchemyUserRepo(IUserRepository):
     def check_user_email(self, user_to_check) -> bool:
         conn = self.database.create_conn()
         res = conn.query(UserSQLAlchemy). \
-            filter(UserSQLAlchemy.user_email == user_to_check.user_email).first()
+            filter(UserSQLAlchemy.user_email == user_to_check.email).first()
         self.database.close_and_save(conn)
         if res is not None:
             return True
