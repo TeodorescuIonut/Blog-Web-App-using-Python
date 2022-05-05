@@ -29,13 +29,12 @@ def test_user_no_posts(client):
     assert b"6" in response.data
     assert b"Jhon_update" in response.data
     assert b"9" in response.data
-    assert b"April-2022" in response.data
+    assert b"May-2022" in response.data
 
 
 def test_not_signed_admin(client):
     sign_in_user(client, "bla@yahoo.com", "1234")
-    client.get('/statistics/', follow_redirects=True)
-    response = client.get('/POST/', follow_redirects=True)
+    response = client.get('/statistics/', follow_redirects=True)
     assert b'You need to be an admin to access this feature!' in response.data
 
 

@@ -77,7 +77,6 @@ def test_delete_option_signed_user(client):
     sign_in_user(client, "bla@yahoo.com", "1234")
     add_post(client, "My title", 'blblblbl', 'Jhon', 1)
     response = client.get('/USER/DELETE/0', follow_redirects=True)
-    response = client.get('/POST/', follow_redirects=True)
     assert b'You need to be an admin to access this feature!' in response.data
 
 
