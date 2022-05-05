@@ -15,6 +15,6 @@ def check_if_admin(setup):
         admin = authentication.get_user_details().admin
         if not admin:
             flash('You need to be an admin to access this feature!')
-            return redirect(url_for('main'))
+            return redirect(url_for('post_bp.blog'))
         return setup(*args, **kwargs)
     return wrapper

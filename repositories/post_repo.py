@@ -67,12 +67,12 @@ class PostRepo(IPostRepository):
         return posts_previews
 
     @staticmethod
-    def create_preview(post: PostPreview):
-        content_preview = post.post_contents[0:200]
-        creation_date = post.post_date_creation
-        modification_date = post.post_date_modification
-        preview = PostPreview(post.post_id, post.post_title,
-                              content_preview, post.post_owner, creation_date, modification_date)
+    def create_preview(post: Post):
+        content_preview = post.contents[0:200]
+        creation_date = post.created_at
+        modification_date = post.modified_at
+        preview = PostPreview(post.id, post.title,
+                              content_preview, post.owner, creation_date, modification_date)
         return preview
 
     def get_post_index(self, owner_id) -> int:

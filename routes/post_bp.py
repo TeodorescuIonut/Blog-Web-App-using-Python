@@ -36,7 +36,7 @@ class PostBlueprint:
         self.post_bp.route('/POST', methods=["GET", "POST"])(self.blog)
         self.post_bp.route('/CREATE/posts', methods=["GET", "POST"])(self.add_post)
         self.post_bp.route('/VIEW/<int:post_id>')(self.view_post)
-        self.post_bp.route('/api/post/<int:post_id>')(self.api_post)
+        self.post_bp.route('/view/client-api/<int:post_id>')(self.api_post)
         self.post_bp.route('/UPDATE/<int:post_id>', methods=["GET", "POST"])(self.update_post)
         self.post_bp.route('/DELETE/<int:post_id>', methods=["GET", "POST"])(self.delete_post)
         self.post_bp.context_processor(self.context_processor)

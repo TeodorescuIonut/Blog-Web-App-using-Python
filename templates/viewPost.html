@@ -23,7 +23,7 @@
       <p class="card-text"><small class="text-muted"> Modified on {{post.modified_at}}</small></p>
       {%endif%}
       <!-- Button trigger modal -->
-      {%if logged_in is true and logged_user.admin is true or logged_user.user_id == post.owner_id %}
+      {%if logged_in is true and logged_user.admin is true or logged_user.id == post.owner_id %}
       <a href="{{url_for('post_bp.update_post',post_id = post.id )}}" class="d-inline btn btn-secondary" id="updateBtn">Update</a>
       <a class="d-inline btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#exampleModal">
           Delete
