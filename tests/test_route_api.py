@@ -20,12 +20,6 @@ def sign_in_user(client, email, password):
 def sign_out_user(client):
     return client.get('/SIGNOUT/', follow_redirects=True)
 
-def test_client_api_route(client):
-    ContainerService.memory_config.set_configuration = True
-    sign_in_user(client, "admin@localhost.com", "1234")
-    response = client.get('/POST/view/client-api/0', follow_redirects=True)
-    assert b'get_info(0)' in response.data
-
 
 def test_response_api_for_valid_post(client):
     ContainerService.memory_config.set_configuration = True

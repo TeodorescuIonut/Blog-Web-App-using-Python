@@ -2,7 +2,7 @@ from flask import session
 from interfaces.authentication_interface import IAuthentication
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.password_interface import IPassword
-from models.user import User
+from models.dtos.user import User
 
 
 class Authentication(IAuthentication):

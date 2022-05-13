@@ -7,7 +7,7 @@ from decorators.dependency_injection.injector_di import injector
 from interfaces.authentication_interface import IAuthentication
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.password_interface import IPassword
-from models.user import User
+from models.dtos.user import User
 
 
 @injector

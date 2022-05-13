@@ -2,8 +2,8 @@ import datetime
 
 from interfaces.image_repo_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
-from models.post_preview import PostPreview
-from models.post import Post
+from models.dtos.post_preview import PostPreview
+from models.dtos.post import Post
 
 
 class PostRepo(IPostRepository):

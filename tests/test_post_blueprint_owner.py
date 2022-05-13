@@ -148,3 +148,9 @@ def test_redirect_setup_true(client):
     response = client.get('/POST/', follow_redirects=True)
     assert response.status == '200 OK'
     assert b"Read about true experiences," in response.data
+
+def test_client_api_route(client):
+    ContainerService.memory_config.set_configuration = True
+    sign_in_user(client, "admin@localhost.com", "1234")
+    response = client.get('/POST/view/client-api/0', follow_redirects=True)
+    assert b'get_info(0)' in response.data

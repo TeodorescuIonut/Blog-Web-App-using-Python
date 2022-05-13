@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from decorators.dependency_injection.injector_di import injector
 from decorators.setup.setup import check_setup
 from interfaces.authentication_interface import IAuthentication
-from models.user import User
+from models.dtos.user import User
 
 authenticate = Blueprint('authenticate', __name__)
 

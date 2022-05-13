@@ -2,8 +2,8 @@ from datetime import datetime
 from sqlalchemy import desc, insert, update, delete
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
 from interfaces.user_repository_interface import IUserRepository
-from models.user import User
-from models.user_sqlalchemy import UserSQLAlchemy
+from models.dtos.user import User
+from models.data_models.user_sqlalchemy import UserSQLAlchemy
 
 
 class SQLAlchemyUserRepo(IUserRepository):

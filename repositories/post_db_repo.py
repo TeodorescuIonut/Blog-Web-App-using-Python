@@ -1,7 +1,7 @@
 from interfaces.image_repo_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.database_interface import IDatabase
-from models.post import Post
+from models.dtos.post import Post
 
 
 class PostDbRepo(IPostRepository):

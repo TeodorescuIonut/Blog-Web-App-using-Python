@@ -1,7 +1,7 @@
 from flask import request
 from interfaces.filtering_interface import IFiltering
 from interfaces.user_repository_interface import IUserRepository
-from models.filter import Filter
+from models.dtos.filter import Filter
 
 
 class Filtering(IFiltering):

@@ -1,7 +1,7 @@
 import math
 from flask import request
 from interfaces.pagination_interface import IPagination
-from models.pagination import Pagination
+from models.dtos.pagination import Pagination
 
 
 class Paginate(IPagination):

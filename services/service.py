@@ -28,7 +28,7 @@ from services.paginate import Paginate
 from services.password_hash import PasswordHashing
 from services.authentication import Authentication
 from services.database_upgrade_create import DatabaseUpgradeAndCreate
-from services.image_repo import ImageRepo
+from repositories.image_repo import ImageRepo
 from services.user_statistics import UserStatistics
 
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.database_interface import IDatabase
-from models.user import User
+from models.dtos.user import User
 
 
 class UserDbRepo(IUserRepository):

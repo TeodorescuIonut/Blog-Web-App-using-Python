@@ -9,8 +9,8 @@ from interfaces.authentication_interface import IAuthentication
 from interfaces.filtering_interface import IFiltering
 from interfaces.pagination_interface import IPagination
 from interfaces.post_repository_interface import IPostRepository
-from models.post import Post
-from models.user import User
+from models.dtos.post import Post
+from models.dtos.user import User
 
 
 @injector

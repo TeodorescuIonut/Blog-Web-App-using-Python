@@ -1,4 +1,4 @@
-from models.user import User
+from models.dtos.user import User
 from interfaces.user_repository_interface import IUserRepository
 from services.password_hash import generate_password_hash
 

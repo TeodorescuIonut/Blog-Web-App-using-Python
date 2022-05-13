@@ -2,9 +2,9 @@ from sqlalchemy import func, case, insert, update, delete, desc
 from interfaces.databse_sqlalchemy_interface import IDatabaseAlchemy
 from interfaces.image_repo_interface import IImageRepo
 from interfaces.post_repository_interface import IPostRepository
-from models.post import Post
-from models.post_sqlalchemy import PostSQLAlchemy
-from models.user_sqlalchemy import UserSQLAlchemy
+from models.dtos.post import Post
+from models.data_models.post_sqlalchemy import PostSQLAlchemy
+from models.data_models.user_sqlalchemy import UserSQLAlchemy
 
 
 class SQLAlchemyPostRepo(IPostRepository):

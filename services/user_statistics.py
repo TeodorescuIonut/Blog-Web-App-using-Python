@@ -1,7 +1,7 @@
 from interfaces.post_repository_interface import IPostRepository
 from interfaces.user_repository_interface import IUserRepository
 from interfaces.user_statistics_interface import IUserStatistics
-from models.data_statistics import DataStatistics
+from models.dtos.data_statistics import DataStatistics
 
 
 class UserStatistics(IUserStatistics):
